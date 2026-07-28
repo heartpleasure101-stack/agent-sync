@@ -33,7 +33,9 @@
 
 ## 2. Quick Start (快速上手)
 
-- **Prerequisites（前置要求）**：電腦只要裝有 **Bun 1.3+** 或 **Node.js 20+** 就可以直接跑。
+- **Prerequisites（前置要求）**：
+  - **使用者**：只要電腦裝有 **Node.js 22+**（`npx` 內建於 Node，不用另外裝）。**不需要 Bun**。
+  - **開發者**（想自己改 code、build、發版本）：除了 Node.js 22+，再裝 **Bun 1.3+**（僅用於執行 `bun run build`）。
 - **One-Liner Command（單行執行指令）**：打開終端機 (Terminal)，複製貼上這行指令就能立刻開始：
 
   ```bash
