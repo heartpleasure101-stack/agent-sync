@@ -6,6 +6,8 @@ import { buildLinkPlan } from './core/plan.js';
 import { getLinkStatus } from './core/status.js';
 import { applyMigration, scanMigration } from './core/migrate.js';
 import { resolveRoots } from './core/paths.js';
+import os from 'os';
+import { detectInstalledClients, getGlobalClientRoots } from './core/detect-installed.js';
 import { createBackupSession, finalizeBackup } from './core/backup.js';
 import { undoLastChange } from './core/undo.js';
 import { preflightBackup } from './core/preflight.js';
@@ -13,6 +15,18 @@ import type { Client, LinkStatus, Scope } from './core/types.js';
 import type { MigrationCandidate } from './core/migrate.js';
 
 const appTitle = 'dotagents';
+
+const CLIENT_LABELS: Record<Client, string> = {
+  claude: 'Claude',
+  factory: 'Factory',
+  codex: 'Codex',
+  cursor: 'Cursor',
+  opencode: 'OpenCode',
+  gemini: 'Gemini',
+  antigravity: 'Antigravity',
+  github: 'GitHub',
+  ampcode: 'Ampcode',
+};
 
 type StatusSummary = { name: string; linked: number; missing: number; conflict: number };
 
@@ -129,21 +143,42 @@ function formatCount(count: number, singular: string, plural?: string): string {
 }
 
 async function selectClients(): Promise<Client[]> {
-  const options = [
-    { label: 'Claude', value: 'claude' },
-    { label: 'Factory', value: 'factory' },
-    { label: 'Codex', value: 'codex' },
-    { label: 'Cursor', value: 'cursor' },
-    { label: 'OpenCode', value: 'opencode' },
-    { label: 'Gemini', value: 'gemini' },
-    { label: 'Antigravity', value: 'antigravity' },
-    { label: 'GitHub', value: 'github' },
-    { label: 'Ampcode', value: 'ampcode' },
-  ] as const;
+  const options: { label: string; value: Client }[] = [
+    { label: CLIENT_LABELS.claude, value: 'claude' },
+    { label: CLIENT_LABELS.factory, value: 'factory' },
+    { label: CLIENT_LABELS.codex, value: 'codex' },
+    { label: CLIENT_LABELS.cursor, value: 'cursor' },
+    { label: CLIENT_LABELS.opencode, value: 'opencode' },
+    { label: CLIENT_LABELS.gemini, value: 'gemini' },
+    { label: CLIENT_LABELS.antigravity, value: 'antigravity' },
+    { label: CLIENT_LABELS.github, value: 'github' },
+    { label: CLIENT_LABELS.ampcode, value: 'ampcode' },
+  ];
+
+  let detected: Client[] = [];
+  try {
+    detected = await detectInstalledClients();
+  } catch {
+    detected = [];
+  }
+  const detectedSet = new Set(detected);
+  const clientRoots = getGlobalClientRoots();
+  const homeDir = os.homedir();
+  const displayPath = (p: string): string =>
+    p.startsWith(homeDir + path.sep) ? '~' + p.slice(homeDir.length) : p;
+
+  const hint = detected.length > 0
+    ? `偵測到下列資料夾：${detected.map((c) => displayPath(clientRoots[c])).join(', ')}`
+    : '未偵測到任何 client 資料夾';
+
   const selected = await multiselect({
-    message: 'Select clients to manage',
-    options: options.map((opt) => ({ label: opt.label, value: opt.value })),
-    initialValues: options.map((opt) => opt.value),
+    message: `Select clients to manage\n${chalk.dim(hint)}`,
+    options: options.map((opt) => ({
+      label: opt.label,
+      value: opt.value,
+      hint: detectedSet.has(opt.value) ? displayPath(clientRoots[opt.value]) : undefined,
+    })),
+    initialValues: [] as Client[],
     required: true,
   });
   if (isCancel(selected)) exitCancelled();
@@ -151,18 +186,7 @@ async function selectClients(): Promise<Client[]> {
 }
 
 function formatClients(clients: Client[]): string {
-  const names: Record<Client, string> = {
-    claude: 'Claude',
-    factory: 'Factory',
-    codex: 'Codex',
-    cursor: 'Cursor',
-    opencode: 'OpenCode',
-    gemini: 'Gemini',
-    antigravity: 'Antigravity',
-    github: 'GitHub',
-    ampcode: 'Ampcode',
-  };
-  return clients.map((c) => names[c]).join(', ');
+  return clients.map((c) => CLIENT_LABELS[c]).join(', ');
 }
 
 async function showStatus(scope: Scope, clients: Client[], status: LinkStatus[], planConflicts: { target: string; reason: string }[]): Promise<void> {

@@ -32,3 +32,11 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# Claude Code local config and agent files
+.agent
+.agents
+.claude
+
+# PR review (local, not committed)
+pr-review.md
