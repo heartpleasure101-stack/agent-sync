@@ -2,12 +2,14 @@ import path from 'path';
 import type { Client, Mapping, Scope } from './types.js';
 import { resolveRoots } from './paths.js';
 import { pathExists } from '../utils/fs.js';
+import { listSkills } from './list-skills.js';
 
 export type MappingOptions = {
   scope: Scope;
   projectRoot?: string;
   homeDir?: string;
   clients?: Client[];
+  selectedSkills?: string[] | null;
 };
 
 export async function getMappings(opts: MappingOptions): Promise<Mapping[]> {
@@ -83,25 +85,48 @@ export async function getMappings(opts: MappingOptions): Promise<Mapping[]> {
       ].filter(Boolean) as string[],
       kind: 'dir',
     },
-    {
+  );
+
+  const skillTargetRoots: string[] = [
+    clients.has('claude') ? path.join(roots.claudeRoot, 'skills') : null,
+    clients.has('factory') ? path.join(roots.factoryRoot, 'skills') : null,
+    clients.has('codex') ? path.join(roots.codexRoot, 'skills') : null,
+    clients.has('opencode') ? path.join(opencodeSkillsRoot, 'skills') : null,
+    clients.has('cursor') ? path.join(roots.cursorRoot, 'skills') : null,
+    clients.has('gemini') ? path.join(roots.geminiRoot, 'skills') : null,
+    clients.has('antigravity') ? path.join(roots.antigravityRoot, 'skills') : null,
+    // GitHub uses .github/skills for project scope and ~/.copilot/skills for global scope.
+    clients.has('github')
+      ? (opts.scope === 'global' ? path.join(roots.copilotRoot, 'skills') : path.join(roots.githubRoot, 'skills'))
+      : null,
+  ].filter(Boolean) as string[];
+
+  if (opts.selectedSkills === undefined || opts.selectedSkills === null) {
+    mappings.push({
       name: 'skills',
       source: path.join(canonical, 'skills'),
-      targets: [
-        clients.has('claude') ? path.join(roots.claudeRoot, 'skills') : null,
-        clients.has('factory') ? path.join(roots.factoryRoot, 'skills') : null,
-        clients.has('codex') ? path.join(roots.codexRoot, 'skills') : null,
-        clients.has('opencode') ? path.join(opencodeSkillsRoot, 'skills') : null,
-        clients.has('cursor') ? path.join(roots.cursorRoot, 'skills') : null,
-        clients.has('gemini') ? path.join(roots.geminiRoot, 'skills') : null,
-        clients.has('antigravity') ? path.join(roots.antigravityRoot, 'skills') : null,
-        // GitHub uses .github/skills for project scope and ~/.copilot/skills for global scope.
-        clients.has('github')
-          ? (opts.scope === 'global' ? path.join(roots.copilotRoot, 'skills') : path.join(roots.githubRoot, 'skills'))
-          : null,
-      ].filter(Boolean) as string[],
+      targets: skillTargetRoots,
       kind: 'dir',
-    },
-  );
+    });
+  } else if (opts.selectedSkills.length > 0 && skillTargetRoots.length > 0) {
+    // selectedSkills = list of absolute skill dir paths (unique identity — basenames may collide).
+    const wanted = new Set(opts.selectedSkills);
+    const entries = await listSkills({
+      scope: opts.scope,
+      projectRoot: opts.projectRoot,
+      homeDir: opts.homeDir,
+    });
+    for (const entry of entries) {
+      if (!wanted.has(entry.dir)) continue;
+      const basename = path.basename(entry.dir);
+      mappings.push({
+        name: 'skills',
+        source: entry.dir,
+        targets: skillTargetRoots.map((root) => path.join(root, basename)),
+        kind: 'dir',
+      });
+    }
+  }
 
   return mappings;
 }
