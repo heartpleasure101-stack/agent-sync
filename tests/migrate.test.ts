@@ -96,12 +96,12 @@ test('migration wizard copies skills from github/copilot folders', async () => {
     projectSelections.set(conflict.targetPath, conflict.candidates[0] || null);
   }
 
-  const projectBackup = await createBackupSession({ canonicalRoot: path.join(project, '.agents'), scope: 'project', operation: 'test' });
+  const projectBackup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'project', operation: 'test' });
   const projectResult = await applyMigration(projectPlan, projectSelections, { scope: 'project', homeDir: home, projectRoot: project, backup: projectBackup, forceLinks: true, clients: ['github'] });
   await finalizeBackup(projectBackup);
 
   expect(projectResult.copied).toBeGreaterThan(0);
-  expect(fs.existsSync(path.join(project, '.agents', 'skills', 'project-github-skill', 'SKILL.md'))).toBe(true);
+  expect(fs.existsSync(path.join(home, '.agents', 'skills', 'project-github-skill', 'SKILL.md'))).toBe(true);
 });
 
 test('migration wizard copies antigravity workflows and skills into .agents', async () => {
@@ -119,7 +119,7 @@ test('migration wizard copies antigravity workflows and skills into .agents', as
     selections.set(conflict.targetPath, conflict.candidates[0] || null);
   }
 
-  const backup = await createBackupSession({ canonicalRoot: path.join(project, '.agents'), scope: 'project', operation: 'test' });
+  const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'project', operation: 'test' });
   const result = await applyMigration(plan, selections, {
     scope: 'project',
     homeDir: home,
@@ -131,8 +131,8 @@ test('migration wizard copies antigravity workflows and skills into .agents', as
   await finalizeBackup(backup);
 
   expect(result.copied).toBeGreaterThan(0);
-  expect(fs.existsSync(path.join(project, '.agents', 'commands', 'ship-it.md'))).toBe(true);
-  expect(fs.existsSync(path.join(project, '.agents', 'skills', 'antigravity-skill', 'SKILL.md'))).toBe(true);
-  expect(await readLinkTarget(path.join(project, '.agent', 'workflows'))).toBe(path.join(project, '.agents', 'commands'));
-  expect(await readLinkTarget(path.join(project, '.agent', 'skills'))).toBe(path.join(project, '.agents', 'skills'));
+  expect(fs.existsSync(path.join(home, '.agents', 'commands', 'ship-it.md'))).toBe(true);
+  expect(fs.existsSync(path.join(home, '.agents', 'skills', 'antigravity-skill', 'SKILL.md'))).toBe(true);
+  expect(await readLinkTarget(path.join(project, '.agent', 'workflows'))).toBe(path.join(home, '.agents', 'commands'));
+  expect(await readLinkTarget(path.join(project, '.agent', 'skills'))).toBe(path.join(home, '.agents', 'skills'));
 });
