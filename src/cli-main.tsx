@@ -16,6 +16,7 @@ import { undoLastChange } from './core/undo.js';
 import { preflightBackup } from './core/preflight.js';
 import type { Client, LinkStatus, Scope } from './core/types.js';
 import type { MigrationCandidate } from './core/migrate.js';
+import { ensureCanonical } from './core/ensure-canonical.js';
 
 const appTitle = 'dotagents';
 
@@ -201,10 +202,10 @@ function formatClients(clients: Client[]): string {
   return clients.map((c) => CLIENT_LABELS[c]).join(', ');
 }
 
-async function selectSkills(scope: Scope): Promise<string[] | 'back'> {
+async function selectSkills(scope: Scope, canonicalOverride?: string): Promise<string[] | 'back'> {
   let entries: SkillEntry[] = [];
   try {
-    entries = await listSkills({ scope });
+    entries = await listSkills({ scope, canonicalOverride });
   } catch {
     entries = [];
   }
@@ -260,13 +261,13 @@ async function resolveMigrationConflicts(plan: Awaited<ReturnType<typeof scanMig
   return selections;
 }
 
-async function runChange(scope: Scope, clients: Client[], skills: string[]): Promise<void> {
+async function runChange(scope: Scope, clients: Client[], skills: string[], canonicalOverride?: string): Promise<void> {
   const spin = spinner();
   spin.start('Scanning current setup...');
-  const roots = resolveRoots({ scope });
+  const roots = resolveRoots({ scope, canonicalOverride });
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const migrate = await scanMigration({ scope, clients });
-  const link = await buildLinkPlan({ scope, clients, selectedSkills: skills });
+  const migrate = await scanMigration({ scope, clients, canonicalOverride });
+  const link = await buildLinkPlan({ scope, clients, selectedSkills: skills, canonicalOverride });
   const backupDir = path.join(roots.canonicalRoot, 'backup', timestamp);
   spin.stop('Scan complete');
 
@@ -320,7 +321,7 @@ async function runChange(scope: Scope, clients: Client[], skills: string[]): Pro
       selections,
       forceLinks: overwriteConflicts,
     });
-    const result = await applyMigration(migrate, selections, { scope, clients, backup, forceLinks: overwriteConflicts, selectedSkills: skills });
+    const result = await applyMigration(migrate, selections, { scope, clients, backup, forceLinks: overwriteConflicts, selectedSkills: skills, canonicalOverride });
     await finalizeBackup(backup);
     const migrationSummary = `Migrated ${formatCount(result.copied, 'item')}`;
     const linkSummary = `Linked ${formatCount(result.links.applied, 'path')}`;
@@ -338,9 +339,9 @@ async function runChange(scope: Scope, clients: Client[], skills: string[]): Pro
   }
 }
 
-async function loadAllSkillEntries(scope: Scope): Promise<SkillEntry[]> {
+async function loadAllSkillEntries(scope: Scope, canonicalOverride?: string): Promise<SkillEntry[]> {
   try {
-    return await listSkills({ scope });
+    return await listSkills({ scope, canonicalOverride });
   } catch {
     return [];
   }
@@ -348,6 +349,12 @@ async function loadAllSkillEntries(scope: Scope): Promise<SkillEntry[]> {
 
 async function run(): Promise<void> {
   intro(chalk.cyan(appTitle));
+
+  const canonicalRes = await ensureCanonical();
+  const canonicalOverride = canonicalRes.canonicalOverride;
+  if (canonicalRes.migrationHint) {
+    note(canonicalRes.migrationHint, 'Migration Hint');
+  }
 
   let scope: Scope = 'global';
   let clients: Client[] = [];
@@ -370,10 +377,10 @@ async function run(): Promise<void> {
       continue;
     }
     if (step === 'skills') {
-      const res = await selectSkills(scope);
+      const res = await selectSkills(scope, canonicalOverride);
       if (res === 'back') { step = 'clients'; continue; }
       skills = res;
-      allSkillEntries = await loadAllSkillEntries(scope);
+      allSkillEntries = await loadAllSkillEntries(scope, canonicalOverride);
       step = 'main';
       continue;
     }
@@ -381,8 +388,8 @@ async function run(): Promise<void> {
   }
 
   while (true) {
-    const status = mergeAgentStatus(await getLinkStatus({ scope, clients, selectedSkills: skills }));
-    const plan = await buildLinkPlan({ scope, clients, selectedSkills: skills });
+    const status = mergeAgentStatus(await getLinkStatus({ scope, clients, selectedSkills: skills, canonicalOverride }));
+    const plan = await buildLinkPlan({ scope, clients, selectedSkills: skills, canonicalOverride });
     const conflicts = plan.conflicts.length || 0;
     const changes = plan.changes.length || 0;
     const summary = buildStatusSummary(status);
@@ -425,10 +432,10 @@ async function run(): Promise<void> {
     }
 
     if (action === 'skills') {
-      const res = await selectSkills(scope);
+      const res = await selectSkills(scope, canonicalOverride);
       if (res !== 'back') {
         skills = res;
-        allSkillEntries = await loadAllSkillEntries(scope);
+        allSkillEntries = await loadAllSkillEntries(scope, canonicalOverride);
       }
       continue;
     }
@@ -437,7 +444,7 @@ async function run(): Promise<void> {
       const spin = spinner();
       spin.start('Undoing last change...');
       try {
-        const result = await undoLastChange({ scope });
+        const result = await undoLastChange({ scope, canonicalOverride });
         const restoredSummary = `Restored ${formatCount(result.restoredBackups, 'backup')}`;
         const removedSummary = `Removed ${formatCount(result.removedCreated, 'created path')}`;
         const symlinkSummary = result.removedSymlinks > 0
@@ -461,7 +468,7 @@ async function run(): Promise<void> {
     }
 
     if (action === 'change') {
-      await runChange(scope, clients, skills);
+      await runChange(scope, clients, skills, canonicalOverride);
     }
   }
 
