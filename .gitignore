@@ -3,8 +3,8 @@ node_modules
 
 # output
 out
-dist
 *.tgz
+# dist is committed so `npx github:heartpleasure101-stack/dotagents` works without a build step.
 
 # code coverage
 coverage
