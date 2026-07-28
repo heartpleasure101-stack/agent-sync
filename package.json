@@ -14,7 +14,8 @@
   ],
   "scripts": {
     "dev": "bun run src/cli.tsx",
-    "build": "bun build src/cli.tsx --outdir dist --target node --format esm --external react-devtools-core",
+    "build": "bun run build.mjs",
+    "smoke": "node scripts/smoke.mjs",
     "type-check": "tsc --noEmit",
     "test": "bun test"
   },

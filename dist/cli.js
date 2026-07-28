@@ -18328,9 +18328,14 @@ var init_devtools_window_polyfill = __esm(() => {
   ];
 });
 
+// stub:react-devtools-core-stub
+var react_devtools_core_stub_default;
+var init_react_devtools_core_stub = __esm(() => {
+  react_devtools_core_stub_default = {};
+});
+
 // node_modules/ink/build/devtools.js
 var exports_devtools = {};
-import devtools from "react-devtools-core";
 var isDevToolsReachable = async () => new Promise((resolve) => {
   const socket = new wrapper_default("ws://localhost:8097");
   const timeout = setTimeout(() => {
@@ -18352,9 +18357,10 @@ var isDevToolsReachable = async () => new Promise((resolve) => {
 var init_devtools = __esm(async () => {
   init_devtools_window_polyfill();
   init_wrapper();
+  init_react_devtools_core_stub();
   if (await isDevToolsReachable()) {
-    devtools.initialize();
-    devtools.connectToDevTools();
+    react_devtools_core_stub_default.initialize();
+    react_devtools_core_stub_default.connectToDevTools();
   } else {
     console.warn(`DEV is set to true, but the React DevTools server is not running. Start it with:
 
