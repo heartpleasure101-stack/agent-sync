@@ -36,6 +36,12 @@
 - **Prerequisites（前置要求）**：
   - **使用者**：只要電腦裝有 **Node.js 22+**（`npx` 內建於 Node，不用另外裝）。**不需要 Bun**。
   - **開發者**（想自己改 code、build、發版本）：除了 Node.js 22+，再裝 **Bun 1.3+**（僅用於執行 `bun run build`）。
+  - **沒裝 Node.js？** 挑一個平台指令跑：
+    - macOS：`brew install node@22`
+    - Windows：`winget install OpenJS.NodeJS`
+    - Linux（用 nvm）：`nvm install 22`
+    - 或到官網下載：<https://nodejs.org>
+  - CLI 啟動時會自動檢查 Node 版本；若版本 < 22 會顯示中文提示與對應的安裝指令，不會拋出堆疊錯誤。
 - **One-Liner Command（單行執行指令）**：打開終端機 (Terminal)，複製貼上這行指令就能立刻開始：
 
   ```bash
