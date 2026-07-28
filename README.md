@@ -1,134 +1,110 @@
 <div align="center">
-  <strong>dotagents</strong>
-  <br />
-  <em>One canonical .agents folder that powers all your AI tools.</em>
+  <h1>dotagents</h1>
+  <p><strong>一個資料夾，搞定你電腦裡所有 AI 助手的設定與技能招式！</strong></p>
 
-  <br /><br />
-  <em>
-    Simple setup • One source of truth • Safe to re-run anytime
-  </em>
+  <p>
+    <a href="https://github.com/heartpleasure101-stack/dotagents/actions"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status" /></a>
+    <a href="https://github.com/heartpleasure101-stack/dotagents/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License" /></a>
+    <a href="https://bun.sh"><img src="https://img.shields.io/badge/runtime-Bun%201.3%2B-black.svg" alt="Bun 1.3+" /></a>
+  </p>
+
+  <p><em>自動偵測已安裝 AI • 免安裝貼上即跑 • 內建一鍵自動備份與還原</em></p>
 </div>
 
-## Quick Start
+---
 
-Requirements: Bun 1.3+.
+## 1. Header & Visual Hook (標頭與視覺錨點)
 
-Run the guided CLI:
-```bash
-npx @dean9703111/dotagents
+- **Title & Subtitle**：`dotagents` —— 把所有 AI 助手（Claude, ChatGPT, Cursor 等）的招式與規則通通綁定，再也不用手動複製貼上！
+- **Badges**：顯示自動測試通過標籤、MIT 免費開源授權與 Bun 執行環境。
+- **Visual Demo**：畫面向導會自動幫你看電腦裡裝了哪些 AI 工具，按空白鍵就能輕鬆勾選要用的技能招式！
+
+```text
+┌──────────────────────────────────────────────────────────┐
+│  dotagents — 請選擇要設定的 AI 助手                        │
+│  已偵測到電腦已安裝：Claude, Gemini                       │
+│                                                          │
+│  [ 分頁: 寫程式招式 ]  [ 分頁: 寫文件招式 ]                  │
+│  [x] 自動寫 Commit   [ ] 自動寫 PR 描述  [ ] 程式檢查     │
+└──────────────────────────────────────────────────────────┘
 ```
 
-Or with Bun:
-```bash
-bunx @dean9703111/dotagents
-```
+---
 
-Choose a workspace (Global home or Project folder), select the clients you want to manage, and follow the prompts. You can run it again anytime to repair links or undo changes.
+## 2. Quick Start (快速上手)
 
-Global home affects all projects. Project folder only affects the current directory you run dotagents from.
+- **Prerequisites（前置要求）**：電腦只要裝有 **Bun 1.3+** 或 **Node.js 20+** 就可以直接跑。
+- **One-Liner Command（單行執行指令）**：打開終端機 (Terminal)，複製貼上這行指令就能立刻開始：
 
-## What it does
+  ```bash
+  npx github:heartpleasure101-stack/dotagents
+  ```
 
-- Keeps `.agents` as the source of truth.
-- Creates symlinks for Claude, Codex, Factory, Cursor, OpenCode, Gemini, and Antigravity (based on your selection).
-- Always creates a backup before any overwrite so changes are reversible.
+  （如果您是用 Bun 的朋友，也可以跑 `bunx github:heartpleasure101-stack/dotagents`）
 
-## Where it links (global scope)
+- **Scope Explanation（作用域說明）**：
+  - **全域套用 (Global `~`)**：設定一次，電腦裡所有專案的 AI 助手都能一起共享招式與規則！
+  - **單一專案套用 (Project `.agent/`)**：只針對您現在開啟的這個專案做設定，不會影響其他專案。
 
-`.agents/CLAUDE.md` → `~/.claude/CLAUDE.md` (if present)
+---
 
-`.agents/AGENTS.md` → `~/.claude/CLAUDE.md` (fallback when no CLAUDE.md)
+## 3. Features & Architecture (專案重點與架構矩陣)
 
-`.agents/GEMINI.md` → `~/.gemini/GEMINI.md` (if present)
+- **Key Features（核心特色）**：
+  - 🎯 **一個地方改，全部一起變 (Single Source of Truth)**：規則與技能統一放在 `.agents` 資料夾，不用每個 AI 工具分開改。
+  - 🔍 **聰明自動偵測 (Smart Client Detection)**：自動掃描您電腦裡裝了哪些 AI 工具並貼心提醒，省去手動檢查的時間。
+  - 🎛️ **要用什麼自己挑 (Opt-in Selection)**：選單預設不強迫全選，只幫您設定您真正有在用的 AI 工具。
+  - 📂 **像分頁一樣好選的技能盒 (Tabbed Skill Picker)**：技能按類別分類，用鍵盤左右鍵或 `Tab` 就能像瀏覽器切換分頁一樣輕鬆挑選。
+  - 🔗 **精準安全連線 (Per-Skill Symlinks)**：只把您勾選的技能連線過去，絕不弄亂您原本的資料夾。
 
-`.agents/AGENTS.md` → `~/.gemini/GEMINI.md` (fallback when no GEMINI.md)
+- **Target Mapping Matrix（對照表）**：
 
-`.agents/commands` → `~/.claude/commands`
+  #### 支援的 9 大 AI 助手對照表 (Global Scope `~`)
+  | AI 助手 (Client) | 設定位置 | 規則檔案 | 指令與提示詞位置 | 技能招式位置 |
+  | --- | --- | --- | --- | --- |
+  | **Claude** | `~/.claude/` | `CLAUDE.md` (或 `AGENTS.md`) | `commands/` | `skills/<技能名稱>` |
+  | **Gemini** | `~/.gemini/` | `GEMINI.md` (或 `AGENTS.md`) | `commands/` | `skills/<技能名稱>` |
+  | **Factory** | `~/.factory/` | `AGENTS.md` | `commands/` | `skills/<技能名稱>` |
+  | **Codex** | `~/.codex/` | `AGENTS.md` | `prompts/` | `skills/<技能名稱>` |
+  | **OpenCode** | `~/.config/opencode/` | `AGENTS.md` | `commands/` | `skills/<技能名稱>` |
+  | **Cursor** | `~/.cursor/` | *(工具自動讀取)* | `commands/` | `skills/<技能名稱>` |
+  | **Antigravity** | `~/.gemini/antigravity/` | *(工具自動讀取)* | `workflows/` | `skills/<技能名稱>` |
+  | **GitHub Copilot** | `~/.copilot/` | *(工具自動讀取)* | *(預設無)* | `skills/<技能名稱>` |
+  | **AmpCode** | `~/.ampcode/` | `AGENTS.md` | *(預設無)* | *(預設無)* |
 
-`.agents/commands` → `~/.factory/commands`
+  #### 規則優先順序（簡單好懂）
+  - **Claude**：優先讀取 `.agents/CLAUDE.md`，找不到時會自動改成使用 `.agents/AGENTS.md`。
+  - **Gemini**：優先讀取 `.agents/GEMINI.md`，找不到時會自動改成使用 `.agents/AGENTS.md`。
+  - **其他 AI 助手**：統一讀取 `.agents/AGENTS.md`。
 
-`.agents/commands` → `~/.codex/prompts`
+---
 
-`.agents/commands` → `~/.cursor/commands`
+## 4. Development, Build & Deploy Pipeline (開發與部署/發布)
 
-`.agents/commands` → `~/.config/opencode/commands`
+- **Local Development（本地開發）**：
+  如果您想自己修改或加強這個工具：
+  ```bash
+  # 啟動開發試跑模式
+  bun run dev
 
-`.agents/commands` → `~/.gemini/commands`
+  # 檢查程式碼有沒有寫錯型態
+  bun run type-check
 
-`.agents/commands` → `~/.gemini/antigravity/workflows`
+  # 執行自動測試確認功能正常
+  bun test
+  ```
 
-`.agents/hooks` → `~/.claude/hooks`
+- **Build & Publish Architecture（建置與發布架構）**：
+  - **自動打包打包外掛 (Bundling Mechanism)**：使用 `bun run build.mjs` 打包成單一檔案，並自動替換掉容易出錯的除錯模組，讓任何人的電腦都能順利跑起來。
+  - **免上架直接跑 (Zero-npm Deployment)**：打包好的檔案直接存在 GitHub 上，大家不用去 npm 下載，用 `npx github:owner/repo` 就能直接跑最新版！
+  - **500 毫秒安全檢查 (Smoke Verification)**：每次打包都會跑 `bun run smoke` 測試，確認程式可以在 0.5 秒內順利啟動、不會卡住。
 
-`.agents/hooks` → `~/.factory/hooks`
+---
 
-`.agents/AGENTS.md` → `~/.factory/AGENTS.md`
+## 5. Governance & License (維護與授權)
 
-`.agents/AGENTS.md` → `~/.codex/AGENTS.md`
+- **Backups & Restore（備份與安全復原）**：
+  免驚！每次修改設定前，系統都會自動在 `.agents/backup/` 資料夾存一份備份。如果設定錯了，只要在選單點選 **「Undo last change」** 就能一鍵回到上一次的狀態！
 
-`.agents/AGENTS.md` → `~/.config/opencode/AGENTS.md`
-
-Skills are selected per run. Canonical layout `.agents/skills/<category>/<skill>` (categories are just top-level folders you create, e.g. `01_Coding/`, `02_WordProcessing/`); flat `.agents/skills/<skill>` also works. Selected skills link individually to each client with a flat layout:
-
-`.agents/skills/<category>/<skill>` → `~/.claude/skills/<skill>`
-
-`.agents/skills/<category>/<skill>` → `~/.factory/skills/<skill>`
-
-`.agents/skills/<category>/<skill>` → `~/.codex/skills/<skill>`
-
-`.agents/skills/<category>/<skill>` → `~/.cursor/skills/<skill>`
-
-`.agents/skills/<category>/<skill>` → `~/.config/opencode/skills/<skill>`
-
-`.agents/skills/<category>/<skill>` → `~/.gemini/skills/<skill>`
-
-`.agents/skills/<category>/<skill>` → `~/.gemini/antigravity/skills/<skill>`
-
-The CLI opens a tabbed picker: each category is a tab, plus an `(uncategorized)` tab when flat skills exist. Keyboard:
-
-- `←` / `→` (or `Tab` / `Shift+Tab`) — switch category tab
-- `↑` / `↓` — move focus within the tab
-- `Space` — toggle the focused skill
-- `a` / `d` — select all / deselect all within the current tab
-- `Enter` — submit; `Esc` / `Ctrl+C` — cancel
-
-Existing users upgrading from the older whole-directory symlink will see one round of overwrite conflicts on first run — apply with overwrite to migrate to per-skill links.
-
-Project scope links only commands/hooks/skills into the project’s client folders (no AGENTS/CLAUDE/GEMINI rules).
-
-## Development
-
-Run the CLI in dev mode:
-```bash
-bun run dev
-```
-
-Type-check:
-```bash
-bun run type-check
-```
-
-Run tests:
-```bash
-bun test
-```
-
-Build the CLI:
-```bash
-bun run build
-```
-
-## Notes
-
-- Cursor supports `.claude/commands` and `.claude/skills` (global or project). dotagents also links `.agents/commands` → `.cursor/commands` and `.agents/skills` → `.cursor/skills`.
-- OpenCode uses `~/.config/opencode/AGENTS.md` and prefers AGENTS.md over CLAUDE.md when both exist.
-- Codex prompts always symlink to `.agents/commands` (canonical source).
-- Antigravity workflows symlink to `.agents/commands`, and Antigravity skills symlink to `.agents/skills`. In project scope these targets are `.agent/workflows` and `.agent/skills`.
-- Skills require a valid `SKILL.md` with `name` + `description` frontmatter.
-- Claude prompt precedence: if `.agents/CLAUDE.md` exists, it links to `.claude/CLAUDE.md`. Otherwise `.agents/AGENTS.md` is used. After adding or removing `.agents/CLAUDE.md`, re-run dotagents and apply/repair links to update the symlink. Factory/Codex always link to `.agents/AGENTS.md`.
-- Gemini context file precedence: if `.agents/GEMINI.md` exists, it links to `.gemini/GEMINI.md`. Otherwise `.agents/AGENTS.md` is used. After adding or removing `.agents/GEMINI.md`, re-run dotagents and apply/repair links to update the symlink.
-- Project scope creates `.agents` plus client folders for commands/hooks/skills only. Rule files (`AGENTS.md`/`CLAUDE.md`/`GEMINI.md`) are left to the repo root so you can manage them explicitly.
-- Backups are stored under `.agents/backup/<timestamp>` and can be restored via “Undo last change.”
-
-## License
-
-MIT
+- **License（開源授權）**：
+  本專案完全免費開源，採用 [MIT License](LICENSE) 授權，歡迎自由使用與分享！
