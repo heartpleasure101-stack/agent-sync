@@ -8,6 +8,8 @@ import { applyMigration, scanMigration } from './core/migrate.js';
 import { resolveRoots } from './core/paths.js';
 import os from 'os';
 import { detectInstalledClients, getGlobalClientRoots } from './core/detect-installed.js';
+import { listSkills, type SkillEntry } from './core/list-skills.js';
+import { pickSkills, SkillPickerBackError } from './ui/skill-picker.js';
 import { createBackupSession, finalizeBackup } from './core/backup.js';
 import { undoLastChange } from './core/undo.js';
 import { preflightBackup } from './core/preflight.js';
@@ -30,7 +32,7 @@ const CLIENT_LABELS: Record<Client, string> = {
 
 type StatusSummary = { name: string; linked: number; missing: number; conflict: number };
 
-type Action = 'change' | 'status' | 'undo' | 'clients' | 'exit';
+type Action = 'change' | 'status' | 'undo' | 'clients' | 'skills' | 'exit';
 
 type ChangeChoice = 'force' | 'skip' | 'back';
 
@@ -142,7 +144,9 @@ function formatCount(count: number, singular: string, plural?: string): string {
   return `${count} ${pluralize(count, singular, plural)}`;
 }
 
-async function selectClients(): Promise<Client[]> {
+const BACK_TOKEN = '__BACK__';
+
+async function selectClients(): Promise<Client[] | 'back'> {
   const options: { label: string; value: Client }[] = [
     { label: CLIENT_LABELS.claude, value: 'claude' },
     { label: CLIENT_LABELS.factory, value: 'factory' },
@@ -171,22 +175,67 @@ async function selectClients(): Promise<Client[]> {
     ? `偵測到下列資料夾：${detected.map((c) => displayPath(clientRoots[c])).join(', ')}`
     : '未偵測到任何 client 資料夾';
 
+  note('space toggle · a toggle-all · enter submit · pick ◀ Back to return · ctrl+c cancel', 'Keys');
+
   const selected = await multiselect({
     message: `Select clients to manage\n${chalk.dim(hint)}`,
-    options: options.map((opt) => ({
-      label: opt.label,
-      value: opt.value,
-      hint: detectedSet.has(opt.value) ? displayPath(clientRoots[opt.value]) : undefined,
-    })),
-    initialValues: [] as Client[],
+    options: [
+      { label: '◀ Back', value: BACK_TOKEN, hint: 'return to scope selection' },
+      ...options.map((opt) => ({
+        label: opt.label,
+        value: opt.value,
+        hint: detectedSet.has(opt.value) ? displayPath(clientRoots[opt.value]) : undefined,
+      })),
+    ] as { label: string; value: string; hint?: string }[],
+    initialValues: [] as string[],
     required: true,
   });
   if (isCancel(selected)) exitCancelled();
-  return selected as Client[];
+  const values = selected as string[];
+  if (values.includes(BACK_TOKEN)) return 'back';
+  return values as Client[];
 }
 
 function formatClients(clients: Client[]): string {
   return clients.map((c) => CLIENT_LABELS[c]).join(', ');
+}
+
+async function selectSkills(scope: Scope): Promise<string[] | 'back'> {
+  let entries: SkillEntry[] = [];
+  try {
+    entries = await listSkills({ scope });
+  } catch {
+    entries = [];
+  }
+  if (entries.length === 0) {
+    note('未偵測到任何 canonical skill', 'Skills');
+    return [];
+  }
+
+  try {
+    return await pickSkills(entries);
+  } catch (err: unknown) {
+    if (err instanceof SkillPickerBackError) return 'back';
+    exitCancelled();
+    return [];
+  }
+}
+
+function formatSkillsOverview(selected: string[], allEntries: SkillEntry[]): string {
+  const selectedSet = new Set(selected);
+  const activeCategories = Array.from(
+    new Set(
+      allEntries
+        .filter((e) => selectedSet.has(e.dir) && e.category !== null)
+        .map((e) => e.category as string),
+    ),
+  );
+  const catPart = activeCategories.length === 0
+    ? ''
+    : activeCategories.length <= 3
+      ? ` · Categories: ${activeCategories.join(', ')}`
+      : ` · Categories: ${activeCategories.length}`;
+  return `Skills: ${selected.length} / ${allEntries.length}${catPart}`;
 }
 
 async function showStatus(scope: Scope, clients: Client[], status: LinkStatus[], planConflicts: { target: string; reason: string }[]): Promise<void> {
@@ -210,13 +259,13 @@ async function resolveMigrationConflicts(plan: Awaited<ReturnType<typeof scanMig
   return selections;
 }
 
-async function runChange(scope: Scope, clients: Client[]): Promise<void> {
+async function runChange(scope: Scope, clients: Client[], skills: string[]): Promise<void> {
   const spin = spinner();
   spin.start('Scanning current setup...');
   const roots = resolveRoots({ scope });
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const migrate = await scanMigration({ scope, clients });
-  const link = await buildLinkPlan({ scope, clients });
+  const link = await buildLinkPlan({ scope, clients, selectedSkills: skills });
   const backupDir = path.join(roots.canonicalRoot, 'backup', timestamp);
   spin.stop('Scan complete');
 
@@ -270,7 +319,7 @@ async function runChange(scope: Scope, clients: Client[]): Promise<void> {
       selections,
       forceLinks: overwriteConflicts,
     });
-    const result = await applyMigration(migrate, selections, { scope, clients, backup, forceLinks: overwriteConflicts });
+    const result = await applyMigration(migrate, selections, { scope, clients, backup, forceLinks: overwriteConflicts, selectedSkills: skills });
     await finalizeBackup(backup);
     const migrationSummary = `Migrated ${formatCount(result.copied, 'item')}`;
     const linkSummary = `Linked ${formatCount(result.links.applied, 'path')}`;
@@ -288,14 +337,51 @@ async function runChange(scope: Scope, clients: Client[]): Promise<void> {
   }
 }
 
+async function loadAllSkillEntries(scope: Scope): Promise<SkillEntry[]> {
+  try {
+    return await listSkills({ scope });
+  } catch {
+    return [];
+  }
+}
+
 async function run(): Promise<void> {
   intro(chalk.cyan(appTitle));
-  const scope = await selectScope();
-  let clients = await selectClients();
+
+  let scope: Scope = 'global';
+  let clients: Client[] = [];
+  let skills: string[] = [];
+  let allSkillEntries: SkillEntry[] = [];
+
+  // Wizard: scope → clients → skills → main. Back from any step rewinds one step.
+  let step: 'scope' | 'clients' | 'skills' | 'main' = 'scope';
+  wizard: while (true) {
+    if (step === 'scope') {
+      scope = await selectScope();
+      step = 'clients';
+      continue;
+    }
+    if (step === 'clients') {
+      const res = await selectClients();
+      if (res === 'back') { step = 'scope'; continue; }
+      clients = res;
+      step = 'skills';
+      continue;
+    }
+    if (step === 'skills') {
+      const res = await selectSkills(scope);
+      if (res === 'back') { step = 'clients'; continue; }
+      skills = res;
+      allSkillEntries = await loadAllSkillEntries(scope);
+      step = 'main';
+      continue;
+    }
+    break wizard;
+  }
 
   while (true) {
-    const status = mergeAgentStatus(await getLinkStatus({ scope, clients }));
-    const plan = await buildLinkPlan({ scope, clients });
+    const status = mergeAgentStatus(await getLinkStatus({ scope, clients, selectedSkills: skills }));
+    const plan = await buildLinkPlan({ scope, clients, selectedSkills: skills });
     const conflicts = plan.conflicts.length || 0;
     const changes = plan.changes.length || 0;
     const summary = buildStatusSummary(status);
@@ -304,6 +390,7 @@ async function run(): Promise<void> {
     note([
       `Scope: ${scopeLabel(scope)}`,
       `Clients: ${formatClients(clients)}`,
+      formatSkillsOverview(skills, allSkillEntries),
       `Pending changes: ${changes} · Conflicts: ${conflicts}`,
       ...summaryLines,
     ].join('\n'), 'Overview');
@@ -317,6 +404,7 @@ async function run(): Promise<void> {
     }
     options.push({ label: 'View status', value: 'status' });
     options.push({ label: 'Change clients', value: 'clients' });
+    options.push({ label: 'Change skills', value: 'skills' });
     options.push({ label: 'Undo last change', value: 'undo' });
     options.push({ label: 'Exit', value: 'exit' });
 
@@ -330,7 +418,17 @@ async function run(): Promise<void> {
     }
 
     if (action === 'clients') {
-      clients = await selectClients();
+      const res = await selectClients();
+      if (res !== 'back') clients = res;
+      continue;
+    }
+
+    if (action === 'skills') {
+      const res = await selectSkills(scope);
+      if (res !== 'back') {
+        skills = res;
+        allSkillEntries = await loadAllSkillEntries(scope);
+      }
       continue;
     }
 
@@ -362,7 +460,7 @@ async function run(): Promise<void> {
     }
 
     if (action === 'change') {
-      await runChange(scope, clients);
+      await runChange(scope, clients, skills);
     }
   }
 

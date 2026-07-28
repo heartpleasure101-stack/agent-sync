@@ -219,7 +219,7 @@ export type MigrationResult = {
 export async function applyMigration(
   plan: MigrationPlan,
   selections: Map<string, MigrationCandidate | null>,
-  opts: RootOptions & { clients?: Client[]; backup?: BackupSession; forceLinks?: boolean },
+  opts: RootOptions & { clients?: Client[]; backup?: BackupSession; forceLinks?: boolean; selectedSkills?: string[] | null },
 ): Promise<MigrationResult> {
   const backup = opts.backup;
   if (!backup) throw new Error('Backup session required.');

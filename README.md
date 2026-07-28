@@ -67,19 +67,31 @@ Global home affects all projects. Project folder only affects the current direct
 
 `.agents/AGENTS.md` → `~/.config/opencode/AGENTS.md`
 
-`.agents/skills` → `~/.claude/skills`
+Skills are selected per run. Canonical layout `.agents/skills/<category>/<skill>` (categories are just top-level folders you create, e.g. `01_Coding/`, `02_WordProcessing/`); flat `.agents/skills/<skill>` also works. Selected skills link individually to each client with a flat layout:
 
-`.agents/skills` → `~/.factory/skills`
+`.agents/skills/<category>/<skill>` → `~/.claude/skills/<skill>`
 
-`.agents/skills` → `~/.codex/skills`
+`.agents/skills/<category>/<skill>` → `~/.factory/skills/<skill>`
 
-`.agents/skills` → `~/.cursor/skills`
+`.agents/skills/<category>/<skill>` → `~/.codex/skills/<skill>`
 
-`.agents/skills` → `~/.config/opencode/skills`
+`.agents/skills/<category>/<skill>` → `~/.cursor/skills/<skill>`
 
-`.agents/skills` → `~/.gemini/skills`
+`.agents/skills/<category>/<skill>` → `~/.config/opencode/skills/<skill>`
 
-`.agents/skills` → `~/.gemini/antigravity/skills`
+`.agents/skills/<category>/<skill>` → `~/.gemini/skills/<skill>`
+
+`.agents/skills/<category>/<skill>` → `~/.gemini/antigravity/skills/<skill>`
+
+The CLI opens a tabbed picker: each category is a tab, plus an `(uncategorized)` tab when flat skills exist. Keyboard:
+
+- `←` / `→` (or `Tab` / `Shift+Tab`) — switch category tab
+- `↑` / `↓` — move focus within the tab
+- `Space` — toggle the focused skill
+- `a` / `d` — select all / deselect all within the current tab
+- `Enter` — submit; `Esc` / `Ctrl+C` — cancel
+
+Existing users upgrading from the older whole-directory symlink will see one round of overwrite conflicts on first run — apply with overwrite to migrate to per-skill links.
 
 Project scope links only commands/hooks/skills into the project’s client folders (no AGENTS/CLAUDE/GEMINI rules).
 
