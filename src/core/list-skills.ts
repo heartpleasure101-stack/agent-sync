@@ -16,11 +16,12 @@ export type ListSkillsOptions = {
   scope?: Scope;
   projectRoot?: string;
   homeDir?: string;
+  canonicalOverride?: string;
 };
 
 export async function listSkills(opts: ListSkillsOptions = {}): Promise<SkillEntry[]> {
   const scope: Scope = opts.scope ?? 'global';
-  const roots = resolveRoots({ scope, projectRoot: opts.projectRoot, homeDir: opts.homeDir });
+  const roots = resolveRoots({ scope, projectRoot: opts.projectRoot, homeDir: opts.homeDir, canonicalOverride: opts.canonicalOverride });
   const skillsRoot = path.join(roots.canonicalRoot, 'skills');
   if (!(await pathExists(skillsRoot))) return [];
 

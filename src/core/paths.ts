@@ -6,6 +6,7 @@ export type RootOptions = {
   scope: Scope;
   projectRoot?: string;
   homeDir?: string;
+  canonicalOverride?: string;
 };
 
 export type ResolvedRoots = {
@@ -28,6 +29,11 @@ export type ResolvedRoots = {
 export function resolveRoots(opts: RootOptions): ResolvedRoots {
   const homeDir = opts.homeDir || os.homedir();
   const projectRoot = path.resolve(opts.projectRoot || process.cwd());
+  const canonicalOverride =
+    opts.canonicalOverride && opts.canonicalOverride.trim() !== '' && path.isAbsolute(opts.canonicalOverride.trim())
+      ? opts.canonicalOverride.trim()
+      : undefined;
+
   if (opts.scope === 'global') {
     return {
       canonicalRoot: path.join(homeDir, '.agents'),
@@ -47,7 +53,7 @@ export function resolveRoots(opts: RootOptions): ResolvedRoots {
     };
   }
   return {
-    canonicalRoot: path.join(projectRoot, '.agents'),
+    canonicalRoot: canonicalOverride ?? path.join(homeDir, '.agents'),
     claudeRoot: path.join(projectRoot, '.claude'),
     factoryRoot: path.join(projectRoot, '.factory'),
     codexRoot: path.join(projectRoot, '.codex'),

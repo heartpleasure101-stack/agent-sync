@@ -1,13 +1,10 @@
 import path from 'path';
 import type { Client, Mapping, Scope } from './types.js';
-import { resolveRoots } from './paths.js';
+import { resolveRoots, type RootOptions } from './paths.js';
 import { pathExists } from '../utils/fs.js';
 import { listSkills } from './list-skills.js';
 
-export type MappingOptions = {
-  scope: Scope;
-  projectRoot?: string;
-  homeDir?: string;
+export type MappingOptions = RootOptions & {
   clients?: Client[];
   selectedSkills?: string[] | null;
 };
@@ -115,6 +112,7 @@ export async function getMappings(opts: MappingOptions): Promise<Mapping[]> {
       scope: opts.scope,
       projectRoot: opts.projectRoot,
       homeDir: opts.homeDir,
+      canonicalOverride: opts.canonicalOverride,
     });
     for (const entry of entries) {
       if (!wanted.has(entry.dir)) continue;

@@ -179,12 +179,12 @@ test('github skills link to .github/skills in project scope', async () => {
   const project = await makeTempDir('dotagents-project-');
 
   const plan = await buildLinkPlan({ scope: 'project', homeDir: home, projectRoot: project });
-  const backup = await createBackupSession({ canonicalRoot: path.join(project, '.agents'), scope: 'project', operation: 'test' });
+  const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'project', operation: 'test' });
   const result = await applyLinkPlan(plan, { backup });
   await finalizeBackup(backup);
   expect(result.applied).toBeGreaterThan(0);
 
-  const skills = path.join(project, '.agents', 'skills');
+  const skills = path.join(home, '.agents', 'skills');
   const githubSkills = path.join(project, '.github', 'skills');
 
   expect(await readLinkTarget(githubSkills)).toBe(skills);
@@ -195,13 +195,13 @@ test('antigravity links to .agent folders in project scope', async () => {
   const project = await makeTempDir('dotagents-project-');
 
   const plan = await buildLinkPlan({ scope: 'project', homeDir: home, projectRoot: project });
-  const backup = await createBackupSession({ canonicalRoot: path.join(project, '.agents'), scope: 'project', operation: 'test' });
+  const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'project', operation: 'test' });
   const result = await applyLinkPlan(plan, { backup });
   await finalizeBackup(backup);
   expect(result.applied).toBeGreaterThan(0);
 
-  const commands = path.join(project, '.agents', 'commands');
-  const skills = path.join(project, '.agents', 'skills');
+  const commands = path.join(home, '.agents', 'commands');
+  const skills = path.join(home, '.agents', 'skills');
   const antigravityWorkflows = path.join(project, '.agent', 'workflows');
   const antigravitySkills = path.join(project, '.agent', 'skills');
 
@@ -306,9 +306,10 @@ test('project symlinks are portable after directory move when supported', async 
   const tempBase = await makeTempDir('dotagents-portable-');
   const project = path.join(tempBase, 'myproject');
   await fs.promises.mkdir(project, { recursive: true });
+  const canonicalOverride = path.join(project, '.agents');
 
-  const plan = await buildLinkPlan({ scope: 'project', projectRoot: project });
-  const backup = await createBackupSession({ canonicalRoot: path.join(project, '.agents'), scope: 'project', operation: 'test' });
+  const plan = await buildLinkPlan({ scope: 'project', projectRoot: project, canonicalOverride });
+  const backup = await createBackupSession({ canonicalRoot: canonicalOverride, scope: 'project', operation: 'test' });
   await applyLinkPlan(plan, { backup });
   await finalizeBackup(backup);
 

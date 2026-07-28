@@ -867,7 +867,7 @@ function OD({ input: e = $, output: u = k, overwrite: F = true, hideCursor: t = 
     e.off("keypress", C), t && u.write(import_sisteransi.cursor.show), e.isTTY && !WD && e.setRawMode(false), s.terminal = false, s.close();
   };
 }
-var import_sisteransi, J, j, Q, X, DD = function() {
+var import_sisteransi, import_picocolors, J, j, Q, X, DD = function() {
   return /\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62(?:\uDB40\uDC77\uDB40\uDC6C\uDB40\uDC73|\uDB40\uDC73\uDB40\uDC63\uDB40\uDC74|\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67)\uDB40\uDC7F|(?:\uD83E\uDDD1\uD83C\uDFFF\u200D\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1|\uD83D\uDC69\uD83C\uDFFF\u200D\uD83E\uDD1D\u200D(?:\uD83D[\uDC68\uDC69]))(?:\uD83C[\uDFFB-\uDFFE])|(?:\uD83E\uDDD1\uD83C\uDFFE\u200D\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1|\uD83D\uDC69\uD83C\uDFFE\u200D\uD83E\uDD1D\u200D(?:\uD83D[\uDC68\uDC69]))(?:\uD83C[\uDFFB-\uDFFD\uDFFF])|(?:\uD83E\uDDD1\uD83C\uDFFD\u200D\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1|\uD83D\uDC69\uD83C\uDFFD\u200D\uD83E\uDD1D\u200D(?:\uD83D[\uDC68\uDC69]))(?:\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])|(?:\uD83E\uDDD1\uD83C\uDFFC\u200D\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1|\uD83D\uDC69\uD83C\uDFFC\u200D\uD83E\uDD1D\u200D(?:\uD83D[\uDC68\uDC69]))(?:\uD83C[\uDFFB\uDFFD-\uDFFF])|(?:\uD83E\uDDD1\uD83C\uDFFB\u200D\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1|\uD83D\uDC69\uD83C\uDFFB\u200D\uD83E\uDD1D\u200D(?:\uD83D[\uDC68\uDC69]))(?:\uD83C[\uDFFC-\uDFFF])|\uD83D\uDC68(?:\uD83C\uDFFB(?:\u200D(?:\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D\uD83D\uDC68(?:\uD83C[\uDFFB-\uDFFF])|\uD83D\uDC68(?:\uD83C[\uDFFB-\uDFFF]))|\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFC-\uDFFF])|[\u2695\u2696\u2708]\uFE0F|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD]))?|(?:\uD83C[\uDFFC-\uDFFF])\u200D\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D\uD83D\uDC68(?:\uD83C[\uDFFB-\uDFFF])|\uD83D\uDC68(?:\uD83C[\uDFFB-\uDFFF]))|\u200D(?:\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D)?\uD83D\uDC68|(?:\uD83D[\uDC68\uDC69])\u200D(?:\uD83D\uDC66\u200D\uD83D\uDC66|\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67]))|\uD83D\uDC66\u200D\uD83D\uDC66|\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67])|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFF\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFB-\uDFFE])|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFE\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFB-\uDFFD\uDFFF])|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFD\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFC\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFB\uDFFD-\uDFFF])|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|(?:\uD83C\uDFFF\u200D[\u2695\u2696\u2708]|\uD83C\uDFFE\u200D[\u2695\u2696\u2708]|\uD83C\uDFFD\u200D[\u2695\u2696\u2708]|\uD83C\uDFFC\u200D[\u2695\u2696\u2708]|\u200D[\u2695\u2696\u2708])\uFE0F|\u200D(?:(?:\uD83D[\uDC68\uDC69])\u200D(?:\uD83D[\uDC66\uDC67])|\uD83D[\uDC66\uDC67])|\uD83C\uDFFF|\uD83C\uDFFE|\uD83C\uDFFD|\uD83C\uDFFC)?|(?:\uD83D\uDC69(?:\uD83C\uDFFB\u200D\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D(?:\uD83D[\uDC68\uDC69])|\uD83D[\uDC68\uDC69])|(?:\uD83C[\uDFFC-\uDFFF])\u200D\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D(?:\uD83D[\uDC68\uDC69])|\uD83D[\uDC68\uDC69]))|\uD83E\uDDD1(?:\uD83C[\uDFFB-\uDFFF])\u200D\uD83E\uDD1D\u200D\uD83E\uDDD1)(?:\uD83C[\uDFFB-\uDFFF])|\uD83D\uDC69\u200D\uD83D\uDC69\u200D(?:\uD83D\uDC66\u200D\uD83D\uDC66|\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67]))|\uD83D\uDC69(?:\u200D(?:\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D(?:\uD83D[\uDC68\uDC69])|\uD83D[\uDC68\uDC69])|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFF\u200D(?:\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFE\u200D(?:\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFD\u200D(?:\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFC\u200D(?:\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFB\u200D(?:\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD]))|\uD83E\uDDD1(?:\u200D(?:\uD83E\uDD1D\u200D\uD83E\uDDD1|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFF\u200D(?:\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFE\u200D(?:\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFD\u200D(?:\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFC\u200D(?:\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFB\u200D(?:\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD]))|\uD83D\uDC69\u200D\uD83D\uDC66\u200D\uD83D\uDC66|\uD83D\uDC69\u200D\uD83D\uDC69\u200D(?:\uD83D[\uDC66\uDC67])|\uD83D\uDC69\u200D\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67])|(?:\uD83D\uDC41\uFE0F\u200D\uD83D\uDDE8|\uD83E\uDDD1(?:\uD83C\uDFFF\u200D[\u2695\u2696\u2708]|\uD83C\uDFFE\u200D[\u2695\u2696\u2708]|\uD83C\uDFFD\u200D[\u2695\u2696\u2708]|\uD83C\uDFFC\u200D[\u2695\u2696\u2708]|\uD83C\uDFFB\u200D[\u2695\u2696\u2708]|\u200D[\u2695\u2696\u2708])|\uD83D\uDC69(?:\uD83C\uDFFF\u200D[\u2695\u2696\u2708]|\uD83C\uDFFE\u200D[\u2695\u2696\u2708]|\uD83C\uDFFD\u200D[\u2695\u2696\u2708]|\uD83C\uDFFC\u200D[\u2695\u2696\u2708]|\uD83C\uDFFB\u200D[\u2695\u2696\u2708]|\u200D[\u2695\u2696\u2708])|\uD83D\uDE36\u200D\uD83C\uDF2B|\uD83C\uDFF3\uFE0F\u200D\u26A7|\uD83D\uDC3B\u200D\u2744|(?:(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC70\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD35\uDD37-\uDD39\uDD3D\uDD3E\uDDB8\uDDB9\uDDCD-\uDDCF\uDDD4\uDDD6-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])|\uD83D\uDC6F|\uD83E[\uDD3C\uDDDE\uDDDF])\u200D[\u2640\u2642]|(?:\u26F9|\uD83C[\uDFCB\uDFCC]|\uD83D\uDD75)(?:\uFE0F|\uD83C[\uDFFB-\uDFFF])\u200D[\u2640\u2642]|\uD83C\uDFF4\u200D\u2620|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC70\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD35\uDD37-\uDD39\uDD3D\uDD3E\uDDB8\uDDB9\uDDCD-\uDDCF\uDDD4\uDDD6-\uDDDD])\u200D[\u2640\u2642]|[\xA9\xAE\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u2328\u23CF\u23ED-\u23EF\u23F1\u23F2\u23F8-\u23FA\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB\u25FC\u2600-\u2604\u260E\u2611\u2618\u2620\u2622\u2623\u2626\u262A\u262E\u262F\u2638-\u263A\u2640\u2642\u265F\u2660\u2663\u2665\u2666\u2668\u267B\u267E\u2692\u2694-\u2697\u2699\u269B\u269C\u26A0\u26A7\u26B0\u26B1\u26C8\u26CF\u26D1\u26D3\u26E9\u26F0\u26F1\u26F4\u26F7\u26F8\u2702\u2708\u2709\u270F\u2712\u2714\u2716\u271D\u2721\u2733\u2734\u2744\u2747\u2763\u27A1\u2934\u2935\u2B05-\u2B07\u3030\u303D\u3297\u3299]|\uD83C[\uDD70\uDD71\uDD7E\uDD7F\uDE02\uDE37\uDF21\uDF24-\uDF2C\uDF36\uDF7D\uDF96\uDF97\uDF99-\uDF9B\uDF9E\uDF9F\uDFCD\uDFCE\uDFD4-\uDFDF\uDFF5\uDFF7]|\uD83D[\uDC3F\uDCFD\uDD49\uDD4A\uDD6F\uDD70\uDD73\uDD76-\uDD79\uDD87\uDD8A-\uDD8D\uDDA5\uDDA8\uDDB1\uDDB2\uDDBC\uDDC2-\uDDC4\uDDD1-\uDDD3\uDDDC-\uDDDE\uDDE1\uDDE3\uDDE8\uDDEF\uDDF3\uDDFA\uDECB\uDECD-\uDECF\uDEE0-\uDEE5\uDEE9\uDEF0\uDEF3])\uFE0F|\uD83C\uDFF3\uFE0F\u200D\uD83C\uDF08|\uD83D\uDC69\u200D\uD83D\uDC67|\uD83D\uDC69\u200D\uD83D\uDC66|\uD83D\uDE35\u200D\uD83D\uDCAB|\uD83D\uDE2E\u200D\uD83D\uDCA8|\uD83D\uDC15\u200D\uD83E\uDDBA|\uD83E\uDDD1(?:\uD83C\uDFFF|\uD83C\uDFFE|\uD83C\uDFFD|\uD83C\uDFFC|\uD83C\uDFFB)?|\uD83D\uDC69(?:\uD83C\uDFFF|\uD83C\uDFFE|\uD83C\uDFFD|\uD83C\uDFFC|\uD83C\uDFFB)?|\uD83C\uDDFD\uD83C\uDDF0|\uD83C\uDDF6\uD83C\uDDE6|\uD83C\uDDF4\uD83C\uDDF2|\uD83D\uDC08\u200D\u2B1B|\u2764\uFE0F\u200D(?:\uD83D\uDD25|\uD83E\uDE79)|\uD83D\uDC41\uFE0F|\uD83C\uDFF3\uFE0F|\uD83C\uDDFF(?:\uD83C[\uDDE6\uDDF2\uDDFC])|\uD83C\uDDFE(?:\uD83C[\uDDEA\uDDF9])|\uD83C\uDDFC(?:\uD83C[\uDDEB\uDDF8])|\uD83C\uDDFB(?:\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDEE\uDDF3\uDDFA])|\uD83C\uDDFA(?:\uD83C[\uDDE6\uDDEC\uDDF2\uDDF3\uDDF8\uDDFE\uDDFF])|\uD83C\uDDF9(?:\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDED\uDDEF-\uDDF4\uDDF7\uDDF9\uDDFB\uDDFC\uDDFF])|\uD83C\uDDF8(?:\uD83C[\uDDE6-\uDDEA\uDDEC-\uDDF4\uDDF7-\uDDF9\uDDFB\uDDFD-\uDDFF])|\uD83C\uDDF7(?:\uD83C[\uDDEA\uDDF4\uDDF8\uDDFA\uDDFC])|\uD83C\uDDF5(?:\uD83C[\uDDE6\uDDEA-\uDDED\uDDF0-\uDDF3\uDDF7-\uDDF9\uDDFC\uDDFE])|\uD83C\uDDF3(?:\uD83C[\uDDE6\uDDE8\uDDEA-\uDDEC\uDDEE\uDDF1\uDDF4\uDDF5\uDDF7\uDDFA\uDDFF])|\uD83C\uDDF2(?:\uD83C[\uDDE6\uDDE8-\uDDED\uDDF0-\uDDFF])|\uD83C\uDDF1(?:\uD83C[\uDDE6-\uDDE8\uDDEE\uDDF0\uDDF7-\uDDFB\uDDFE])|\uD83C\uDDF0(?:\uD83C[\uDDEA\uDDEC-\uDDEE\uDDF2\uDDF3\uDDF5\uDDF7\uDDFC\uDDFE\uDDFF])|\uD83C\uDDEF(?:\uD83C[\uDDEA\uDDF2\uDDF4\uDDF5])|\uD83C\uDDEE(?:\uD83C[\uDDE8-\uDDEA\uDDF1-\uDDF4\uDDF6-\uDDF9])|\uD83C\uDDED(?:\uD83C[\uDDF0\uDDF2\uDDF3\uDDF7\uDDF9\uDDFA])|\uD83C\uDDEC(?:\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEE\uDDF1-\uDDF3\uDDF5-\uDDFA\uDDFC\uDDFE])|\uD83C\uDDEB(?:\uD83C[\uDDEE-\uDDF0\uDDF2\uDDF4\uDDF7])|\uD83C\uDDEA(?:\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDED\uDDF7-\uDDFA])|\uD83C\uDDE9(?:\uD83C[\uDDEA\uDDEC\uDDEF\uDDF0\uDDF2\uDDF4\uDDFF])|\uD83C\uDDE8(?:\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDEE\uDDF0-\uDDF5\uDDF7\uDDFA-\uDDFF])|\uD83C\uDDE7(?:\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEF\uDDF1-\uDDF4\uDDF6-\uDDF9\uDDFB\uDDFC\uDDFE\uDDFF])|\uD83C\uDDE6(?:\uD83C[\uDDE8-\uDDEC\uDDEE\uDDF1\uDDF2\uDDF4\uDDF6-\uDDFA\uDDFC\uDDFD\uDDFF])|[#\*0-9]\uFE0F\u20E3|\u2764\uFE0F|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC70\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD35\uDD37-\uDD39\uDD3D\uDD3E\uDDB8\uDDB9\uDDCD-\uDDCF\uDDD4\uDDD6-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])|(?:\u26F9|\uD83C[\uDFCB\uDFCC]|\uD83D\uDD75)(?:\uFE0F|\uD83C[\uDFFB-\uDFFF])|\uD83C\uDFF4|(?:[\u270A\u270B]|\uD83C[\uDF85\uDFC2\uDFC7]|\uD83D[\uDC42\uDC43\uDC46-\uDC50\uDC66\uDC67\uDC6B-\uDC6D\uDC72\uDC74-\uDC76\uDC78\uDC7C\uDC83\uDC85\uDC8F\uDC91\uDCAA\uDD7A\uDD95\uDD96\uDE4C\uDE4F\uDEC0\uDECC]|\uD83E[\uDD0C\uDD0F\uDD18-\uDD1C\uDD1E\uDD1F\uDD30-\uDD34\uDD36\uDD77\uDDB5\uDDB6\uDDBB\uDDD2\uDDD3\uDDD5])(?:\uD83C[\uDFFB-\uDFFF])|(?:[\u261D\u270C\u270D]|\uD83D[\uDD74\uDD90])(?:\uFE0F|\uD83C[\uDFFB-\uDFFF])|[\u270A\u270B]|\uD83C[\uDF85\uDFC2\uDFC7]|\uD83D[\uDC08\uDC15\uDC3B\uDC42\uDC43\uDC46-\uDC50\uDC66\uDC67\uDC6B-\uDC6D\uDC72\uDC74-\uDC76\uDC78\uDC7C\uDC83\uDC85\uDC8F\uDC91\uDCAA\uDD7A\uDD95\uDD96\uDE2E\uDE35\uDE36\uDE4C\uDE4F\uDEC0\uDECC]|\uD83E[\uDD0C\uDD0F\uDD18-\uDD1C\uDD1E\uDD1F\uDD30-\uDD34\uDD36\uDD77\uDDB5\uDDB6\uDDBB\uDDD2\uDDD3\uDDD5]|\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC70\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD35\uDD37-\uDD39\uDD3D\uDD3E\uDDB8\uDDB9\uDDCD-\uDDCF\uDDD4\uDDD6-\uDDDD]|\uD83D\uDC6F|\uD83E[\uDD3C\uDDDE\uDDDF]|[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF84\uDF86-\uDF93\uDFA0-\uDFC1\uDFC5\uDFC6\uDFC8\uDFC9\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC07\uDC09-\uDC14\uDC16-\uDC3A\uDC3C-\uDC3E\uDC40\uDC44\uDC45\uDC51-\uDC65\uDC6A\uDC79-\uDC7B\uDC7D-\uDC80\uDC84\uDC88-\uDC8E\uDC90\uDC92-\uDCA9\uDCAB-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDDA4\uDDFB-\uDE2D\uDE2F-\uDE34\uDE37-\uDE44\uDE48-\uDE4A\uDE80-\uDEA2\uDEA4-\uDEB3\uDEB7-\uDEBF\uDEC1-\uDEC5\uDED0-\uDED2\uDED5-\uDED7\uDEEB\uDEEC\uDEF4-\uDEFC\uDFE0-\uDFEB]|\uD83E[\uDD0D\uDD0E\uDD10-\uDD17\uDD1D\uDD20-\uDD25\uDD27-\uDD2F\uDD3A\uDD3F-\uDD45\uDD47-\uDD76\uDD78\uDD7A-\uDDB4\uDDB7\uDDBA\uDDBC-\uDDCB\uDDD0\uDDE0-\uDDFF\uDE70-\uDE74\uDE78-\uDE7A\uDE80-\uDE86\uDE90-\uDEA8\uDEB0-\uDEB6\uDEC0-\uDEC2\uDED0-\uDED6]|(?:[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF93\uDFA0-\uDFCA\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF4\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC3E\uDC40\uDC42-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDD7A\uDD95\uDD96\uDDA4\uDDFB-\uDE4F\uDE80-\uDEC5\uDECC\uDED0-\uDED2\uDED5-\uDED7\uDEEB\uDEEC\uDEF4-\uDEFC\uDFE0-\uDFEB]|\uD83E[\uDD0C-\uDD3A\uDD3C-\uDD45\uDD47-\uDD78\uDD7A-\uDDCB\uDDCD-\uDDFF\uDE70-\uDE74\uDE78-\uDE7A\uDE80-\uDE86\uDE90-\uDEA8\uDEB0-\uDEB6\uDEC0-\uDEC2\uDED0-\uDED6])|(?:[#\*0-9\xA9\xAE\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE\u2600-\u2604\u260E\u2611\u2614\u2615\u2618\u261D\u2620\u2622\u2623\u2626\u262A\u262E\u262F\u2638-\u263A\u2640\u2642\u2648-\u2653\u265F\u2660\u2663\u2665\u2666\u2668\u267B\u267E\u267F\u2692-\u2697\u2699\u269B\u269C\u26A0\u26A1\u26A7\u26AA\u26AB\u26B0\u26B1\u26BD\u26BE\u26C4\u26C5\u26C8\u26CE\u26CF\u26D1\u26D3\u26D4\u26E9\u26EA\u26F0-\u26F5\u26F7-\u26FA\u26FD\u2702\u2705\u2708-\u270D\u270F\u2712\u2714\u2716\u271D\u2721\u2728\u2733\u2734\u2744\u2747\u274C\u274E\u2753-\u2755\u2757\u2763\u2764\u2795-\u2797\u27A1\u27B0\u27BF\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55\u3030\u303D\u3297\u3299]|\uD83C[\uDC04\uDCCF\uDD70\uDD71\uDD7E\uDD7F\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE02\uDE1A\uDE2F\uDE32-\uDE3A\uDE50\uDE51\uDF00-\uDF21\uDF24-\uDF93\uDF96\uDF97\uDF99-\uDF9B\uDF9E-\uDFF0\uDFF3-\uDFF5\uDFF7-\uDFFF]|\uD83D[\uDC00-\uDCFD\uDCFF-\uDD3D\uDD49-\uDD4E\uDD50-\uDD67\uDD6F\uDD70\uDD73-\uDD7A\uDD87\uDD8A-\uDD8D\uDD90\uDD95\uDD96\uDDA4\uDDA5\uDDA8\uDDB1\uDDB2\uDDBC\uDDC2-\uDDC4\uDDD1-\uDDD3\uDDDC-\uDDDE\uDDE1\uDDE3\uDDE8\uDDEF\uDDF3\uDDFA-\uDE4F\uDE80-\uDEC5\uDECB-\uDED2\uDED5-\uDED7\uDEE0-\uDEE5\uDEE9\uDEEB\uDEEC\uDEF0\uDEF3-\uDEFC\uDFE0-\uDFEB]|\uD83E[\uDD0C-\uDD3A\uDD3C-\uDD45\uDD47-\uDD78\uDD7A-\uDDCB\uDDCD-\uDDFF\uDE70-\uDE74\uDE78-\uDE7A\uDE80-\uDE86\uDE90-\uDEA8\uDEB0-\uDEB6\uDEC0-\uDEC2\uDED0-\uDED6])\uFE0F|(?:[\u261D\u26F9\u270A-\u270D]|\uD83C[\uDF85\uDFC2-\uDFC4\uDFC7\uDFCA-\uDFCC]|\uD83D[\uDC42\uDC43\uDC46-\uDC50\uDC66-\uDC78\uDC7C\uDC81-\uDC83\uDC85-\uDC87\uDC8F\uDC91\uDCAA\uDD74\uDD75\uDD7A\uDD90\uDD95\uDD96\uDE45-\uDE47\uDE4B-\uDE4F\uDEA3\uDEB4-\uDEB6\uDEC0\uDECC]|\uD83E[\uDD0C\uDD0F\uDD18-\uDD1F\uDD26\uDD30-\uDD39\uDD3C-\uDD3E\uDD77\uDDB5\uDDB6\uDDB8\uDDB9\uDDBB\uDDCD-\uDDCF\uDDD1-\uDDDD])/g;
 }, uD, d = 10, M = (e = 0) => (u) => `\x1B[${u + e}m`, P = (e = 0) => (u) => `\x1B[${38 + e};5;${u}m`, W = (e = 0) => (u, F, t) => `\x1B[${38 + e};2;${u};${F};${t}m`, r, FD, eD, sD, g, CD = 39, b = "\x07", O = "[", iD = "]", I = "m", w, N = (e) => `${g.values().next().value}${O}${e}${I}`, L = (e) => `${g.values().next().value}${w}${e}${b}`, rD = (e) => e.split(" ").map((u) => A(u)), y = (e, u, F) => {
   const t = [...u];
@@ -932,9 +932,10 @@ var import_sisteransi, J, j, Q, X, DD = function() {
 ` && (s && o && (t += N(s)), C && (t += L(C)));
   }
   return t;
-}, nD, aD = (e, u, F) => (u in e) ? nD(e, u, { enumerable: true, configurable: true, writable: true, value: F }) : e[u] = F, a = (e, u, F) => (aD(e, typeof u != "symbol" ? u + "" : u, F), F), V, z, xD, BD, fD, gD = (e, u, F) => (u in e) ? fD(e, u, { enumerable: true, configurable: true, writable: true, value: F }) : e[u] = F, K = (e, u, F) => (gD(e, typeof u != "symbol" ? u + "" : u, F), F), vD, wD, yD = (e, u, F) => (u in e) ? wD(e, u, { enumerable: true, configurable: true, writable: true, value: F }) : e[u] = F, Z = (e, u, F) => (yD(e, typeof u != "symbol" ? u + "" : u, F), F), $D, WD;
+}, nD, aD = (e, u, F) => (u in e) ? nD(e, u, { enumerable: true, configurable: true, writable: true, value: F }) : e[u] = F, a = (e, u, F) => (aD(e, typeof u != "symbol" ? u + "" : u, F), F), V, z, xD, BD, fD, gD = (e, u, F) => (u in e) ? fD(e, u, { enumerable: true, configurable: true, writable: true, value: F }) : e[u] = F, K = (e, u, F) => (gD(e, typeof u != "symbol" ? u + "" : u, F), F), vD, wD, yD = (e, u, F) => (u in e) ? wD(e, u, { enumerable: true, configurable: true, writable: true, value: F }) : e[u] = F, Z = (e, u, F) => (yD(e, typeof u != "symbol" ? u + "" : u, F), F), $D, TD, jD = (e, u, F) => (u in e) ? TD(e, u, { enumerable: true, configurable: true, writable: true, value: F }) : e[u] = F, MD = (e, u, F) => (jD(e, typeof u != "symbol" ? u + "" : u, F), F), PD, WD;
 var init_dist = __esm(() => {
   import_sisteransi = __toESM(require_src(), 1);
+  import_picocolors = __toESM(require_picocolors(), 1);
   J = q();
   j = { exports: {} };
   (function(e) {
@@ -1056,6 +1057,24 @@ var init_dist = __esm(() => {
       this.value = this._value.value;
     }
   };
+  TD = Object.defineProperty;
+  PD = class PD extends x {
+    constructor(u) {
+      super(u), MD(this, "valueWithCursor", ""), this.on("finalize", () => {
+        this.value || (this.value = u.defaultValue), this.valueWithCursor = this.value;
+      }), this.on("value", () => {
+        if (this.cursor >= this.value.length)
+          this.valueWithCursor = `${this.value}${import_picocolors.default.inverse(import_picocolors.default.hidden("_"))}`;
+        else {
+          const F = this.value.slice(0, this.cursor), t = this.value.slice(this.cursor);
+          this.valueWithCursor = `${F}${import_picocolors.default.inverse(t[0])}${t.slice(1)}`;
+        }
+      });
+    }
+    get cursor() {
+      return this._cursor;
+    }
+  };
   WD = globalThis.process.platform.startsWith("win");
 });
 
@@ -1068,59 +1087,79 @@ function me() {
   const r2 = ["[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)", "(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]))"].join("|");
   return new RegExp(r2, "g");
 }
-var import_picocolors, import_sisteransi2, _2, o = (r2, n) => _2 ? r2 : n, H, I2, x2, S2, K2, a2, d2, b2, E, C, w2, M2, U2, B, Z2, z2, X2, J2, Y, Q2, ee, y2 = (r2) => {
+var import_picocolors2, import_sisteransi2, _2, o = (r2, n) => _2 ? r2 : n, H, I2, x2, S2, K2, a2, d2, b2, E, C, w2, M2, U2, B, Z2, z2, X2, J2, Y, Q2, ee, y2 = (r2) => {
   switch (r2) {
     case "initial":
     case "active":
-      return import_picocolors.default.cyan(H);
+      return import_picocolors2.default.cyan(H);
     case "cancel":
-      return import_picocolors.default.red(I2);
+      return import_picocolors2.default.red(I2);
     case "error":
-      return import_picocolors.default.yellow(x2);
+      return import_picocolors2.default.yellow(x2);
     case "submit":
-      return import_picocolors.default.green(S2);
+      return import_picocolors2.default.green(S2);
   }
-}, se = (r2) => {
+}, te = (r2) => new PD({ validate: r2.validate, placeholder: r2.placeholder, defaultValue: r2.defaultValue, initialValue: r2.initialValue, render() {
+  const n = `${import_picocolors2.default.gray(a2)}
+${y2(this.state)}  ${r2.message}
+`, i = r2.placeholder ? import_picocolors2.default.inverse(r2.placeholder[0]) + import_picocolors2.default.dim(r2.placeholder.slice(1)) : import_picocolors2.default.inverse(import_picocolors2.default.hidden("_")), t = this.value ? this.valueWithCursor : i;
+  switch (this.state) {
+    case "error":
+      return `${n.trim()}
+${import_picocolors2.default.yellow(a2)}  ${t}
+${import_picocolors2.default.yellow(d2)}  ${import_picocolors2.default.yellow(this.error)}
+`;
+    case "submit":
+      return `${n}${import_picocolors2.default.gray(a2)}  ${import_picocolors2.default.dim(this.value || r2.placeholder)}`;
+    case "cancel":
+      return `${n}${import_picocolors2.default.gray(a2)}  ${import_picocolors2.default.strikethrough(import_picocolors2.default.dim(this.value ?? ""))}${this.value?.trim() ? `
+` + import_picocolors2.default.gray(a2) : ""}`;
+    default:
+      return `${n}${import_picocolors2.default.cyan(a2)}  ${t}
+${import_picocolors2.default.cyan(d2)}
+`;
+  }
+} }).prompt(), se = (r2) => {
   const n = r2.active ?? "Yes", i = r2.inactive ?? "No";
   return new BD({ active: n, inactive: i, initialValue: r2.initialValue ?? true, render() {
-    const t = `${import_picocolors.default.gray(a2)}
+    const t = `${import_picocolors2.default.gray(a2)}
 ${y2(this.state)}  ${r2.message}
 `, s = this.value ? n : i;
     switch (this.state) {
       case "submit":
-        return `${t}${import_picocolors.default.gray(a2)}  ${import_picocolors.default.dim(s)}`;
+        return `${t}${import_picocolors2.default.gray(a2)}  ${import_picocolors2.default.dim(s)}`;
       case "cancel":
-        return `${t}${import_picocolors.default.gray(a2)}  ${import_picocolors.default.strikethrough(import_picocolors.default.dim(s))}
-${import_picocolors.default.gray(a2)}`;
+        return `${t}${import_picocolors2.default.gray(a2)}  ${import_picocolors2.default.strikethrough(import_picocolors2.default.dim(s))}
+${import_picocolors2.default.gray(a2)}`;
       default:
-        return `${t}${import_picocolors.default.cyan(a2)}  ${this.value ? `${import_picocolors.default.green(b2)} ${n}` : `${import_picocolors.default.dim(E)} ${import_picocolors.default.dim(n)}`} ${import_picocolors.default.dim("/")} ${this.value ? `${import_picocolors.default.dim(E)} ${import_picocolors.default.dim(i)}` : `${import_picocolors.default.green(b2)} ${i}`}
-${import_picocolors.default.cyan(d2)}
+        return `${t}${import_picocolors2.default.cyan(a2)}  ${this.value ? `${import_picocolors2.default.green(b2)} ${n}` : `${import_picocolors2.default.dim(E)} ${import_picocolors2.default.dim(n)}`} ${import_picocolors2.default.dim("/")} ${this.value ? `${import_picocolors2.default.dim(E)} ${import_picocolors2.default.dim(i)}` : `${import_picocolors2.default.green(b2)} ${i}`}
+${import_picocolors2.default.cyan(d2)}
 `;
     }
   } }).prompt();
 }, ie = (r2) => {
   const n = (t, s) => {
-    const c = t.label ?? String(t.value);
-    return s === "active" ? `${import_picocolors.default.green(b2)} ${c} ${t.hint ? import_picocolors.default.dim(`(${t.hint})`) : ""}` : s === "selected" ? `${import_picocolors.default.dim(c)}` : s === "cancelled" ? `${import_picocolors.default.strikethrough(import_picocolors.default.dim(c))}` : `${import_picocolors.default.dim(E)} ${import_picocolors.default.dim(c)}`;
+    const c2 = t.label ?? String(t.value);
+    return s === "active" ? `${import_picocolors2.default.green(b2)} ${c2} ${t.hint ? import_picocolors2.default.dim(`(${t.hint})`) : ""}` : s === "selected" ? `${import_picocolors2.default.dim(c2)}` : s === "cancelled" ? `${import_picocolors2.default.strikethrough(import_picocolors2.default.dim(c2))}` : `${import_picocolors2.default.dim(E)} ${import_picocolors2.default.dim(c2)}`;
   };
   let i = 0;
   return new $D({ options: r2.options, initialValue: r2.initialValue, render() {
-    const t = `${import_picocolors.default.gray(a2)}
+    const t = `${import_picocolors2.default.gray(a2)}
 ${y2(this.state)}  ${r2.message}
 `;
     switch (this.state) {
       case "submit":
-        return `${t}${import_picocolors.default.gray(a2)}  ${n(this.options[this.cursor], "selected")}`;
+        return `${t}${import_picocolors2.default.gray(a2)}  ${n(this.options[this.cursor], "selected")}`;
       case "cancel":
-        return `${t}${import_picocolors.default.gray(a2)}  ${n(this.options[this.cursor], "cancelled")}
-${import_picocolors.default.gray(a2)}`;
+        return `${t}${import_picocolors2.default.gray(a2)}  ${n(this.options[this.cursor], "cancelled")}
+${import_picocolors2.default.gray(a2)}`;
       default: {
         const s = r2.maxItems === undefined ? 1 / 0 : Math.max(r2.maxItems, 5);
         this.cursor >= i + s - 3 ? i = Math.max(Math.min(this.cursor - s + 3, this.options.length - s), 0) : this.cursor < i + 2 && (i = Math.max(this.cursor - 2, 0));
-        const c = s < this.options.length && i > 0, l2 = s < this.options.length && i + s < this.options.length;
-        return `${t}${import_picocolors.default.cyan(a2)}  ${this.options.slice(i, i + s).map((u, m2, $2) => m2 === 0 && c ? import_picocolors.default.dim("...") : m2 === $2.length - 1 && l2 ? import_picocolors.default.dim("...") : n(u, m2 + i === this.cursor ? "active" : "inactive")).join(`
-${import_picocolors.default.cyan(a2)}  `)}
-${import_picocolors.default.cyan(d2)}
+        const c2 = s < this.options.length && i > 0, l2 = s < this.options.length && i + s < this.options.length;
+        return `${t}${import_picocolors2.default.cyan(a2)}  ${this.options.slice(i, i + s).map((u, m2, $2) => m2 === 0 && c2 ? import_picocolors2.default.dim("...") : m2 === $2.length - 1 && l2 ? import_picocolors2.default.dim("...") : n(u, m2 + i === this.cursor ? "active" : "inactive")).join(`
+${import_picocolors2.default.cyan(a2)}  `)}
+${import_picocolors2.default.cyan(d2)}
 `;
       }
     }
@@ -1128,43 +1167,43 @@ ${import_picocolors.default.cyan(d2)}
 }, ae = (r2) => {
   const n = (i, t) => {
     const s = i.label ?? String(i.value);
-    return t === "active" ? `${import_picocolors.default.cyan(C)} ${s} ${i.hint ? import_picocolors.default.dim(`(${i.hint})`) : ""}` : t === "selected" ? `${import_picocolors.default.green(w2)} ${import_picocolors.default.dim(s)}` : t === "cancelled" ? `${import_picocolors.default.strikethrough(import_picocolors.default.dim(s))}` : t === "active-selected" ? `${import_picocolors.default.green(w2)} ${s} ${i.hint ? import_picocolors.default.dim(`(${i.hint})`) : ""}` : t === "submitted" ? `${import_picocolors.default.dim(s)}` : `${import_picocolors.default.dim(M2)} ${import_picocolors.default.dim(s)}`;
+    return t === "active" ? `${import_picocolors2.default.cyan(C)} ${s} ${i.hint ? import_picocolors2.default.dim(`(${i.hint})`) : ""}` : t === "selected" ? `${import_picocolors2.default.green(w2)} ${import_picocolors2.default.dim(s)}` : t === "cancelled" ? `${import_picocolors2.default.strikethrough(import_picocolors2.default.dim(s))}` : t === "active-selected" ? `${import_picocolors2.default.green(w2)} ${s} ${i.hint ? import_picocolors2.default.dim(`(${i.hint})`) : ""}` : t === "submitted" ? `${import_picocolors2.default.dim(s)}` : `${import_picocolors2.default.dim(M2)} ${import_picocolors2.default.dim(s)}`;
   };
   return new vD({ options: r2.options, initialValues: r2.initialValues, required: r2.required ?? true, cursorAt: r2.cursorAt, validate(i) {
     if (this.required && i.length === 0)
       return `Please select at least one option.
-${import_picocolors.default.reset(import_picocolors.default.dim(`Press ${import_picocolors.default.gray(import_picocolors.default.bgWhite(import_picocolors.default.inverse(" space ")))} to select, ${import_picocolors.default.gray(import_picocolors.default.bgWhite(import_picocolors.default.inverse(" enter ")))} to submit`))}`;
+${import_picocolors2.default.reset(import_picocolors2.default.dim(`Press ${import_picocolors2.default.gray(import_picocolors2.default.bgWhite(import_picocolors2.default.inverse(" space ")))} to select, ${import_picocolors2.default.gray(import_picocolors2.default.bgWhite(import_picocolors2.default.inverse(" enter ")))} to submit`))}`;
   }, render() {
-    let i = `${import_picocolors.default.gray(a2)}
+    let i = `${import_picocolors2.default.gray(a2)}
 ${y2(this.state)}  ${r2.message}
 `;
     switch (this.state) {
       case "submit":
-        return `${i}${import_picocolors.default.gray(a2)}  ${this.options.filter(({ value: t }) => this.value.includes(t)).map((t) => n(t, "submitted")).join(import_picocolors.default.dim(", ")) || import_picocolors.default.dim("none")}`;
+        return `${i}${import_picocolors2.default.gray(a2)}  ${this.options.filter(({ value: t }) => this.value.includes(t)).map((t) => n(t, "submitted")).join(import_picocolors2.default.dim(", ")) || import_picocolors2.default.dim("none")}`;
       case "cancel": {
-        const t = this.options.filter(({ value: s }) => this.value.includes(s)).map((s) => n(s, "cancelled")).join(import_picocolors.default.dim(", "));
-        return `${i}${import_picocolors.default.gray(a2)}  ${t.trim() ? `${t}
-${import_picocolors.default.gray(a2)}` : ""}`;
+        const t = this.options.filter(({ value: s }) => this.value.includes(s)).map((s) => n(s, "cancelled")).join(import_picocolors2.default.dim(", "));
+        return `${i}${import_picocolors2.default.gray(a2)}  ${t.trim() ? `${t}
+${import_picocolors2.default.gray(a2)}` : ""}`;
       }
       case "error": {
         const t = this.error.split(`
-`).map((s, c) => c === 0 ? `${import_picocolors.default.yellow(d2)}  ${import_picocolors.default.yellow(s)}` : `   ${s}`).join(`
+`).map((s, c2) => c2 === 0 ? `${import_picocolors2.default.yellow(d2)}  ${import_picocolors2.default.yellow(s)}` : `   ${s}`).join(`
 `);
-        return i + import_picocolors.default.yellow(a2) + "  " + this.options.map((s, c) => {
-          const l2 = this.value.includes(s.value), u = c === this.cursor;
+        return i + import_picocolors2.default.yellow(a2) + "  " + this.options.map((s, c2) => {
+          const l2 = this.value.includes(s.value), u = c2 === this.cursor;
           return u && l2 ? n(s, "active-selected") : l2 ? n(s, "selected") : n(s, u ? "active" : "inactive");
         }).join(`
-${import_picocolors.default.yellow(a2)}  `) + `
+${import_picocolors2.default.yellow(a2)}  `) + `
 ` + t + `
 `;
       }
       default:
-        return `${i}${import_picocolors.default.cyan(a2)}  ${this.options.map((t, s) => {
-          const c = this.value.includes(t.value), l2 = s === this.cursor;
-          return l2 && c ? n(t, "active-selected") : c ? n(t, "selected") : n(t, l2 ? "active" : "inactive");
+        return `${i}${import_picocolors2.default.cyan(a2)}  ${this.options.map((t, s) => {
+          const c2 = this.value.includes(t.value), l2 = s === this.cursor;
+          return l2 && c2 ? n(t, "active-selected") : c2 ? n(t, "selected") : n(t, l2 ? "active" : "inactive");
         }).join(`
-${import_picocolors.default.cyan(a2)}  `)}
-${import_picocolors.default.cyan(d2)}
+${import_picocolors2.default.cyan(a2)}  `)}
+${import_picocolors2.default.cyan(d2)}
 `;
     }
   } }).prompt();
@@ -1172,43 +1211,43 @@ ${import_picocolors.default.cyan(d2)}
   const i = `
 ${r2}
 `.split(`
-`), t = R2(n).length, s = Math.max(i.reduce((l2, u) => (u = R2(u), u.length > l2 ? u.length : l2), 0), t) + 2, c = i.map((l2) => `${import_picocolors.default.gray(a2)}  ${import_picocolors.default.dim(l2)}${" ".repeat(s - R2(l2).length)}${import_picocolors.default.gray(a2)}`).join(`
+`), t = R2(n).length, s = Math.max(i.reduce((l2, u) => (u = R2(u), u.length > l2 ? u.length : l2), 0), t) + 2, c2 = i.map((l2) => `${import_picocolors2.default.gray(a2)}  ${import_picocolors2.default.dim(l2)}${" ".repeat(s - R2(l2).length)}${import_picocolors2.default.gray(a2)}`).join(`
 `);
-  process.stdout.write(`${import_picocolors.default.gray(a2)}
-${import_picocolors.default.green(S2)}  ${import_picocolors.default.reset(n)} ${import_picocolors.default.gray(B.repeat(Math.max(s - t - 1, 1)) + Z2)}
-${c}
-${import_picocolors.default.gray(z2 + B.repeat(s + 2) + X2)}
+  process.stdout.write(`${import_picocolors2.default.gray(a2)}
+${import_picocolors2.default.green(S2)}  ${import_picocolors2.default.reset(n)} ${import_picocolors2.default.gray(B.repeat(Math.max(s - t - 1, 1)) + Z2)}
+${c2}
+${import_picocolors2.default.gray(z2 + B.repeat(s + 2) + X2)}
 `);
 }, ue = (r2 = "") => {
-  process.stdout.write(`${import_picocolors.default.gray(d2)}  ${import_picocolors.default.red(r2)}
+  process.stdout.write(`${import_picocolors2.default.gray(d2)}  ${import_picocolors2.default.red(r2)}
 
 `);
 }, oe = (r2 = "") => {
-  process.stdout.write(`${import_picocolors.default.gray(K2)}  ${r2}
+  process.stdout.write(`${import_picocolors2.default.gray(K2)}  ${r2}
 `);
 }, $e = (r2 = "") => {
-  process.stdout.write(`${import_picocolors.default.gray(a2)}
-${import_picocolors.default.gray(d2)}  ${r2}
+  process.stdout.write(`${import_picocolors2.default.gray(a2)}
+${import_picocolors2.default.gray(d2)}  ${r2}
 
 `);
 }, de = () => {
   const r2 = _2 ? ["◒", "◐", "◓", "◑"] : ["•", "o", "O", "0"], n = _2 ? 80 : 120;
-  let i, t, s = false, c = "";
+  let i, t, s = false, c2 = "";
   const l2 = (v2 = "") => {
-    s = true, i = OD(), c = v2.replace(/\.+$/, ""), process.stdout.write(`${import_picocolors.default.gray(a2)}
+    s = true, i = OD(), c2 = v2.replace(/\.+$/, ""), process.stdout.write(`${import_picocolors2.default.gray(a2)}
 `);
     let g2 = 0, p = 0;
     t = setInterval(() => {
-      const O2 = import_picocolors.default.magenta(r2[g2]), P2 = ".".repeat(Math.floor(p)).slice(0, 3);
-      process.stdout.write(import_sisteransi2.cursor.move(-999, 0)), process.stdout.write(import_sisteransi2.erase.down(1)), process.stdout.write(`${O2}  ${c}${P2}`), g2 = g2 + 1 < r2.length ? g2 + 1 : 0, p = p < r2.length ? p + 0.125 : 0;
+      const O2 = import_picocolors2.default.magenta(r2[g2]), P2 = ".".repeat(Math.floor(p)).slice(0, 3);
+      process.stdout.write(import_sisteransi2.cursor.move(-999, 0)), process.stdout.write(import_sisteransi2.erase.down(1)), process.stdout.write(`${O2}  ${c2}${P2}`), g2 = g2 + 1 < r2.length ? g2 + 1 : 0, p = p < r2.length ? p + 0.125 : 0;
     }, n);
   }, u = (v2 = "", g2 = 0) => {
-    c = v2 ?? c, s = false, clearInterval(t);
-    const p = g2 === 0 ? import_picocolors.default.green(S2) : g2 === 1 ? import_picocolors.default.red(I2) : import_picocolors.default.red(x2);
-    process.stdout.write(import_sisteransi2.cursor.move(-999, 0)), process.stdout.write(import_sisteransi2.erase.down(1)), process.stdout.write(`${p}  ${c}
+    c2 = v2 ?? c2, s = false, clearInterval(t);
+    const p = g2 === 0 ? import_picocolors2.default.green(S2) : g2 === 1 ? import_picocolors2.default.red(I2) : import_picocolors2.default.red(x2);
+    process.stdout.write(import_sisteransi2.cursor.move(-999, 0)), process.stdout.write(import_sisteransi2.erase.down(1)), process.stdout.write(`${p}  ${c2}
 `), i();
   }, m2 = (v2 = "") => {
-    c = v2 ?? c;
+    c2 = v2 ?? c2;
   }, $2 = (v2) => {
     const g2 = v2 > 1 ? "Something went wrong" : "Canceled";
     s && u(g2, v2);
@@ -1218,7 +1257,7 @@ ${import_picocolors.default.gray(d2)}  ${r2}
 var init_dist2 = __esm(() => {
   init_dist();
   init_dist();
-  import_picocolors = __toESM(require_picocolors(), 1);
+  import_picocolors2 = __toESM(require_picocolors(), 1);
   import_sisteransi2 = __toESM(require_src(), 1);
   _2 = q2();
   H = o("◆", "*");
@@ -1250,6 +1289,7 @@ import path from "path";
 function resolveRoots(opts) {
   const homeDir = opts.homeDir || os2.homedir();
   const projectRoot = path.resolve(opts.projectRoot || process.cwd());
+  const canonicalOverride = opts.canonicalOverride && opts.canonicalOverride.trim() !== "" && path.isAbsolute(opts.canonicalOverride.trim()) ? opts.canonicalOverride.trim() : undefined;
   if (opts.scope === "global") {
     return {
       canonicalRoot: path.join(homeDir, ".agents"),
@@ -1269,7 +1309,7 @@ function resolveRoots(opts) {
     };
   }
   return {
-    canonicalRoot: path.join(projectRoot, ".agents"),
+    canonicalRoot: canonicalOverride ?? path.join(homeDir, ".agents"),
     claudeRoot: path.join(projectRoot, ".claude"),
     factoryRoot: path.join(projectRoot, ".factory"),
     codexRoot: path.join(projectRoot, ".codex"),
@@ -2019,14 +2059,14 @@ var require_bool = __commonJS((exports, module) => {
 var require_int = __commonJS((exports, module) => {
   var common = require_common();
   var Type = require_type();
-  function isHexCode(c) {
-    return 48 <= c && c <= 57 || 65 <= c && c <= 70 || 97 <= c && c <= 102;
+  function isHexCode(c2) {
+    return 48 <= c2 && c2 <= 57 || 65 <= c2 && c2 <= 70 || 97 <= c2 && c2 <= 102;
   }
-  function isOctCode(c) {
-    return 48 <= c && c <= 55;
+  function isOctCode(c2) {
+    return 48 <= c2 && c2 <= 55;
   }
-  function isDecCode(c) {
-    return 48 <= c && c <= 57;
+  function isDecCode(c2) {
+    return 48 <= c2 && c2 <= 57;
   }
   function resolveYamlInteger(data) {
     if (data === null)
@@ -2734,56 +2774,56 @@ var require_loader = __commonJS((exports, module) => {
   function _class(obj) {
     return Object.prototype.toString.call(obj);
   }
-  function is_EOL(c) {
-    return c === 10 || c === 13;
+  function is_EOL(c2) {
+    return c2 === 10 || c2 === 13;
   }
-  function is_WHITE_SPACE(c) {
-    return c === 9 || c === 32;
+  function is_WHITE_SPACE(c2) {
+    return c2 === 9 || c2 === 32;
   }
-  function is_WS_OR_EOL(c) {
-    return c === 9 || c === 32 || c === 10 || c === 13;
+  function is_WS_OR_EOL(c2) {
+    return c2 === 9 || c2 === 32 || c2 === 10 || c2 === 13;
   }
-  function is_FLOW_INDICATOR(c) {
-    return c === 44 || c === 91 || c === 93 || c === 123 || c === 125;
+  function is_FLOW_INDICATOR(c2) {
+    return c2 === 44 || c2 === 91 || c2 === 93 || c2 === 123 || c2 === 125;
   }
-  function fromHexCode(c) {
+  function fromHexCode(c2) {
     var lc;
-    if (48 <= c && c <= 57) {
-      return c - 48;
+    if (48 <= c2 && c2 <= 57) {
+      return c2 - 48;
     }
-    lc = c | 32;
+    lc = c2 | 32;
     if (97 <= lc && lc <= 102) {
       return lc - 97 + 10;
     }
     return -1;
   }
-  function escapedHexLen(c) {
-    if (c === 120) {
+  function escapedHexLen(c2) {
+    if (c2 === 120) {
       return 2;
     }
-    if (c === 117) {
+    if (c2 === 117) {
       return 4;
     }
-    if (c === 85) {
+    if (c2 === 85) {
       return 8;
     }
     return 0;
   }
-  function fromDecimalCode(c) {
-    if (48 <= c && c <= 57) {
-      return c - 48;
+  function fromDecimalCode(c2) {
+    if (48 <= c2 && c2 <= 57) {
+      return c2 - 48;
     }
     return -1;
   }
-  function simpleEscapeSequence(c) {
-    return c === 48 ? "\x00" : c === 97 ? "\x07" : c === 98 ? "\b" : c === 116 ? "\t" : c === 9 ? "\t" : c === 110 ? `
-` : c === 118 ? "\v" : c === 102 ? "\f" : c === 114 ? "\r" : c === 101 ? "\x1B" : c === 32 ? " " : c === 34 ? '"' : c === 47 ? "/" : c === 92 ? "\\" : c === 78 ? "" : c === 95 ? " " : c === 76 ? "\u2028" : c === 80 ? "\u2029" : "";
+  function simpleEscapeSequence(c2) {
+    return c2 === 48 ? "\x00" : c2 === 97 ? "\x07" : c2 === 98 ? "\b" : c2 === 116 ? "\t" : c2 === 9 ? "\t" : c2 === 110 ? `
+` : c2 === 118 ? "\v" : c2 === 102 ? "\f" : c2 === 114 ? "\r" : c2 === 101 ? "\x1B" : c2 === 32 ? " " : c2 === 34 ? '"' : c2 === 47 ? "/" : c2 === 92 ? "\\" : c2 === 78 ? "" : c2 === 95 ? " " : c2 === 76 ? "\u2028" : c2 === 80 ? "\u2029" : "";
   }
-  function charFromCodepoint(c) {
-    if (c <= 65535) {
-      return String.fromCharCode(c);
+  function charFromCodepoint(c2) {
+    if (c2 <= 65535) {
+      return String.fromCharCode(c2);
     }
-    return String.fromCharCode((c - 65536 >> 10) + 55296, (c - 65536 & 1023) + 56320);
+    return String.fromCharCode((c2 - 65536 >> 10) + 55296, (c2 - 65536 & 1023) + 56320);
   }
   function setProperty(object, key, value) {
     if (key === "__proto__") {
@@ -3990,20 +4030,20 @@ var require_dumper = __commonJS((exports, module) => {
     }
     return false;
   }
-  function isWhitespace(c) {
-    return c === CHAR_SPACE || c === CHAR_TAB;
+  function isWhitespace(c2) {
+    return c2 === CHAR_SPACE || c2 === CHAR_TAB;
   }
-  function isPrintable(c) {
-    return 32 <= c && c <= 126 || 161 <= c && c <= 55295 && c !== 8232 && c !== 8233 || 57344 <= c && c <= 65533 && c !== 65279 || 65536 <= c && c <= 1114111;
+  function isPrintable(c2) {
+    return 32 <= c2 && c2 <= 126 || 161 <= c2 && c2 <= 55295 && c2 !== 8232 && c2 !== 8233 || 57344 <= c2 && c2 <= 65533 && c2 !== 65279 || 65536 <= c2 && c2 <= 1114111;
   }
-  function isNsChar(c) {
-    return isPrintable(c) && !isWhitespace(c) && c !== 65279 && c !== CHAR_CARRIAGE_RETURN && c !== CHAR_LINE_FEED;
+  function isNsChar(c2) {
+    return isPrintable(c2) && !isWhitespace(c2) && c2 !== 65279 && c2 !== CHAR_CARRIAGE_RETURN && c2 !== CHAR_LINE_FEED;
   }
-  function isPlainSafe(c, prev) {
-    return isPrintable(c) && c !== 65279 && c !== CHAR_COMMA && c !== CHAR_LEFT_SQUARE_BRACKET && c !== CHAR_RIGHT_SQUARE_BRACKET && c !== CHAR_LEFT_CURLY_BRACKET && c !== CHAR_RIGHT_CURLY_BRACKET && c !== CHAR_COLON && (c !== CHAR_SHARP || prev && isNsChar(prev));
+  function isPlainSafe(c2, prev) {
+    return isPrintable(c2) && c2 !== 65279 && c2 !== CHAR_COMMA && c2 !== CHAR_LEFT_SQUARE_BRACKET && c2 !== CHAR_RIGHT_SQUARE_BRACKET && c2 !== CHAR_LEFT_CURLY_BRACKET && c2 !== CHAR_RIGHT_CURLY_BRACKET && c2 !== CHAR_COLON && (c2 !== CHAR_SHARP || prev && isNsChar(prev));
   }
-  function isPlainSafeFirst(c) {
-    return isPrintable(c) && c !== 65279 && !isWhitespace(c) && c !== CHAR_MINUS && c !== CHAR_QUESTION && c !== CHAR_COLON && c !== CHAR_COMMA && c !== CHAR_LEFT_SQUARE_BRACKET && c !== CHAR_RIGHT_SQUARE_BRACKET && c !== CHAR_LEFT_CURLY_BRACKET && c !== CHAR_RIGHT_CURLY_BRACKET && c !== CHAR_SHARP && c !== CHAR_AMPERSAND && c !== CHAR_ASTERISK && c !== CHAR_EXCLAMATION && c !== CHAR_VERTICAL_LINE && c !== CHAR_EQUALS && c !== CHAR_GREATER_THAN && c !== CHAR_SINGLE_QUOTE && c !== CHAR_DOUBLE_QUOTE && c !== CHAR_PERCENT && c !== CHAR_COMMERCIAL_AT && c !== CHAR_GRAVE_ACCENT;
+  function isPlainSafeFirst(c2) {
+    return isPrintable(c2) && c2 !== 65279 && !isWhitespace(c2) && c2 !== CHAR_MINUS && c2 !== CHAR_QUESTION && c2 !== CHAR_COLON && c2 !== CHAR_COMMA && c2 !== CHAR_LEFT_SQUARE_BRACKET && c2 !== CHAR_RIGHT_SQUARE_BRACKET && c2 !== CHAR_LEFT_CURLY_BRACKET && c2 !== CHAR_RIGHT_CURLY_BRACKET && c2 !== CHAR_SHARP && c2 !== CHAR_AMPERSAND && c2 !== CHAR_ASTERISK && c2 !== CHAR_EXCLAMATION && c2 !== CHAR_VERTICAL_LINE && c2 !== CHAR_EQUALS && c2 !== CHAR_GREATER_THAN && c2 !== CHAR_SINGLE_QUOTE && c2 !== CHAR_DOUBLE_QUOTE && c2 !== CHAR_PERCENT && c2 !== CHAR_COMMERCIAL_AT && c2 !== CHAR_GRAVE_ACCENT;
   }
   function needIndentIndicator(string) {
     var leadingSpaceRe = /^\n* /;
@@ -4878,7 +4918,7 @@ var init_skills = __esm(() => {
 import path4 from "path";
 async function listSkills(opts = {}) {
   const scope = opts.scope ?? "global";
-  const roots = resolveRoots({ scope, projectRoot: opts.projectRoot, homeDir: opts.homeDir });
+  const roots = resolveRoots({ scope, projectRoot: opts.projectRoot, homeDir: opts.homeDir, canonicalOverride: opts.canonicalOverride });
   const skillsRoot = path4.join(roots.canonicalRoot, "skills");
   if (!await pathExists(skillsRoot))
     return [];
@@ -4898,12 +4938,12 @@ async function listSkills(opts = {}) {
     }
   }
   const counts = new Map;
-  for (const c of collected)
-    counts.set(c.name, (counts.get(c.name) ?? 0) + 1);
-  return collected.map((c) => {
-    const hasCollision = (counts.get(c.name) ?? 0) > 1;
-    const displayName = c.category ? `${c.category}/${c.name}` : c.name;
-    return { ...c, displayName, hasCollision };
+  for (const c2 of collected)
+    counts.set(c2.name, (counts.get(c2.name) ?? 0) + 1);
+  return collected.map((c2) => {
+    const hasCollision = (counts.get(c2.name) ?? 0) > 1;
+    const displayName = c2.category ? `${c2.category}/${c2.name}` : c2.name;
+    return { ...c2, displayName, hasCollision };
   });
 }
 var init_list_skills = __esm(() => {
@@ -5002,7 +5042,8 @@ async function getMappings(opts) {
     const entries = await listSkills({
       scope: opts.scope,
       projectRoot: opts.projectRoot,
-      homeDir: opts.homeDir
+      homeDir: opts.homeDir,
+      canonicalOverride: opts.canonicalOverride
     });
     for (const entry of entries) {
       if (!wanted.has(entry.dir))
@@ -5607,7 +5648,7 @@ async function detectInstalledClients(opts = {}) {
     client,
     exists: await pathExists(rootForClient[client])
   })));
-  return checks.filter((c) => c.exists).map((c) => c.client);
+  return checks.filter((c2) => c2.exists).map((c2) => c2.client);
 }
 var CLIENT_ORDER;
 var init_detect_installed = __esm(() => {
@@ -5876,8 +5917,8 @@ var require_react_development = __commonJS((exports, module) => {
         invokeCallback = children;
         callback = callback(invokeCallback);
         var childKey = nameSoFar === "" ? "." + getElementKey(invokeCallback, 0) : nameSoFar;
-        isArrayImpl(callback) ? (escapedPrefix = "", childKey != null && (escapedPrefix = childKey.replace(userProvidedKeyEscapeRegex, "$&/") + "/"), mapIntoArray(callback, array, escapedPrefix, "", function(c) {
-          return c;
+        isArrayImpl(callback) ? (escapedPrefix = "", childKey != null && (escapedPrefix = childKey.replace(userProvidedKeyEscapeRegex, "$&/") + "/"), mapIntoArray(callback, array, escapedPrefix, "", function(c2) {
+          return c2;
         })) : callback != null && (isValidElement(callback) && (callback.key != null && (invokeCallback && invokeCallback.key === callback.key || checkKeyStringCoercion(callback.key)), escapedPrefix = cloneAndReplaceKey(callback, escapedPrefix + (callback.key == null || invokeCallback && invokeCallback.key === callback.key ? "" : ("" + callback.key).replace(userProvidedKeyEscapeRegex, "$&/") + "/") + childKey), nameSoFar !== "" && invokeCallback != null && isValidElement(invokeCallback) && invokeCallback.key == null && invokeCallback._store && !invokeCallback._store.validated && (escapedPrefix._store.validated = 2), callback = escapedPrefix), array.push(callback));
         return 1;
       }
@@ -7069,9 +7110,9 @@ var init_yoga_wasm_base64_esm = __esm(() => {
       var noExitRuntime = h2.noExitRuntime || true;
       typeof WebAssembly != "object" && x3("no native wasm support detected");
       var fa, ha = false;
-      function z3(a3, b3, c) {
-        c = b3 + c;
-        for (var d3 = "";!(b3 >= c); ) {
+      function z3(a3, b3, c2) {
+        c2 = b3 + c2;
+        for (var d3 = "";!(b3 >= c2); ) {
           var e2 = a3[b3++];
           if (!e2)
             break;
@@ -7134,10 +7175,10 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             return new Uint8Array(w3);
           if (ua(a3))
             try {
-              var b3 = xa(a3.slice(37)), c = new Uint8Array(b3.length);
+              var b3 = xa(a3.slice(37)), c2 = new Uint8Array(b3.length);
               for (a3 = 0;a3 < b3.length; ++a3)
-                c[a3] = b3.charCodeAt(a3);
-              var d3 = c;
+                c2[a3] = b3.charCodeAt(a3);
+              var d3 = c2;
             } catch (f2) {
               throw Error("Converting base64 string to bytes failed.");
             }
@@ -7181,19 +7222,19 @@ var init_yoga_wasm_base64_esm = __esm(() => {
       }
       var J3 = [{}, { value: undefined }, { value: null }, { value: true }, { value: false }], Ca = [];
       function Da(a3) {
-        var b3 = Error, c = Ba(a3, function(d3) {
+        var b3 = Error, c2 = Ba(a3, function(d3) {
           this.name = a3;
           this.message = d3;
           d3 = Error(d3).stack;
           d3 !== undefined && (this.stack = this.toString() + `
 ` + d3.replace(/^Error(:[^\n]*)?\n/, ""));
         });
-        c.prototype = Object.create(b3.prototype);
-        c.prototype.constructor = c;
-        c.prototype.toString = function() {
+        c2.prototype = Object.create(b3.prototype);
+        c2.prototype.constructor = c2;
+        c2.prototype.toString = function() {
           return this.message === undefined ? this.name : this.name + ": " + this.message;
         };
-        return c;
+        return c2;
       }
       var K3 = undefined;
       function L2(a3) {
@@ -7245,9 +7286,9 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         return b3;
       }
       function La(a3, b3) {
-        var c = R3[a3];
-        c === undefined && L2(b3 + " has unknown type " + Ja(a3));
-        return c;
+        var c2 = R3[a3];
+        c2 === undefined && L2(b3 + " has unknown type " + Ja(a3));
+        return c2;
       }
       function Ma() {}
       var Na = false;
@@ -7255,13 +7296,13 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         --a3.count.value;
         a3.count.value === 0 && (a3.T ? a3.U.W(a3.T) : a3.P.N.W(a3.O));
       }
-      function Pa(a3, b3, c) {
-        if (b3 === c)
+      function Pa(a3, b3, c2) {
+        if (b3 === c2)
           return a3;
-        if (c.R === undefined)
+        if (c2.R === undefined)
           return null;
-        a3 = Pa(a3, b3, c.R);
-        return a3 === null ? null : c.na(a3);
+        a3 = Pa(a3, b3, c2.R);
+        return a3 === null ? null : c2.na(a3);
       }
       var Qa = {};
       function Ra(a3, b3) {
@@ -7285,8 +7326,8 @@ var init_yoga_wasm_base64_esm = __esm(() => {
           Oa(b3.M);
         });
         T3 = (b3) => {
-          var c = b3.M;
-          c.T && Na.register(b3, { M: c }, b3);
+          var c2 = b3.M;
+          c2.T && Na.register(b3, { M: c2 }, b3);
           return b3;
         };
         Ma = (b3) => {
@@ -7305,9 +7346,9 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         return this.fromWireType(D[a3 >> 2]);
       }
       var U3 = {}, Ya = {};
-      function V2(a3, b3, c) {
+      function V2(a3, b3, c2) {
         function d3(k2) {
-          k2 = c(k2);
+          k2 = c2(k2);
           k2.length !== a3.length && Ta("Mismatched type converter count");
           for (var m2 = 0;m2 < a3.length; ++m2)
             W2(a3[m2], k2[m2]);
@@ -7339,13 +7380,13 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             throw new TypeError("Unknown type size: " + a3);
         }
       }
-      function W2(a3, b3, c = {}) {
+      function W2(a3, b3, c2 = {}) {
         if (!("argPackAdvance" in b3))
           throw new TypeError("registerType registeredInstance requires argPackAdvance");
         var d3 = b3.name;
         a3 || L2('type "' + d3 + '" must have a positive integer typeid pointer');
         if (R3.hasOwnProperty(a3)) {
-          if (c.ua)
+          if (c2.ua)
             return;
           L2("Cannot register type '" + d3 + "' twice");
         }
@@ -7357,11 +7398,11 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         L2(a3.M.P.N.name + " instance already deleted");
       }
       function X3() {}
-      function ab(a3, b3, c) {
+      function ab(a3, b3, c2) {
         if (a3[b3].S === undefined) {
           var d3 = a3[b3];
           a3[b3] = function() {
-            a3[b3].S.hasOwnProperty(arguments.length) || L2("Function '" + c + "' called with an invalid number of arguments (" + arguments.length + ") - expects one of (" + a3[b3].S + ")!");
+            a3[b3].S.hasOwnProperty(arguments.length) || L2("Function '" + c2 + "' called with an invalid number of arguments (" + arguments.length + ") - expects one of (" + a3[b3].S + ")!");
             return a3[b3].S[arguments.length].apply(this, arguments);
           };
           a3[b3].S = [];
@@ -7371,10 +7412,10 @@ var init_yoga_wasm_base64_esm = __esm(() => {
       function bb(a3, b3) {
         h2.hasOwnProperty(a3) ? (L2("Cannot register public name '" + a3 + "' twice"), ab(h2, a3, a3), h2.hasOwnProperty(undefined) && L2("Cannot register multiple overloads of a function with the same number of arguments (undefined)!"), h2[a3].S[undefined] = b3) : h2[a3] = b3;
       }
-      function cb(a3, b3, c, d3, e2, f2, g2, k2) {
+      function cb(a3, b3, c2, d3, e2, f2, g2, k2) {
         this.name = a3;
         this.constructor = b3;
-        this.X = c;
+        this.X = c2;
         this.W = d3;
         this.R = e2;
         this.pa = f2;
@@ -7382,9 +7423,9 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         this.na = k2;
         this.ja = [];
       }
-      function db(a3, b3, c) {
-        for (;b3 !== c; )
-          b3.ba || L2("Expected null or instance of " + c.name + ", got an instance of " + b3.name), a3 = b3.ba(a3), b3 = b3.R;
+      function db(a3, b3, c2) {
+        for (;b3 !== c2; )
+          b3.ba || L2("Expected null or instance of " + c2.name + ", got an instance of " + b3.name), a3 = b3.ba(a3), b3 = b3.R;
         return a3;
       }
       function eb(a3, b3) {
@@ -7398,39 +7439,39 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         if (b3 === null) {
           this.ea && L2("null is not a valid " + this.name);
           if (this.da) {
-            var c = this.fa();
-            a3 !== null && a3.push(this.W, c);
-            return c;
+            var c2 = this.fa();
+            a3 !== null && a3.push(this.W, c2);
+            return c2;
           }
           return 0;
         }
         b3.M || L2('Cannot pass "' + fb(b3) + '" as a ' + this.name);
         b3.M.O || L2("Cannot pass deleted object as a pointer of type " + this.name);
         !this.ca && b3.M.P.ca && L2("Cannot convert argument of type " + (b3.M.U ? b3.M.U.name : b3.M.P.name) + " to parameter type " + this.name);
-        c = db(b3.M.O, b3.M.P.N, this.N);
+        c2 = db(b3.M.O, b3.M.P.N, this.N);
         if (this.da)
           switch (b3.M.T === undefined && L2("Passing raw pointer to smart pointer is illegal"), this.Ba) {
             case 0:
-              b3.M.U === this ? c = b3.M.T : L2("Cannot convert argument of type " + (b3.M.U ? b3.M.U.name : b3.M.P.name) + " to parameter type " + this.name);
+              b3.M.U === this ? c2 = b3.M.T : L2("Cannot convert argument of type " + (b3.M.U ? b3.M.U.name : b3.M.P.name) + " to parameter type " + this.name);
               break;
             case 1:
-              c = b3.M.T;
+              c2 = b3.M.T;
               break;
             case 2:
               if (b3.M.U === this)
-                c = b3.M.T;
+                c2 = b3.M.T;
               else {
                 var d3 = b3.clone();
-                c = this.xa(c, Ea(function() {
+                c2 = this.xa(c2, Ea(function() {
                   d3["delete"]();
                 }));
-                a3 !== null && a3.push(this.W, c);
+                a3 !== null && a3.push(this.W, c2);
               }
               break;
             default:
               L2("Unsupporting sharing policy");
           }
-        return c;
+        return c2;
       }
       function hb(a3, b3) {
         if (b3 === null)
@@ -7440,10 +7481,10 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         b3.M.P.ca && L2("Cannot convert argument of type " + b3.M.P.name + " to parameter type " + this.name);
         return db(b3.M.O, b3.M.P.N, this.N);
       }
-      function Y2(a3, b3, c, d3) {
+      function Y2(a3, b3, c2, d3) {
         this.name = a3;
         this.N = b3;
-        this.ea = c;
+        this.ea = c2;
         this.ca = d3;
         this.da = false;
         this.W = this.xa = this.fa = this.ka = this.Ba = this.wa = undefined;
@@ -7455,39 +7496,39 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         h2[a3].Z = undefined;
       }
       function jb(a3, b3) {
-        var c = [];
+        var c2 = [];
         return function() {
-          c.length = 0;
-          Object.assign(c, arguments);
+          c2.length = 0;
+          Object.assign(c2, arguments);
           if (a3.includes("j")) {
             var d3 = h2["dynCall_" + a3];
-            d3 = c && c.length ? d3.apply(null, [b3].concat(c)) : d3.call(null, b3);
+            d3 = c2 && c2.length ? d3.apply(null, [b3].concat(c2)) : d3.call(null, b3);
           } else
-            d3 = oa.get(b3).apply(null, c);
+            d3 = oa.get(b3).apply(null, c2);
           return d3;
         };
       }
       function Z3(a3, b3) {
         a3 = N2(a3);
-        var c = a3.includes("j") ? jb(a3, b3) : oa.get(b3);
-        typeof c != "function" && L2("unknown function pointer with signature " + a3 + ": " + b3);
-        return c;
+        var c2 = a3.includes("j") ? jb(a3, b3) : oa.get(b3);
+        typeof c2 != "function" && L2("unknown function pointer with signature " + a3 + ": " + b3);
+        return c2;
       }
       var mb = undefined;
       function nb(a3, b3) {
-        function c(f2) {
-          e2[f2] || R3[f2] || (Ya[f2] ? Ya[f2].forEach(c) : (d3.push(f2), e2[f2] = true));
+        function c2(f2) {
+          e2[f2] || R3[f2] || (Ya[f2] ? Ya[f2].forEach(c2) : (d3.push(f2), e2[f2] = true));
         }
         var d3 = [], e2 = {};
-        b3.forEach(c);
+        b3.forEach(c2);
         throw new mb(a3 + ": " + d3.map(Ja).join([", "]));
       }
-      function ob(a3, b3, c, d3, e2) {
+      function ob(a3, b3, c2, d3, e2) {
         var f2 = b3.length;
         2 > f2 && L2("argTypes array size mismatch! Must at least get return value and 'this' types!");
-        var g2 = b3[1] !== null && c !== null, k2 = false;
-        for (c = 1;c < b3.length; ++c)
-          if (b3[c] !== null && b3[c].V === undefined) {
+        var g2 = b3[1] !== null && c2 !== null, k2 = false;
+        for (c2 = 1;c2 < b3.length; ++c2)
+          if (b3[c2] !== null && b3[c2].V === undefined) {
             k2 = true;
             break;
           }
@@ -7516,9 +7557,9 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         };
       }
       function pb(a3, b3) {
-        for (var c = [], d3 = 0;d3 < a3; d3++)
-          c.push(E2[b3 + 4 * d3 >> 2]);
-        return c;
+        for (var c2 = [], d3 = 0;d3 < a3; d3++)
+          c2.push(E2[b3 + 4 * d3 >> 2]);
+        return c2;
       }
       function qb(a3) {
         4 < a3 && --J3[a3].ga === 0 && (J3[a3] = undefined, Ca.push(a3));
@@ -7532,33 +7573,33 @@ var init_yoga_wasm_base64_esm = __esm(() => {
       function rb(a3, b3) {
         switch (b3) {
           case 2:
-            return function(c) {
-              return this.fromWireType(la[c >> 2]);
+            return function(c2) {
+              return this.fromWireType(la[c2 >> 2]);
             };
           case 3:
-            return function(c) {
-              return this.fromWireType(ma[c >> 3]);
+            return function(c2) {
+              return this.fromWireType(ma[c2 >> 3]);
             };
           default:
             throw new TypeError("Unknown float type: " + a3);
         }
       }
-      function sb(a3, b3, c) {
+      function sb(a3, b3, c2) {
         switch (b3) {
           case 0:
-            return c ? function(d3) {
+            return c2 ? function(d3) {
               return ja[d3];
             } : function(d3) {
               return A3[d3];
             };
           case 1:
-            return c ? function(d3) {
+            return c2 ? function(d3) {
               return C2[d3 >> 1];
             } : function(d3) {
               return ka[d3 >> 1];
             };
           case 2:
-            return c ? function(d3) {
+            return c2 ? function(d3) {
               return D[d3 >> 2];
             } : function(d3) {
               return E2[d3 >> 2];
@@ -7568,22 +7609,22 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         }
       }
       function tb(a3, b3) {
-        for (var c = "", d3 = 0;!(d3 >= b3 / 2); ++d3) {
+        for (var c2 = "", d3 = 0;!(d3 >= b3 / 2); ++d3) {
           var e2 = C2[a3 + 2 * d3 >> 1];
           if (e2 == 0)
             break;
-          c += String.fromCharCode(e2);
+          c2 += String.fromCharCode(e2);
         }
-        return c;
+        return c2;
       }
-      function ub(a3, b3, c) {
-        c === undefined && (c = 2147483647);
-        if (2 > c)
+      function ub(a3, b3, c2) {
+        c2 === undefined && (c2 = 2147483647);
+        if (2 > c2)
           return 0;
-        c -= 2;
+        c2 -= 2;
         var d3 = b3;
-        c = c < 2 * a3.length ? c / 2 : a3.length;
-        for (var e2 = 0;e2 < c; ++e2)
+        c2 = c2 < 2 * a3.length ? c2 / 2 : a3.length;
+        for (var e2 = 0;e2 < c2; ++e2)
           C2[b3 >> 1] = a3.charCodeAt(e2), b3 += 2;
         C2[b3 >> 1] = 0;
         return b3 - d3;
@@ -7592,21 +7633,21 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         return 2 * a3.length;
       }
       function wb(a3, b3) {
-        for (var c = 0, d3 = "";!(c >= b3 / 4); ) {
-          var e2 = D[a3 + 4 * c >> 2];
+        for (var c2 = 0, d3 = "";!(c2 >= b3 / 4); ) {
+          var e2 = D[a3 + 4 * c2 >> 2];
           if (e2 == 0)
             break;
-          ++c;
+          ++c2;
           65536 <= e2 ? (e2 -= 65536, d3 += String.fromCharCode(55296 | e2 >> 10, 56320 | e2 & 1023)) : d3 += String.fromCharCode(e2);
         }
         return d3;
       }
-      function xb(a3, b3, c) {
-        c === undefined && (c = 2147483647);
-        if (4 > c)
+      function xb(a3, b3, c2) {
+        c2 === undefined && (c2 = 2147483647);
+        if (4 > c2)
           return 0;
         var d3 = b3;
-        c = d3 + c - 4;
+        c2 = d3 + c2 - 4;
         for (var e2 = 0;e2 < a3.length; ++e2) {
           var f2 = a3.charCodeAt(e2);
           if (55296 <= f2 && 57343 >= f2) {
@@ -7615,16 +7656,16 @@ var init_yoga_wasm_base64_esm = __esm(() => {
           }
           D[b3 >> 2] = f2;
           b3 += 4;
-          if (b3 + 4 > c)
+          if (b3 + 4 > c2)
             break;
         }
         D[b3 >> 2] = 0;
         return b3 - d3;
       }
       function yb(a3) {
-        for (var b3 = 0, c = 0;c < a3.length; ++c) {
-          var d3 = a3.charCodeAt(c);
-          55296 <= d3 && 57343 >= d3 && ++c;
+        for (var b3 = 0, c2 = 0;c2 < a3.length; ++c2) {
+          var d3 = a3.charCodeAt(c2);
+          55296 <= d3 && 57343 >= d3 && ++c2;
           b3 += 4;
         }
         return b3;
@@ -7641,9 +7682,9 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         return b3;
       }
       function Db(a3, b3) {
-        for (var c = Array(a3), d3 = 0;d3 < a3; ++d3)
-          c[d3] = La(E2[b3 + 4 * d3 >> 2], "parameter " + d3);
-        return c;
+        for (var c2 = Array(a3), d3 = 0;d3 < a3; ++d3)
+          c2[d3] = La(E2[b3 + 4 * d3 >> 2], "parameter " + d3);
+        return c2;
       }
       var Eb = [], Fb = [null, [], []];
       K3 = h2.BindingError = Da("BindingError");
@@ -7680,19 +7721,19 @@ var init_yoga_wasm_base64_esm = __esm(() => {
       X3.prototype.isAliasOf = function(a3) {
         if (!(this instanceof X3 && a3 instanceof X3))
           return false;
-        var b3 = this.M.P.N, c = this.M.O, d3 = a3.M.P.N;
+        var b3 = this.M.P.N, c2 = this.M.O, d3 = a3.M.P.N;
         for (a3 = a3.M.O;b3.R; )
-          c = b3.ba(c), b3 = b3.R;
+          c2 = b3.ba(c2), b3 = b3.R;
         for (;d3.R; )
           a3 = d3.ba(a3), d3 = d3.R;
-        return b3 === d3 && c === a3;
+        return b3 === d3 && c2 === a3;
       };
       X3.prototype.clone = function() {
         this.M.O || $a(this);
         if (this.M.aa)
           return this.M.count.value += 1, this;
-        var a3 = T3, b3 = Object, c = b3.create, d3 = Object.getPrototypeOf(this), e2 = this.M;
-        a3 = a3(c.call(b3, d3, { M: { value: { count: e2.count, $: e2.$, aa: e2.aa, O: e2.O, P: e2.P, T: e2.T, U: e2.U } } }));
+        var a3 = T3, b3 = Object, c2 = b3.create, d3 = Object.getPrototypeOf(this), e2 = this.M;
+        a3 = a3(c2.call(b3, d3, { M: { value: { count: e2.count, $: e2.$, aa: e2.aa, O: e2.O, P: e2.P, T: e2.T, U: e2.U } } }));
         a3.M.count.value += 1;
         a3.M.$ = false;
         return a3;
@@ -7730,52 +7771,52 @@ var init_yoga_wasm_base64_esm = __esm(() => {
       };
       Y2.prototype.fromWireType = function(a3) {
         function b3() {
-          return this.da ? Ua(this.N.X, { P: this.wa, O: c, U: this, T: a3 }) : Ua(this.N.X, { P: this, O: a3 });
+          return this.da ? Ua(this.N.X, { P: this.wa, O: c2, U: this, T: a3 }) : Ua(this.N.X, { P: this, O: a3 });
         }
-        var c = this.qa(a3);
-        if (!c)
+        var c2 = this.qa(a3);
+        if (!c2)
           return this.ha(a3), null;
-        var d3 = Ra(this.N, c);
+        var d3 = Ra(this.N, c2);
         if (d3 !== undefined) {
           if (d3.M.count.value === 0)
-            return d3.M.O = c, d3.M.T = a3, d3.clone();
+            return d3.M.O = c2, d3.M.T = a3, d3.clone();
           d3 = d3.clone();
           this.ha(a3);
           return d3;
         }
-        d3 = this.N.pa(c);
+        d3 = this.N.pa(c2);
         d3 = Qa[d3];
         if (!d3)
           return b3.call(this);
         d3 = this.ca ? d3.la : d3.pointerType;
-        var e2 = Pa(c, this.N, d3.N);
+        var e2 = Pa(c2, this.N, d3.N);
         return e2 === null ? b3.call(this) : this.da ? Ua(d3.N.X, { P: d3, O: e2, U: this, T: a3 }) : Ua(d3.N.X, { P: d3, O: e2 });
       };
       mb = h2.UnboundTypeError = Da("UnboundTypeError");
       var xa = typeof atob == "function" ? atob : function(a3) {
-        var b3 = "", c = 0;
+        var b3 = "", c2 = 0;
         a3 = a3.replace(/[^A-Za-z0-9\+\/=]/g, "");
         do {
-          var d3 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(a3.charAt(c++));
-          var e2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(a3.charAt(c++));
-          var f2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(a3.charAt(c++));
-          var g2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(a3.charAt(c++));
+          var d3 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(a3.charAt(c2++));
+          var e2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(a3.charAt(c2++));
+          var f2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(a3.charAt(c2++));
+          var g2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(a3.charAt(c2++));
           d3 = d3 << 2 | e2 >> 4;
           e2 = (e2 & 15) << 4 | f2 >> 2;
           var k2 = (f2 & 3) << 6 | g2;
           b3 += String.fromCharCode(d3);
           f2 !== 64 && (b3 += String.fromCharCode(e2));
           g2 !== 64 && (b3 += String.fromCharCode(k2));
-        } while (c < a3.length);
+        } while (c2 < a3.length);
         return b3;
       }, Jb = {
-        l: function(a3, b3, c, d3) {
-          x3("Assertion failed: " + (a3 ? z3(A3, a3) : "") + ", at: " + [b3 ? b3 ? z3(A3, b3) : "" : "unknown filename", c, d3 ? d3 ? z3(A3, d3) : "" : "unknown function"]);
+        l: function(a3, b3, c2, d3) {
+          x3("Assertion failed: " + (a3 ? z3(A3, a3) : "") + ", at: " + [b3 ? b3 ? z3(A3, b3) : "" : "unknown filename", c2, d3 ? d3 ? z3(A3, d3) : "" : "unknown function"]);
         },
-        q: function(a3, b3, c) {
+        q: function(a3, b3, c2) {
           a3 = N2(a3);
           b3 = La(b3, "wrapper");
-          c = M3(c);
+          c2 = M3(c2);
           var d3 = [].slice, e2 = b3.N, f2 = e2.X, g2 = e2.R.X, k2 = e2.R.constructor;
           a3 = Ba(a3, function() {
             e2.R.ja.forEach(function(l2) {
@@ -7806,14 +7847,14 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             Q3.hasOwnProperty(l2) ? delete Q3[l2] : L2("Tried to unregister unregistered instance: " + l2);
           };
           a3.prototype = Object.create(f2);
-          for (var m2 in c)
-            a3.prototype[m2] = c[m2];
+          for (var m2 in c2)
+            a3.prototype[m2] = c2[m2];
           return Ea(a3);
         },
         j: function(a3) {
           var b3 = Va[a3];
           delete Va[a3];
-          var { fa: c, W: d3, ia: e2 } = b3, f2 = e2.map((g2) => g2.ta).concat(e2.map((g2) => g2.za));
+          var { fa: c2, W: d3, ia: e2 } = b3, f2 = e2.map((g2) => g2.ta).concat(e2.map((g2) => g2.za));
           V2([a3], f2, (g2) => {
             var k2 = {};
             e2.forEach((m2, l2) => {
@@ -7834,7 +7875,7 @@ var init_yoga_wasm_base64_esm = __esm(() => {
               for (var n in k2)
                 if (!(n in l2))
                   throw new TypeError('Missing field:  "' + n + '"');
-              var p = c();
+              var p = c2();
               for (n in k2)
                 k2[n].write(p, l2[n]);
               m2 !== null && m2.push(d3, p);
@@ -7843,8 +7884,8 @@ var init_yoga_wasm_base64_esm = __esm(() => {
           });
         },
         v: function() {},
-        B: function(a3, b3, c, d3, e2) {
-          var f2 = Za(c);
+        B: function(a3, b3, c2, d3, e2) {
+          var f2 = Za(c2);
           b3 = N2(b3);
           W2(a3, {
             name: b3,
@@ -7856,11 +7897,11 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             },
             argPackAdvance: 8,
             readValueFromPointer: function(g2) {
-              if (c === 1)
+              if (c2 === 1)
                 var k2 = ja;
-              else if (c === 2)
+              else if (c2 === 2)
                 k2 = C2;
-              else if (c === 4)
+              else if (c2 === 4)
                 k2 = D;
               else
                 throw new TypeError("Unknown boolean type size: " + b3);
@@ -7869,7 +7910,7 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             V: null
           });
         },
-        f: function(a3, b3, c, d3, e2, f2, g2, k2, m2, l2, n, p, r2) {
+        f: function(a3, b3, c2, d3, e2, f2, g2, k2, m2, l2, n, p, r2) {
           n = N2(n);
           f2 = Z3(e2, f2);
           k2 && (k2 = Z3(g2, k2));
@@ -7879,7 +7920,7 @@ var init_yoga_wasm_base64_esm = __esm(() => {
           bb(u, function() {
             nb("Cannot construct " + n + " due to unbound types", [d3]);
           });
-          V2([a3, b3, c], d3 ? [d3] : [], function(t) {
+          V2([a3, b3, c2], d3 ? [d3] : [], function(t) {
             t = t[0];
             if (d3) {
               var y3 = t.N;
@@ -7910,8 +7951,8 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             return [y3, B2, lb];
           });
         },
-        d: function(a3, b3, c, d3, e2, f2, g2) {
-          var k2 = pb(c, d3);
+        d: function(a3, b3, c2, d3, e2, f2, g2) {
+          var k2 = pb(c2, d3);
           b3 = N2(b3);
           f2 = Z3(e2, f2);
           V2([], [a3], function(m2) {
@@ -7922,18 +7963,18 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             var n = m2.name + "." + b3;
             b3.startsWith("@@") && (b3 = Symbol[b3.substring(2)]);
             var p = m2.N.constructor;
-            p[b3] === undefined ? (l2.Z = c - 1, p[b3] = l2) : (ab(p, b3, n), p[b3].S[c - 1] = l2);
+            p[b3] === undefined ? (l2.Z = c2 - 1, p[b3] = l2) : (ab(p, b3, n), p[b3].S[c2 - 1] = l2);
             V2([], k2, function(r2) {
               r2 = ob(n, [r2[0], null].concat(r2.slice(1)), null, f2, g2);
-              p[b3].S === undefined ? (r2.Z = c - 1, p[b3] = r2) : p[b3].S[c - 1] = r2;
+              p[b3].S === undefined ? (r2.Z = c2 - 1, p[b3] = r2) : p[b3].S[c2 - 1] = r2;
               return [];
             });
             return [];
           });
         },
-        p: function(a3, b3, c, d3, e2, f2) {
+        p: function(a3, b3, c2, d3, e2, f2) {
           0 < b3 || x3();
-          var g2 = pb(b3, c);
+          var g2 = pb(b3, c2);
           e2 = Z3(d3, e2);
           V2([], [a3], function(k2) {
             k2 = k2[0];
@@ -7952,8 +7993,8 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             return [];
           });
         },
-        a: function(a3, b3, c, d3, e2, f2, g2, k2) {
-          var m2 = pb(c, d3);
+        a: function(a3, b3, c2, d3, e2, f2, g2, k2) {
+          var m2 = pb(c2, d3);
           b3 = N2(b3);
           f2 = Z3(e2, f2);
           V2([], [a3], function(l2) {
@@ -7965,10 +8006,10 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             b3.startsWith("@@") && (b3 = Symbol[b3.substring(2)]);
             k2 && l2.N.ja.push(b3);
             var r2 = l2.N.X, u = r2[b3];
-            u === undefined || u.S === undefined && u.className !== l2.name && u.Z === c - 2 ? (n.Z = c - 2, n.className = l2.name, r2[b3] = n) : (ab(r2, b3, p), r2[b3].S[c - 2] = n);
+            u === undefined || u.S === undefined && u.className !== l2.name && u.Z === c2 - 2 ? (n.Z = c2 - 2, n.className = l2.name, r2[b3] = n) : (ab(r2, b3, p), r2[b3].S[c2 - 2] = n);
             V2([], m2, function(t) {
               t = ob(p, t, l2, f2, g2);
-              r2[b3].S === undefined ? (t.Z = c - 2, r2[b3] = t) : r2[b3].S[c - 2] = t;
+              r2[b3].S === undefined ? (t.Z = c2 - 2, r2[b3] = t) : r2[b3].S[c2 - 2] = t;
               return [];
             });
             return [];
@@ -7976,55 +8017,55 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         },
         A: function(a3, b3) {
           b3 = N2(b3);
-          W2(a3, { name: b3, fromWireType: function(c) {
-            var d3 = M3(c);
-            qb(c);
+          W2(a3, { name: b3, fromWireType: function(c2) {
+            var d3 = M3(c2);
+            qb(c2);
             return d3;
-          }, toWireType: function(c, d3) {
+          }, toWireType: function(c2, d3) {
             return Ea(d3);
           }, argPackAdvance: 8, readValueFromPointer: Xa, V: null });
         },
-        n: function(a3, b3, c) {
-          c = Za(c);
+        n: function(a3, b3, c2) {
+          c2 = Za(c2);
           b3 = N2(b3);
           W2(a3, { name: b3, fromWireType: function(d3) {
             return d3;
           }, toWireType: function(d3, e2) {
             return e2;
-          }, argPackAdvance: 8, readValueFromPointer: rb(b3, c), V: null });
+          }, argPackAdvance: 8, readValueFromPointer: rb(b3, c2), V: null });
         },
-        e: function(a3, b3, c, d3, e2) {
+        e: function(a3, b3, c2, d3, e2) {
           b3 = N2(b3);
           e2 === -1 && (e2 = 4294967295);
-          e2 = Za(c);
+          e2 = Za(c2);
           var f2 = (k2) => k2;
           if (d3 === 0) {
-            var g2 = 32 - 8 * c;
+            var g2 = 32 - 8 * c2;
             f2 = (k2) => k2 << g2 >>> g2;
           }
-          c = b3.includes("unsigned") ? function(k2, m2) {
+          c2 = b3.includes("unsigned") ? function(k2, m2) {
             return m2 >>> 0;
           } : function(k2, m2) {
             return m2;
           };
-          W2(a3, { name: b3, fromWireType: f2, toWireType: c, argPackAdvance: 8, readValueFromPointer: sb(b3, e2, d3 !== 0), V: null });
+          W2(a3, { name: b3, fromWireType: f2, toWireType: c2, argPackAdvance: 8, readValueFromPointer: sb(b3, e2, d3 !== 0), V: null });
         },
-        b: function(a3, b3, c) {
+        b: function(a3, b3, c2) {
           function d3(f2) {
             f2 >>= 2;
             var g2 = E2;
             return new e2(ia, g2[f2 + 1], g2[f2]);
           }
           var e2 = [Int8Array, Uint8Array, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array][b3];
-          c = N2(c);
-          W2(a3, { name: c, fromWireType: d3, argPackAdvance: 8, readValueFromPointer: d3 }, { ua: true });
+          c2 = N2(c2);
+          W2(a3, { name: c2, fromWireType: d3, argPackAdvance: 8, readValueFromPointer: d3 }, { ua: true });
         },
         o: function(a3, b3) {
           b3 = N2(b3);
-          var c = b3 === "std::string";
+          var c2 = b3 === "std::string";
           W2(a3, { name: b3, fromWireType: function(d3) {
             var e2 = E2[d3 >> 2], f2 = d3 + 4;
-            if (c)
+            if (c2)
               for (var g2 = f2, k2 = 0;k2 <= e2; ++k2) {
                 var m2 = f2 + k2;
                 if (k2 == e2 || A3[m2] == 0) {
@@ -8048,7 +8089,7 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             e2 instanceof ArrayBuffer && (e2 = new Uint8Array(e2));
             var f2, g2 = typeof e2 == "string";
             g2 || e2 instanceof Uint8Array || e2 instanceof Uint8ClampedArray || e2 instanceof Int8Array || L2("Cannot pass non-string to std::string");
-            if (c && g2) {
+            if (c2 && g2) {
               var k2 = 0;
               for (f2 = 0;f2 < e2.length; ++f2) {
                 var m2 = e2.charCodeAt(f2);
@@ -8060,7 +8101,7 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             k2 = Ib(4 + f2 + 1);
             m2 = k2 + 4;
             E2[k2 >> 2] = f2;
-            if (c && g2) {
+            if (c2 && g2) {
               if (g2 = m2, m2 = f2 + 1, f2 = A3, 0 < m2) {
                 m2 = g2 + m2 - 1;
                 for (var l2 = 0;l2 < e2.length; ++l2) {
@@ -8108,8 +8149,8 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             S3(d3);
           } });
         },
-        i: function(a3, b3, c) {
-          c = N2(c);
+        i: function(a3, b3, c2) {
+          c2 = N2(c2);
           if (b3 === 2) {
             var d3 = tb;
             var e2 = ub;
@@ -8118,7 +8159,7 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             var k2 = 1;
           } else
             b3 === 4 && (d3 = wb, e2 = xb, f2 = yb, g2 = () => E2, k2 = 2);
-          W2(a3, { name: c, fromWireType: function(m2) {
+          W2(a3, { name: c2, fromWireType: function(m2) {
             for (var l2 = E2[m2 >> 2], n = g2(), p, r2 = m2 + 4, u = 0;u <= l2; ++u) {
               var t = m2 + 4 + u * b3;
               if (u == l2 || n[t >> k2] == 0)
@@ -8127,7 +8168,7 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             S3(m2);
             return p;
           }, toWireType: function(m2, l2) {
-            typeof l2 != "string" && L2("Cannot pass non-string to C++ string type " + c);
+            typeof l2 != "string" && L2("Cannot pass non-string to C++ string type " + c2);
             var n = f2(l2), p = Ib(4 + n + b3);
             E2[p >> 2] = n >> k2;
             e2(l2, p + 4, n + b3);
@@ -8137,11 +8178,11 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             S3(m2);
           } });
         },
-        k: function(a3, b3, c, d3, e2, f2) {
-          Va[a3] = { name: N2(b3), fa: Z3(c, d3), W: Z3(e2, f2), ia: [] };
+        k: function(a3, b3, c2, d3, e2, f2) {
+          Va[a3] = { name: N2(b3), fa: Z3(c2, d3), W: Z3(e2, f2), ia: [] };
         },
-        h: function(a3, b3, c, d3, e2, f2, g2, k2, m2, l2) {
-          Va[a3].ia.push({ oa: N2(b3), ta: c, ra: Z3(d3, e2), sa: f2, za: g2, ya: Z3(k2, m2), Aa: l2 });
+        h: function(a3, b3, c2, d3, e2, f2, g2, k2, m2, l2) {
+          Va[a3].ia.push({ oa: N2(b3), ta: c2, ra: Z3(d3, e2), sa: f2, za: g2, ya: Z3(k2, m2), Aa: l2 });
         },
         C: function(a3, b3) {
           b3 = N2(b3);
@@ -8153,24 +8194,24 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             toWireType: function() {}
           });
         },
-        s: function(a3, b3, c, d3, e2) {
+        s: function(a3, b3, c2, d3, e2) {
           a3 = Bb[a3];
           b3 = M3(b3);
-          c = Ab(c);
+          c2 = Ab(c2);
           var f2 = [];
           E2[d3 >> 2] = Ea(f2);
-          return a3(b3, c, f2, e2);
+          return a3(b3, c2, f2, e2);
         },
-        t: function(a3, b3, c, d3) {
+        t: function(a3, b3, c2, d3) {
           a3 = Bb[a3];
           b3 = M3(b3);
-          c = Ab(c);
-          a3(b3, c, null, d3);
+          c2 = Ab(c2);
+          a3(b3, c2, null, d3);
         },
         g: qb,
         m: function(a3, b3) {
-          var c = Db(a3, b3), d3 = c[0];
-          b3 = d3.name + "_$" + c.slice(1).map(function(g2) {
+          var c2 = Db(a3, b3), d3 = c2[0];
+          b3 = d3.name + "_$" + c2.slice(1).map(function(g2) {
             return g2.name;
           }).join("_") + "$";
           var e2 = Eb[b3];
@@ -8179,10 +8220,10 @@ var init_yoga_wasm_base64_esm = __esm(() => {
           var f2 = Array(a3 - 1);
           e2 = Cb((g2, k2, m2, l2) => {
             for (var n = 0, p = 0;p < a3 - 1; ++p)
-              f2[p] = c[p + 1].readValueFromPointer(l2 + n), n += c[p + 1].argPackAdvance;
+              f2[p] = c2[p + 1].readValueFromPointer(l2 + n), n += c2[p + 1].argPackAdvance;
             g2 = g2[k2].apply(g2, f2);
             for (p = 0;p < a3 - 1; ++p)
-              c[p + 1].ma && c[p + 1].ma(f2[p]);
+              c2[p + 1].ma && c2[p + 1].ma(f2[p]);
             if (!d3.va)
               return d3.toWireType(m2, g2);
           });
@@ -8199,16 +8240,16 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         c: function() {
           x3("");
         },
-        x: function(a3, b3, c) {
-          A3.copyWithin(a3, b3, b3 + c);
+        x: function(a3, b3, c2) {
+          A3.copyWithin(a3, b3, b3 + c2);
         },
         w: function(a3) {
           var b3 = A3.length;
           a3 >>>= 0;
           if (2147483648 < a3)
             return false;
-          for (var c = 1;4 >= c; c *= 2) {
-            var d3 = b3 * (1 + 0.2 / c);
+          for (var c2 = 1;4 >= c2; c2 *= 2) {
+            var d3 = b3 * (1 + 0.2 / c2);
             d3 = Math.min(d3, a3 + 100663296);
             var e2 = Math;
             d3 = Math.max(a3, d3);
@@ -8233,8 +8274,8 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         u: function() {
           return 70;
         },
-        y: function(a3, b3, c, d3) {
-          for (var e2 = 0, f2 = 0;f2 < c; f2++) {
+        y: function(a3, b3, c2, d3) {
+          for (var e2 = 0, f2 = 0;f2 < c2; f2++) {
             var g2 = E2[b3 >> 2], k2 = E2[b3 + 4 >> 2];
             b3 += 8;
             for (var m2 = 0;m2 < k2; m2++) {
@@ -8261,7 +8302,7 @@ var init_yoga_wasm_base64_esm = __esm(() => {
         function b3(e2) {
           a3(e2.instance);
         }
-        function c(e2) {
+        function c2(e2) {
           return ya().then(function(f2) {
             return WebAssembly.instantiate(f2, d3);
           }).then(function(f2) {
@@ -8281,11 +8322,11 @@ var init_yoga_wasm_base64_esm = __esm(() => {
             v2("Module.instantiateWasm callback failed with error: " + e2), ca(e2);
           }
         (function() {
-          return w3 || typeof WebAssembly.instantiateStreaming != "function" || ua(H2) || typeof fetch != "function" ? c(b3) : fetch(H2, { credentials: "same-origin" }).then(function(e2) {
+          return w3 || typeof WebAssembly.instantiateStreaming != "function" || ua(H2) || typeof fetch != "function" ? c2(b3) : fetch(H2, { credentials: "same-origin" }).then(function(e2) {
             return WebAssembly.instantiateStreaming(e2, d3).then(b3, function(f2) {
               v2("wasm streaming compile failed: " + f2);
               v2("falling back to ArrayBuffer instantiation");
-              return c(b3);
+              return c2(b3);
             });
           });
         })().catch(ca);
@@ -11022,9 +11063,9 @@ Error generating stack: ` + x3.message + `
     function warnIfNotHydrating() {
       isHydrating || console.error("Expected to be hydrating. This is a bug in React. Please file an issue.");
     }
-    function requiredContext(c) {
-      c === null && console.error("Expected host context to exist. This error is likely caused by a bug in React. Please file an issue.");
-      return c;
+    function requiredContext(c2) {
+      c2 === null && console.error("Expected host context to exist. This error is likely caused by a bug in React. Please file an issue.");
+      return c2;
     }
     function pushHostContainer(fiber, nextRootInstance) {
       push(rootInstanceStackCursor, nextRootInstance, fiber);
@@ -20017,10 +20058,10 @@ Visit https://react.dev/link/error-boundaries to learn more about error boundari
         setCurrentUpdatePriority(previousPriority), ReactSharedInternals.T = prevTransition;
       }
     };
-    exports2.discreteUpdates = function(fn, a3, b3, c, d3) {
+    exports2.discreteUpdates = function(fn, a3, b3, c2, d3) {
       var prevTransition = ReactSharedInternals.T, previousPriority = getCurrentUpdatePriority();
       try {
-        return setCurrentUpdatePriority(2), ReactSharedInternals.T = null, fn(a3, b3, c, d3);
+        return setCurrentUpdatePriority(2), ReactSharedInternals.T = null, fn(a3, b3, c2, d3);
       } finally {
         setCurrentUpdatePriority(previousPriority), ReactSharedInternals.T = prevTransition, executionContext === NoContext && (workInProgressRootRenderTargetTime = now$1() + RENDER_TIMEOUT_MS);
       }
@@ -30070,10 +30111,93 @@ var init_preflight = __esm(() => {
   init_fs();
 });
 
-// src/cli-main.tsx
-var exports_cli_main = {};
+// src/core/ensure-canonical.ts
+import fs11 from "fs";
 import path14 from "path";
 import os4 from "os";
+async function checkMigrationHint(projectRoot) {
+  const p = path14.join(projectRoot, ".agents");
+  try {
+    const lstat = await fs11.promises.lstat(p);
+    if (lstat.isSymbolicLink())
+      return;
+    if (lstat.isDirectory()) {
+      const files = await fs11.promises.readdir(p);
+      if (files.length > 0) {
+        return `偵測到 ${p} 為實體目錄且非空。新版預設讀取 ~/.agents/。
+若需將專案私有本源遷移至全域，請執行：
+  rsync -a .agents/ ~/.agents/ && rm -rf .agents`;
+      }
+    }
+  } catch {}
+  return;
+}
+async function ensureCanonical(opts = {}) {
+  const homeDir = opts.homeDir || os4.homedir();
+  const projectRoot = opts.projectRoot || process.cwd();
+  const defaultCanonical = path14.join(homeDir, ".agents");
+  const migrationHint = await checkMigrationHint(projectRoot);
+  if (fs11.existsSync(defaultCanonical)) {
+    return migrationHint ? { migrationHint } : {};
+  }
+  const selectPrompt = opts.selectFn || ie;
+  const textPrompt = opts.textFn || te;
+  const exitProc = opts.exitFn || ((code) => process.exit(code));
+  const choice = await selectPrompt({
+    message: `Canonical 目錄 (${defaultCanonical}) 不存在，請選擇處理方式：`,
+    options: [
+      { label: `建立空的 ${defaultCanonical}`, value: "create" },
+      { label: "指定其它資料夾路徑", value: "custom" },
+      { label: "取消", value: "cancel" }
+    ]
+  });
+  if (lD(choice) || choice === "cancel") {
+    exitProc(0);
+  }
+  let canonicalOverride;
+  if (choice === "create") {
+    await fs11.promises.mkdir(defaultCanonical, { recursive: true });
+  } else if (choice === "custom") {
+    const input = await textPrompt({
+      message: "請輸入既有 canonical 目錄的絕對路徑：",
+      placeholder: path14.join(homeDir, ".agents"),
+      validate(val) {
+        if (!val || val.trim() === "")
+          return "路徑不能為空";
+        const raw2 = val.trim();
+        const resolved = raw2.startsWith("~") ? path14.join(homeDir, raw2.slice(1)) : path14.resolve(raw2);
+        if (!path14.isAbsolute(resolved))
+          return "必須為絕對路徑";
+        if (!fs11.existsSync(resolved))
+          return `路徑不存在：${resolved}`;
+        try {
+          fs11.accessSync(resolved, fs11.constants.R_OK);
+        } catch {
+          return `無法讀取路徑：${resolved}`;
+        }
+      }
+    });
+    if (lD(input)) {
+      exitProc(0);
+    }
+    const raw = input.trim();
+    canonicalOverride = raw.startsWith("~") ? path14.join(homeDir, raw.slice(1)) : path14.resolve(raw);
+  }
+  const result2 = {};
+  if (canonicalOverride)
+    result2.canonicalOverride = canonicalOverride;
+  if (migrationHint)
+    result2.migrationHint = migrationHint;
+  return result2;
+}
+var init_ensure_canonical = __esm(() => {
+  init_dist2();
+});
+
+// src/cli-main.tsx
+var exports_cli_main = {};
+import path15 from "path";
+import os5 from "os";
 function exitCancelled() {
   ue("Cancelled");
   process.exit(0);
@@ -30098,7 +30222,7 @@ function mergeAgentStatus(items) {
 }
 function displayName(entry) {
   if (entry.name === "agents-md") {
-    const sourceFile = path14.basename(entry.source);
+    const sourceFile = path15.basename(entry.source);
     if (sourceFile === "CLAUDE.md")
       return "AGENTS.md (Claude override)";
     if (sourceFile === "GEMINI.md")
@@ -30188,9 +30312,9 @@ async function selectClients() {
   }
   const detectedSet = new Set(detected);
   const clientRoots = getGlobalClientRoots();
-  const homeDir = os4.homedir();
-  const displayPath = (p) => p.startsWith(homeDir + path14.sep) ? "~" + p.slice(homeDir.length) : p;
-  const hint = detected.length > 0 ? `偵測到下列資料夾：${detected.map((c) => displayPath(clientRoots[c])).join(", ")}` : "未偵測到任何 client 資料夾";
+  const homeDir = os5.homedir();
+  const displayPath = (p) => p.startsWith(homeDir + path15.sep) ? "~" + p.slice(homeDir.length) : p;
+  const hint = detected.length > 0 ? `偵測到下列資料夾：${detected.map((c2) => displayPath(clientRoots[c2])).join(", ")}` : "未偵測到任何 client 資料夾";
   le("space toggle · a toggle-all · enter submit · pick ◀ Back to return · ctrl+c cancel", "Keys");
   const selected = await ae({
     message: `Select clients to manage
@@ -30214,12 +30338,12 @@ ${source_default.dim(hint)}`,
   return values2;
 }
 function formatClients(clients) {
-  return clients.map((c) => CLIENT_LABELS[c]).join(", ");
+  return clients.map((c2) => CLIENT_LABELS[c2]).join(", ");
 }
-async function selectSkills(scope) {
+async function selectSkills(scope, canonicalOverride) {
   let entries = [];
   try {
-    entries = await listSkills({ scope });
+    entries = await listSkills({ scope, canonicalOverride });
   } catch {
     entries = [];
   }
@@ -30243,7 +30367,7 @@ function formatSkillsOverview(selected, allEntries) {
   return `Skills: ${selected.length} / ${allEntries.length}${catPart}`;
 }
 async function showStatus(scope, clients, status, planConflicts) {
-  const conflicts = new Map(planConflicts.map((c) => [c.target, c.reason]));
+  const conflicts = new Map(planConflicts.map((c2) => [c2.target, c2.reason]));
   const lines = renderStatusLines(mergeAgentStatus(status), conflicts);
   le(lines.join(`
 `), `Status · ${scopeLabel(scope)} · ${formatClients(clients)}`);
@@ -30256,7 +30380,7 @@ async function resolveMigrationConflicts(plan) {
       continue;
     const choice = await ie({
       message: `Resolve migration conflict ${i + 1} of ${plan.conflicts.length}: ${conflict.label}`,
-      options: conflict.candidates.map((c) => ({ label: c.label, value: c }))
+      options: conflict.candidates.map((c2) => ({ label: c2.label, value: c2 }))
     });
     if (lD(choice))
       return null;
@@ -30264,14 +30388,14 @@ async function resolveMigrationConflicts(plan) {
   }
   return selections;
 }
-async function runChange(scope, clients, skills) {
+async function runChange(scope, clients, skills, canonicalOverride) {
   const spin = de();
   spin.start("Scanning current setup...");
-  const roots = resolveRoots({ scope });
+  const roots = resolveRoots({ scope, canonicalOverride });
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const migrate = await scanMigration({ scope, clients });
-  const link2 = await buildLinkPlan({ scope, clients, selectedSkills: skills });
-  const backupDir = path14.join(roots.canonicalRoot, "backup", timestamp);
+  const migrate = await scanMigration({ scope, clients, canonicalOverride });
+  const link2 = await buildLinkPlan({ scope, clients, selectedSkills: skills, canonicalOverride });
+  const backupDir = path15.join(roots.canonicalRoot, "backup", timestamp);
   spin.stop("Scan complete");
   const planSummary = [
     `Migration: ${migrate.auto.length} auto · ${migrate.conflicts.length} conflicts (choose sources)`,
@@ -30324,7 +30448,7 @@ async function runChange(scope, clients, skills) {
       selections,
       forceLinks: overwriteConflicts
     });
-    const result2 = await applyMigration(migrate, selections, { scope, clients, backup, forceLinks: overwriteConflicts, selectedSkills: skills });
+    const result2 = await applyMigration(migrate, selections, { scope, clients, backup, forceLinks: overwriteConflicts, selectedSkills: skills, canonicalOverride });
     await finalizeBackup(backup);
     const migrationSummary = `Migrated ${formatCount(result2.copied, "item")}`;
     const linkSummary = `Linked ${formatCount(result2.links.applied, "path")}`;
@@ -30338,15 +30462,20 @@ async function runChange(scope, clients, skills) {
     le(String(err?.message || err), "Error");
   }
 }
-async function loadAllSkillEntries(scope) {
+async function loadAllSkillEntries(scope, canonicalOverride) {
   try {
-    return await listSkills({ scope });
+    return await listSkills({ scope, canonicalOverride });
   } catch {
     return [];
   }
 }
 async function run() {
   oe(source_default.cyan(appTitle));
+  const canonicalRes = await ensureCanonical();
+  const canonicalOverride = canonicalRes.canonicalOverride;
+  if (canonicalRes.migrationHint) {
+    le(canonicalRes.migrationHint, "Migration Hint");
+  }
   let scope = "global";
   let clients = [];
   let skills = [];
@@ -30370,21 +30499,21 @@ async function run() {
         continue;
       }
       if (step === "skills") {
-        const res = await selectSkills(scope);
+        const res = await selectSkills(scope, canonicalOverride);
         if (res === "back") {
           step = "clients";
           continue;
         }
         skills = res;
-        allSkillEntries = await loadAllSkillEntries(scope);
+        allSkillEntries = await loadAllSkillEntries(scope, canonicalOverride);
         step = "main";
         continue;
       }
       break wizard;
     }
   while (true) {
-    const status = mergeAgentStatus(await getLinkStatus({ scope, clients, selectedSkills: skills }));
-    const plan = await buildLinkPlan({ scope, clients, selectedSkills: skills });
+    const status = mergeAgentStatus(await getLinkStatus({ scope, clients, selectedSkills: skills, canonicalOverride }));
+    const plan = await buildLinkPlan({ scope, clients, selectedSkills: skills, canonicalOverride });
     const conflicts = plan.conflicts.length || 0;
     const changes = plan.changes.length || 0;
     const summary = buildStatusSummary(status);
@@ -30423,10 +30552,10 @@ async function run() {
       continue;
     }
     if (action === "skills") {
-      const res = await selectSkills(scope);
+      const res = await selectSkills(scope, canonicalOverride);
       if (res !== "back") {
         skills = res;
-        allSkillEntries = await loadAllSkillEntries(scope);
+        allSkillEntries = await loadAllSkillEntries(scope, canonicalOverride);
       }
       continue;
     }
@@ -30434,7 +30563,7 @@ async function run() {
       const spin = de();
       spin.start("Undoing last change...");
       try {
-        const result2 = await undoLastChange({ scope });
+        const result2 = await undoLastChange({ scope, canonicalOverride });
         const restoredSummary = `Restored ${formatCount(result2.restoredBackups, "backup")}`;
         const removedSummary = `Removed ${formatCount(result2.removedCreated, "created path")}`;
         const symlinkSummary = result2.removedSymlinks > 0 ? `${formatCount(result2.removedSymlinks, "symlink")} removed` : "";
@@ -30455,7 +30584,7 @@ async function run() {
       continue;
     }
     if (action === "change") {
-      await runChange(scope, clients, skills);
+      await runChange(scope, clients, skills, canonicalOverride);
     }
   }
   $e("Bye");
@@ -30473,6 +30602,7 @@ var init_cli_main = __esm(async () => {
   init_backup();
   init_undo2();
   init_preflight();
+  init_ensure_canonical();
   await init_skill_picker();
   CLIENT_LABELS = {
     claude: "Claude",

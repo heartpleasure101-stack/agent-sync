@@ -52,7 +52,21 @@
 
 - **Scope Explanation（作用域說明）**：
   - **全域套用 (Global `~`)**：設定一次，電腦裡所有專案的 AI 助手都能一起共享招式與規則！
-  - **單一專案套用 (Project `.agent/`)**：只針對您現在開啟的這個專案做設定，不會影響其他專案。
+  - **單一專案套用 (Project)**：只針對您現在開啟的這個專案做設定。本源預設共用 `~/.agents/`（免去對每個新專案手動建立 symlink 的儀式），Client 資料夾落點仍為專案目錄下。
+  - **Fallback Prompt**：若 `~/.agents/` 不存在，CLI 啟動時會跳出選單引導您：
+    1. 建立空的 `~/.agents/`（預設）
+    2. 指定其它資料夾作為 canonical 本源（僅當次 session 有效）
+    3. 取消
+
+### 從舊版遷移 (Migration from Older Versions)
+
+若您的既有專案內含有舊版建立的 `專案/.agents/` 實體資料夾（非 symlink），新版 `dotagents` 預設改讀 `~/.agents/`。您可以將專案內本源遷移至全域：
+
+```bash
+rsync -a .agents/ ~/.agents/ && rm -rf .agents
+```
+
+*註：若專案內 `.agents` 已經是指向 `~/.agents` 的 symlink，則不需任何處理。*
 
 ---
 
