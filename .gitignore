@@ -4,7 +4,7 @@ node_modules
 # output
 out
 *.tgz
-# dist is committed so `npx github:heartpleasure101-stack/dotagents` works without a build step.
+# dist is committed so `npx github:heartpleasure101-stack/agent-sync` works without a build step.
 
 # code coverage
 coverage

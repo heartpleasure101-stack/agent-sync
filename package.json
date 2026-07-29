@@ -1,11 +1,11 @@
 {
-  "name": "@dean9703111/dotagents",
+  "name": "agent-sync",
   "version": "0.1.11",
   "description": "Canonical .agents manager with symlinks for popular AI tools",
   "type": "module",
   "license": "MIT",
   "bin": {
-    "dotagents": "dist/cli.js"
+    "agent-sync": "dist/cli.js"
   },
   "files": [
     "dist",

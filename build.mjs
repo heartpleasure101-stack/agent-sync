@@ -1,4 +1,4 @@
-// Bundle src/cli.tsx → dist/cli.js for `npx github:heartpleasure101-stack/dotagents`.
+// Bundle src/cli.tsx → dist/cli.js for `npx github:heartpleasure101-stack/agent-sync`.
 // react-devtools-core is Ink's optional peer; not installed at consumer sites.
 // We stub it so the ESM resolver never chases the missing package.
 
