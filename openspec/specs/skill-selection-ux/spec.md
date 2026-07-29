@@ -1,5 +1,9 @@
-## ADDED Requirements
+# skill-selection-ux Specification
 
+## Purpose
+規範 canonical `skills/` 的挑選體驗：以單一 tabbed picker 呈現分類，選擇為 session-scoped 且不持久化，並確保 mapping 層能接收選定結果。
+
+## Requirements
 ### Requirement: Client-side layout stays flat
 
 被選中的 skills SHALL 以扁平佈局呈現在 client 端，即 `<clientRoot>/skills/<skill-name>`；分類目錄名 MUST NOT 出現在任何 client 端路徑上。
@@ -67,8 +71,6 @@ canonical `skills/` 目錄不存在或為空時，skill 挑選流程 SHALL 回�
 - **THEN** `getMappings()` 回傳結果中不包含任何 `name === 'skills'` 的 mapping
 
 
-## MODIFIED Requirements
-
 ### Requirement: Tabbed skill picker
 
 Skill 挑選 SHALL 以「tab bar + per-tab multi-select」的一頁式互動呈現，取代原先「分類 multi-select → 聯集 skill multi-select」的兩步流程與 `Select all` / `Deselect all` pseudo-option。每個分類 = 一個 tab，使用者以方向鍵在 tab 間切換；每個 tab 內獨立記住當前 skill 勾選狀態；`Enter` 送出時把所有 tab 已勾的 skill dir 攤平聯集回傳。
@@ -120,14 +122,3 @@ Skill 挑選 SHALL 以「tab bar + per-tab multi-select」的一頁式互動呈�
 - **WHEN** canonical `skills/` 底下只有含 `SKILL.md` 的直接子目錄、沒有分類目錄
 - **THEN** tab bar 只有 `(uncategorized)` 一個 tab
 - **AND** 使用者仍可用 `↑`/`↓` + `Space` 選、`a`/`d` 全選 / 全不選、`Enter` 送出
-
-
-## REMOVED Requirements
-
-### Requirement: Category-first browsing
-**Reason**: 兩步式的「先選分類 → 進聯集 skill picker」被單一 tab UI 取代；分類選擇隱含於 tab 導航。
-**Migration**: 使用者不需任何動作；新 picker 開啟時即看得到所有分類 tab，改用 `←`/`→` 切換代替原本的分類 multiselect。
-
-### Requirement: Skill multiselect with select-all / deselect-all
-**Reason**: `Select all` / `Deselect all` pseudo-option 造成需要「勾 → submit → 再看到 re-open」的迂迴體驗；tab UI 已用鍵盤快捷 `a`/`d` 直接對當前 tab 生效，語意更直觀。
-**Migration**: 舊 pseudo-option 移除；改按 `a` = 當前 tab 全選、`d` = 當前 tab 全不選。全域 submit 仍需 `Enter`，`required: true` 語意不變。
