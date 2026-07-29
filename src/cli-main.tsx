@@ -18,7 +18,7 @@ import type { Client, LinkStatus, Scope } from './core/types.js';
 import type { MigrationCandidate } from './core/migrate.js';
 import { ensureCanonical } from './core/ensure-canonical.js';
 
-const appTitle = 'dotagents';
+const appTitle = 'agent-sync';
 
 const CLIENT_LABELS: Record<Client, string> = {
   claude: 'Claude',

@@ -21,7 +21,7 @@ function guideFor(platform: NodeJS.Platform, minimum: number): Guide {
 export function formatFailureMessage(result: CheckFail): string {
   const guide = guideFor(result.platform, result.minimum);
   const lines: string[] = [];
-  lines.push('✖ Node.js 版本過舊，dotagents 無法啟動');
+  lines.push('✖ Node.js 版本過舊，agent-sync 無法啟動');
   lines.push('');
   lines.push(`  目前版本：${result.current}`);
   lines.push(`  需要版本：${result.minimum}.0.0 以上`);
@@ -33,6 +33,6 @@ export function formatFailureMessage(result: CheckFail): string {
   lines.push(`    官網：${OFFICIAL_URL}`);
   lines.push('');
   lines.push('  安裝完成後，重開終端機再跑一次：');
-  lines.push('    $ npx github:heartpleasure101-stack/dotagents');
+  lines.push('    $ npx github:heartpleasure101-stack/agent-sync');
   return lines.join('\n');
 }

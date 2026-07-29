@@ -8,7 +8,7 @@ import { undoLastChange } from '../src/core/undo.js';
 import { makeTempDir, writeFile } from './helpers.js';
 
 test('undo restores overwritten tool paths', async () => {
-  const home = await makeTempDir('dotagents-home-');
+  const home = await makeTempDir('agent-sync-home-');
   const codexPrompts = path.join(home, '.codex', 'prompts');
   await writeFile(path.join(codexPrompts, 'keep.md'), '# keep');
 

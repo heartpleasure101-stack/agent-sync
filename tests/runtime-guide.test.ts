@@ -46,5 +46,5 @@ test('message shows current and minimum versions', () => {
 
 test('message ends with a retry command', () => {
   const msg = formatFailureMessage(fail('linux'));
-  expect(msg).toContain('npx github:heartpleasure101-stack/dotagents');
+  expect(msg).toContain('npx github:heartpleasure101-stack/agent-sync');
 });

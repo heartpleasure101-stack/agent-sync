@@ -5,7 +5,7 @@ import path from 'path';
 import { ensureCanonical } from '../src/core/ensure-canonical.js';
 
 function makeTmpDir(prefix: string): string {
-  return fs.mkdtempSync(path.join(os.tmpdir(), `dotagents-test-${prefix}-`));
+  return fs.mkdtempSync(path.join(os.tmpdir(), `agent-sync-test-${prefix}-`));
 }
 
 test('ensureCanonical returns empty object when ~/.agents exists', async () => {

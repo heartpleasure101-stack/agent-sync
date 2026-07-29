@@ -30589,7 +30589,7 @@ async function run() {
   }
   $e("Bye");
 }
-var appTitle = "dotagents", CLIENT_LABELS, BACK_TOKEN = "__BACK__";
+var appTitle = "agent-sync", CLIENT_LABELS, BACK_TOKEN = "__BACK__";
 var init_cli_main = __esm(async () => {
   init_source();
   init_dist2();
@@ -30658,7 +30658,7 @@ function guideFor(platform, minimum) {
 function formatFailureMessage(result) {
   const guide = guideFor(result.platform, result.minimum);
   const lines = [];
-  lines.push("✖ Node.js 版本過舊，dotagents 無法啟動");
+  lines.push("✖ Node.js 版本過舊，agent-sync 無法啟動");
   lines.push("");
   lines.push(`  目前版本：${result.current}`);
   lines.push(`  需要版本：${result.minimum}.0.0 以上`);
@@ -30670,7 +30670,7 @@ function formatFailureMessage(result) {
   lines.push(`    官網：${OFFICIAL_URL}`);
   lines.push("");
   lines.push("  安裝完成後，重開終端機再跑一次：");
-  lines.push("    $ npx github:heartpleasure101-stack/dotagents");
+  lines.push("    $ npx github:heartpleasure101-stack/agent-sync");
   return lines.join(`
 `);
 }

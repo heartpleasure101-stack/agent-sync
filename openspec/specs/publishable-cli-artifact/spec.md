@@ -5,7 +5,7 @@
 發佈到 GitHub 的 `dist/cli.js` SHALL 能在只安裝了 `package.json` `dependencies` 所列項目、**未**安裝任何 optional peer dependency 的 node runtime 直接啟動；載入階段 MUST NOT 拋出 `ERR_MODULE_NOT_FOUND`。
 
 #### Scenario: 使用者透過 `npx github:` 執行
-- **WHEN** 使用者在乾淨環境（沒有預裝 `react-devtools-core`）跑 `npx github:heartpleasure101-stack/dotagents`
+- **WHEN** 使用者在乾淨環境（沒有預裝 `react-devtools-core`）跑 `npx github:heartpleasure101-stack/agent-sync`
 - **THEN** CLI 進入 scope picker（第一個互動 prompt）
 - **AND** stderr 不包含 `ERR_MODULE_NOT_FOUND`
 

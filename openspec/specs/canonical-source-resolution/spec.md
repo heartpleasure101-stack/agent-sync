@@ -68,7 +68,7 @@ CLI 主流程 SHALL 在建立 link plan 之前呼叫 `ensureCanonical()`，確�
 
 ### Requirement: Canonical override 不持久化
 
-使用者於 prompt 選擇的 `canonicalOverride` MUST 僅存活於當前 CLI process。系統 MUST NOT 將此選擇寫入任何檔案（例如 `~/.dotagentsrc`、`~/.config/dotagents/*` 或專案內設定）。下次啟動 CLI 時，若 `~/.agents/` 仍不存在，MUST 重新詢問。
+使用者於 prompt 選擇的 `canonicalOverride` MUST 僅存活於當前 CLI process。系統 MUST NOT 將此選擇寫入任何檔案（例如 `~/.agent-syncrc`、`~/.config/agent-sync/*` 或專案內設定）。下次啟動 CLI 時，若 `~/.agents/` 仍不存在，MUST 重新詢問。
 
 #### Scenario: 重啟後仍未建立 `~/.agents/`
 - **GIVEN** 前一次 session 使用者選擇了 `/Users/x/Developer/.agents` 作為 override

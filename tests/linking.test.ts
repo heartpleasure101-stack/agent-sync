@@ -13,7 +13,7 @@ async function readLinkTarget(target: string): Promise<string> {
 }
 
 test('creates symlinks from canonical .agents to tool homes', async () => {
-  const home = await makeTempDir('dotagents-home-');
+  const home = await makeTempDir('agent-sync-home-');
 
   const plan = await buildLinkPlan({ scope: 'global', homeDir: home });
   const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'global', operation: 'test' });
@@ -63,7 +63,7 @@ test('creates symlinks from canonical .agents to tool homes', async () => {
 });
 
 test('adds cursor links when .cursor exists without .claude', async () => {
-  const home = await makeTempDir('dotagents-home-');
+  const home = await makeTempDir('agent-sync-home-');
   const cursorRoot = path.join(home, '.cursor');
   await fs.promises.mkdir(cursorRoot, { recursive: true });
 
@@ -83,7 +83,7 @@ test('adds cursor links when .cursor exists without .claude', async () => {
 });
 
 test('relinks Claude prompt when CLAUDE.md is added', async () => {
-  const home = await makeTempDir('dotagents-home-');
+  const home = await makeTempDir('agent-sync-home-');
 
   const first = await buildLinkPlan({ scope: 'global', homeDir: home });
   const backupFirst = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'global', operation: 'test' });
@@ -117,7 +117,7 @@ test('relinks Claude prompt when CLAUDE.md is added', async () => {
 });
 
 test('idempotent apply produces no changes on second run', async () => {
-  const home = await makeTempDir('dotagents-home-');
+  const home = await makeTempDir('agent-sync-home-');
   const first = await buildLinkPlan({ scope: 'global', homeDir: home });
   const backupFirst = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'global', operation: 'test' });
   await applyLinkPlan(first, { backup: backupFirst });
@@ -131,7 +131,7 @@ test('idempotent apply produces no changes on second run', async () => {
 });
 
 test('force apply replaces conflicting targets', async () => {
-  const home = await makeTempDir('dotagents-home-');
+  const home = await makeTempDir('agent-sync-home-');
   const codexPrompts = path.join(home, '.codex', 'prompts');
   await fs.promises.mkdir(path.dirname(codexPrompts), { recursive: true });
   await fs.promises.mkdir(codexPrompts, { recursive: true });
@@ -149,8 +149,8 @@ test('force apply replaces conflicting targets', async () => {
 });
 
 test('project scope does not link AGENTS/CLAUDE files', async () => {
-  const home = await makeTempDir('dotagents-home-');
-  const project = await makeTempDir('dotagents-project-');
+  const home = await makeTempDir('agent-sync-home-');
+  const project = await makeTempDir('agent-sync-project-');
 
   const plan = await buildLinkPlan({ scope: 'project', homeDir: home, projectRoot: project });
 
@@ -175,8 +175,8 @@ test('project scope does not link AGENTS/CLAUDE files', async () => {
 });
 
 test('github skills link to .github/skills in project scope', async () => {
-  const home = await makeTempDir('dotagents-home-');
-  const project = await makeTempDir('dotagents-project-');
+  const home = await makeTempDir('agent-sync-home-');
+  const project = await makeTempDir('agent-sync-project-');
 
   const plan = await buildLinkPlan({ scope: 'project', homeDir: home, projectRoot: project });
   const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'project', operation: 'test' });
@@ -191,8 +191,8 @@ test('github skills link to .github/skills in project scope', async () => {
 });
 
 test('antigravity links to .agent folders in project scope', async () => {
-  const home = await makeTempDir('dotagents-home-');
-  const project = await makeTempDir('dotagents-project-');
+  const home = await makeTempDir('agent-sync-home-');
+  const project = await makeTempDir('agent-sync-project-');
 
   const plan = await buildLinkPlan({ scope: 'project', homeDir: home, projectRoot: project });
   const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'project', operation: 'test' });
@@ -210,7 +210,7 @@ test('antigravity links to .agent folders in project scope', async () => {
 });
 
 test('github skills link to ~/.copilot/skills in global scope', async () => {
-  const home = await makeTempDir('dotagents-home-');
+  const home = await makeTempDir('agent-sync-home-');
 
   const plan = await buildLinkPlan({ scope: 'global', homeDir: home });
   const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'global', operation: 'test' });
@@ -225,7 +225,7 @@ test('github skills link to ~/.copilot/skills in global scope', async () => {
 });
 
 test('creates symlinks with relative paths when supported', async () => {
-  const home = await makeTempDir('dotagents-home-');
+  const home = await makeTempDir('agent-sync-home-');
 
   const plan = await buildLinkPlan({ scope: 'global', homeDir: home });
   const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'global', operation: 'test' });
@@ -247,7 +247,7 @@ test('creates symlinks with relative paths when supported', async () => {
 });
 
 test('creates relative symlinks for nested targets when supported', async () => {
-  const home = await makeTempDir('dotagents-home-');
+  const home = await makeTempDir('agent-sync-home-');
 
   const plan = await buildLinkPlan({ scope: 'global', homeDir: home });
   const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'global', operation: 'test' });
@@ -269,7 +269,7 @@ test('creates relative symlinks for nested targets when supported', async () => 
 });
 
 test('migrates absolute symlinks to relative when supported', async () => {
-  const home = await makeTempDir('dotagents-home-');
+  const home = await makeTempDir('agent-sync-home-');
 
   const commands = path.join(home, '.agents', 'commands');
   const claudeCommands = path.join(home, '.claude', 'commands');
@@ -303,7 +303,7 @@ test('migrates absolute symlinks to relative when supported', async () => {
 });
 
 test('project symlinks are portable after directory move when supported', async () => {
-  const tempBase = await makeTempDir('dotagents-portable-');
+  const tempBase = await makeTempDir('agent-sync-portable-');
   const project = path.join(tempBase, 'myproject');
   await fs.promises.mkdir(project, { recursive: true });
   const canonicalOverride = path.join(project, '.agents');
