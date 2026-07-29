@@ -63,7 +63,26 @@
 - [x] 7.3 `bun run build` exit 0（`dist/main.js` 1.37 MB、`dist/cli.js` 2.6 KB），`bun run smoke` 兩個產物皆 PASS。
 
 - [x] 7.6 **計畫外補上的測試**：第 4 節（unlink）原本沒有任何測試任務，但它是唯一會刪東西的路徑。新增 `tests/unlink-skills.test.ts` 9 個測試：plan 產生 unlink task、apply 移除 symlink 且 canonical 完好、undo 還原、**真目錄被拒絕且內容未動**、指向他處的 symlink 被拒絕、target 已不存在視為 noop、**apply 期 TOCTOU 重驗（plan 後把 symlink 換成真目錄 → 不移除、計入 conflict、使用者檔案完好）**、preflight 涵蓋 unlink target、安裝與移除混用共享單一 backup session 且單次 undo 全部回捲。
-- [ ] 7.4 手動驗收（`bun run dev`，建議先備份自己的 `~/.agents` 與各 client 目錄）：
+- [x] 7.4 驗收方式改為 **headless 端到端測試 + 真人畫面佐證**，而非純手動。
+
+  改動理由：手動互動無法自動重跑，這條路徑會刪磁碟上的東西，值得留成可重複執行的迴歸測試。新增 `tests/skill-lifecycle.test.ts`（6 個測試 / 30 個 expect），在真實檔案系統上跑完整生命週期 `scan → picker state → diff → plan → apply → undo`，**只有按鍵層是模擬的**（直接呼叫 `toggle` / `resetTab`），以下全是正式程式路徑。
+
+  對照計畫列出的八個情境：
+
+  | 計畫情境 | 覆蓋方式 | 結果 |
+  |---|---|---|
+  | 裝 2 個到 claude → 重啟選 claude → `[x]` | headless：alpha 兩邊都裝 → `original='all'` | ✓ |
+  | 選 `claude, gemini` → `[~]` | headless：beta 只裝 claude → `original='partial'` | ✓ |
+  | 只選 gemini → `[ ]` + 灰字 `(claude)` | headless：`outOfScopeClients` 回 `['claude']` | ✓ |
+  | `[x]` 按成 `[ ]` → 標 `-` → 套用 → symlink 消失、canonical 完好 | headless：`removed=2`，兩個 symlink 消失，`SKILL.md` 仍在 | ✓ |
+  | 立刻 Undo → symlink 回來 | headless：兩邊都還原且指向正確 | ✓ |
+  | `[~]` 連按三次回到 `[~]`，Pending 0 | headless：循環 `all → none → partial`，`pendingCounts` 0/0 | ✓ |
+  | `d` 回到原始狀態而非全移除 | headless：alpha 回 `all`、beta 回 `partial`，pending 歸零 | ✓ |
+  | 一次裝 2 移 1 → 單次 undo 全回捲 | headless：1 裝 1 移，單次 undo 兩個方向都回捲 | ✓ |
+
+  **真人畫面佐證**（使用者於 project scope 實跑截圖）：A1_Coding (12/12)、A2_Git (3/3) 全 `[x]`，B1_WordProcessing (0/2)、C1_Medie (0/4)，footer `Pending: 0 install · 0 remove`、無 `+`/`-` 標記。以 `scanInstalledSkills({scope:'project'})` 交叉驗證得 `installed.size = 15`，且 `.claude/skills/` 與 `.agent/skills/` 下確有 15 條指向 canonical 的 symlink —— 畫面與磁碟完全一致。改動前同一畫面會是 21 個全空 `[ ]`。
+
+  **仍未涵蓋**：Ink 的實際按鍵事件與終端機渲染（顏色、灰字排版、tab 反白）。這層需要真 TTY，無法自動化；狀態轉換本身由 `tests/skill-picker-state.test.ts` 22 個測試覆蓋。原計畫的手動情境列表保留於下作為人工複驗清單：
   - 全新環境安裝 2 個 skill 到 `claude` → 重啟 CLI 選 `claude` → 兩列顯示 `[x]`。
   - 重啟選 `claude, gemini` → 那兩列顯示 `[~]`，列尾無範圍外註記。
   - 重啟只選 `gemini` → 那兩列顯示 `[ ]`，列尾灰字 `(claude)`。
