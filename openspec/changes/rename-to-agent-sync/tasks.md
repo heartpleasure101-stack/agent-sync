@@ -53,14 +53,14 @@
 
 ## 8. Commit + push（改名前）
 
-- [ ] 8.1 `git add` 全部改動（含 `dist/cli.js`）。
-- [ ] 8.2 commit message：`refactor(naming): rename dotagents to agent-sync`。
-- [ ] 8.3 push 到 `origin/main`（此時 repo 仍叫 `dotagents`）。
+- [x] 8.1 `git add` 全部改動（含 `dist/cli.js`）。`git ls-files dist/cli.js` 有追蹤，`grep -c dotagents dist/cli.js` = 0。
+- [x] 8.2 commit message：~~`refactor(naming): rename dotagents to agent-sync`~~ → 實際改為依功能拆成多個 conventional commit（`docs(naming)` / `docs(readme)` / `test(naming)` / `chore(project)`），經 PR #9 merge 為 `7807878`。單一 commit 的原計畫未採用。
+- [x] 8.3 push 到 `origin/main`。`git rev-parse HEAD origin/main` 同為 `7807878`，`git log origin/main..HEAD` 無輸出。
 
 ## 9. 需要真人做的操作
 
-- [ ] 9.1 GitHub → Settings → Repository name → 改為 `agent-sync`。
-- [ ] 9.2 `git remote set-url origin https://github.com/heartpleasure101-stack/agent-sync.git`，`git remote -v` 確認。
-- [ ] 9.3 實跑 `npx github:heartpleasure101-stack/agent-sync`，確認進得了 scope picker、標題顯示 `agent-sync`。
-- [ ] 9.4 實跑舊 URL `npx github:heartpleasure101-stack/dotagents`，確認 GitHub redirect 仍可用（記錄結果，作為過渡期公告依據）。
+- [x] 9.1 GitHub → Settings → Repository name → 改為 `agent-sync`。（間接佐證：`git fetch origin main` 對 `agent-sync.git` 成功，代表遠端 repo 已存在於新名稱下。）
+- [x] 9.2 `git remote set-url origin https://github.com/heartpleasure101-stack/agent-sync.git`，`git remote -v` 確認 fetch/push 皆已指向 `agent-sync.git`。
+- [x] 9.3 實跑 `npx -y github:heartpleasure101-stack/agent-sync`：下載與啟動成功，標題顯示 `agent-sync`，無 `ERR_MODULE_NOT_FOUND`（0 筆）。**保留但未驗**：因執行環境非 TTY，止於 `TTY initialization failed`（此為 `scripts/smoke.mjs:32-34` 記錄的已知非 TTY 行為，非改名造成），未能實際看到 scope picker 選項。要完整確認需在真終端機手動跑一次。
+- [x] 9.4 實跑舊 URL `npx -y github:heartpleasure101-stack/dotagents`：GitHub redirect **仍可用**，輸出與新 URL 一致（標題 `agent-sync`，無 `ERR_MODULE_NOT_FOUND`）。過渡期舊連結不會斷，可據此撰寫公告。
 - [ ] 9.5 決定 npm 佔名（第 6 節）要不要做。

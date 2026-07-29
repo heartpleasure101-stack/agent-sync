@@ -55,5 +55,26 @@
 
 ## 6. 需要真人做的驗證
 
-- [ ] 6.1 在 Node 20 環境（例：`nvm use 20`）跑 `node dist/cli.js`，確認看到中文提示 + brew/nvm/winget 指引，且 exit code = 1。
-- [ ] 6.2 在 Node 22+ 環境跑，確認 CLI 正常進 scope picker、無 preflight 訊息。
+- [x] 6.1 ~~在 Node 20 環境（例：`nvm use 20`）跑~~ → **改以偽造 `process.versions.node` 驗證，未使用真實 Node 20 binary**（本機 `nvm ls` 只有 v24.12.0 / v24.16.0，未安裝 Node 20）。
+
+  做法：`node --import <preload> dist/cli.js`，preload 覆寫 `process.versions.node` 與 `process.platform`，跑的是真實 build 產物。
+
+  結果（每組 exit code 皆 = 1，訊息為中文）：
+
+  | 版本 | platform | 指引 |
+  |---|---|---|
+  | 20.20.2 | darwin | `brew install node@22` |
+  | 20.20.2 | win32 | `winget install OpenJS.NodeJS` |
+  | 20.20.2 | linux | `nvm install 22` |
+  | 18.20.8 | darwin | `brew install node@22` |
+  | 21.7.3 | darwin | `brew install node@22` |
+
+  上邊界：22.0.0 未觸發 guard，直接進 app（`grep -c 版本過舊` = 0）。
+  單元測試：`bun test tests/runtime-check.test.ts tests/runtime-guide.test.ts` → 13 pass / 0 fail。
+
+  ~~**未覆蓋的殘留風險**~~ → **已由 `split-preflight-from-bundle` 收斂**。
+
+  原記錄的風險：偽造版本無法驗證 Node 20 是否**解析得動** `dist/cli.js`；當時 `dist/` 是單一 1.4MB / 30685 行的 bundle，preflight 落在第 30628 行，舊 Node 必須先解析完整包才會跑到版本檢查，任一處新語法都會讓使用者看到 SyntaxError 而非本指引。
+
+  收斂方式：`split-preflight-from-bundle` 把產物拆成 `dist/cli.js`（launcher，2670 bytes）與 `dist/main.js`（主程式），並在建置流程加上 esbuild `target: node18` lowering，保證 launcher 的語法可被舊版 Node 解析。實證：把 `dist/main.js` 完全移走後，偽造 Node 20 執行 launcher 仍正常顯示本指引 —— 版本檢查不再依賴主程式能否被解析。
+- [x] 6.2 在 Node 22+ 環境跑，確認 CLI 正常進 scope picker、無 preflight 訊息。實測 Node `v24.16.0`，`script` 分配 pty 後跑 `node dist/cli.js`，輸出為 `┌ agent-sync` → `◆ Choose a workspace` → `● Global (~/.agents) / ○ Project (.agents) / ○ Exit`；grep `node|版本|upgrade|nvm|brew|winget` 回 0 筆，確認無 preflight 訊息。
