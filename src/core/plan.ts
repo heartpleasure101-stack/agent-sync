@@ -1,22 +1,11 @@
 import fs from 'fs';
 import path from 'path';
-import { getMappings } from './mappings.js';
+import { getMappings, getRemovalMappings } from './mappings.js';
 import type { MappingOptions } from './mappings.js';
 import type { LinkPlan, LinkTask, SourceKind, ConflictTask } from './types.js';
 import { pathExists } from '../utils/fs.js';
 import { getLinkTarget } from './link-target.js';
-
-async function getLinkTargetAbsolute(targetPath: string): Promise<string | null> {
-  try {
-    const link = await fs.promises.readlink(targetPath);
-    if (!path.isAbsolute(link)) {
-      return path.resolve(path.dirname(targetPath), link);
-    }
-    return link;
-  } catch {
-    return null;
-  }
-}
+import { resolveSymlinkTo, isSymlinkPointingTo, describePathKind } from './symlink.js';
 
 async function ensureSourceTask(source: string, kind: SourceKind): Promise<LinkTask[]> {
   const exists = await pathExists(source);
@@ -42,7 +31,7 @@ async function analyzeTarget(
   const stat = await fs.promises.lstat(target);
   if (stat.isSymbolicLink()) {
     const rawLink = await fs.promises.readlink(target);
-    const resolved = await getLinkTargetAbsolute(target);
+    const resolved = await resolveSymlinkTo(target);
     if (resolved && path.resolve(resolved) === path.resolve(source)) {
       const desired = getLinkTarget(source, target, kind);
       if (desired.isRelative && path.isAbsolute(rawLink)) {
@@ -62,6 +51,30 @@ async function analyzeTarget(
   }
   const targetKind = stat.isDirectory() ? 'directory' : stat.isFile() ? 'file' : 'path';
   return { type: 'conflict', source, target, reason: `Target exists and is not a symlink (${targetKind})`, kind };
+}
+
+/**
+ * Decide whether a deselected skill's target can safely be removed.
+ *
+ * A missing target is simply already gone (noop). Anything present that is not
+ * a symlink resolving to our canonical source becomes a conflict rather than an
+ * unlink: applyLinkPlan() hands unlink targets to backupPath(), which renames a
+ * real directory wholesale into the backup dir. Silently relocating a user's
+ * own directory is not an acceptable outcome of unchecking a box.
+ */
+async function analyzeRemoval(source: string, target: string, kind: SourceKind): Promise<LinkTask> {
+  if (!(await pathExists(target))) return { type: 'noop', source, target };
+  if (await isSymlinkPointingTo(target, source)) {
+    return { type: 'unlink', source, target, kind };
+  }
+  const actual = await describePathKind(target);
+  return {
+    type: 'conflict',
+    source,
+    target,
+    reason: `Refusing to remove: expected a symlink to ${source} but found ${actual}`,
+    kind,
+  };
 }
 
 export async function buildLinkPlan(opts: MappingOptions): Promise<LinkPlan> {
@@ -88,8 +101,16 @@ export async function buildLinkPlan(opts: MappingOptions): Promise<LinkPlan> {
     }
   }
 
+  for (const mapping of await getRemovalMappings(opts)) {
+    for (const target of mapping.targets) {
+      tasks.push(await analyzeRemoval(mapping.source, target, mapping.kind));
+    }
+  }
+
   const conflicts = tasks.filter((t) => t.type === 'conflict') as ConflictTask[];
-  const changes = tasks.filter((t) => t.type === 'link' || t.type === 'ensure-source');
+  const changes = tasks.filter(
+    (t) => t.type === 'link' || t.type === 'ensure-source' || t.type === 'unlink',
+  );
 
   return { tasks, conflicts, changes };
 }

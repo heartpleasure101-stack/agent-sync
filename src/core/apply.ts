@@ -5,6 +5,7 @@ import { getLinkTarget } from './link-target.js';
 import { ensureDir, ensureFile, removePath, pathExists } from '../utils/fs.js';
 import type { BackupSession } from './backup.js';
 import { backupPath, recordCreatedPath } from './backup.js';
+import { isSymlinkPointingTo } from './symlink.js';
 
 const DEFAULT_AGENTS = `# AGENTS\n\nAdd shared agent instructions here.\n`;
 
@@ -44,7 +45,7 @@ async function createLink(
 export async function applyLinkPlan(
   plan: LinkPlan,
   opts: { force?: boolean; backup: BackupSession },
-): Promise<{ applied: number; skipped: number; conflicts: number; backupDir: string; backedUp: number }> {
+): Promise<{ applied: number; skipped: number; conflicts: number; backupDir: string; backedUp: number; removed: number }> {
   const force = !!opts?.force;
   const backup = opts.backup;
   if (!backup) throw new Error('Backup session required.');
@@ -52,6 +53,7 @@ export async function applyLinkPlan(
   let skipped = 0;
   let conflicts = 0;
   let backedUp = 0;
+  let removed = 0;
 
   for (const task of plan.tasks) {
     if (task.type === 'conflict') {
@@ -73,6 +75,28 @@ export async function applyLinkPlan(
       applied += 1;
       continue;
     }
+    if (task.type === 'unlink') {
+      // Re-verify. buildLinkPlan() already checked, but several interactive
+      // prompts run between plan and apply, and backupPath() would move a real
+      // directory into the backup dir rather than refuse. The TOCTOU window is
+      // real, so the check that guards a destructive call belongs next to it.
+      if (!(await isSymlinkPointingTo(task.target, task.source))) {
+        if (await pathExists(task.target)) conflicts += 1;
+        else skipped += 1;
+        continue;
+      }
+      // backupPath() returns false when a parent path was already backed up in
+      // this session; it skips without deleting. Reporting that as removed
+      // would tell the user something vanished while it is still on disk.
+      const ok = await backupPath(task.target, backup);
+      if (ok) {
+        removed += 1;
+        backedUp += 1;
+      } else {
+        skipped += 1;
+      }
+      continue;
+    }
     if (task.type === 'link') {
       const before = await pathExists(task.target);
       let useForce = force;
@@ -91,5 +115,5 @@ export async function applyLinkPlan(
     }
   }
 
-  return { applied, skipped, conflicts, backupDir: backup.dir, backedUp };
+  return { applied, skipped, conflicts, backupDir: backup.dir, backedUp, removed };
 }

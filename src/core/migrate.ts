@@ -213,13 +213,19 @@ export type MigrationResult = {
   copied: number;
   skipped: number;
   backupDir: string;
-  links: { applied: number; skipped: number; conflicts: number; backedUp: number };
+  links: { applied: number; skipped: number; conflicts: number; backedUp: number; removed: number };
 };
 
 export async function applyMigration(
   plan: MigrationPlan,
   selections: Map<string, MigrationCandidate | null>,
-  opts: RootOptions & { clients?: Client[]; backup?: BackupSession; forceLinks?: boolean; selectedSkills?: string[] | null },
+  opts: RootOptions & {
+    clients?: Client[];
+    backup?: BackupSession;
+    forceLinks?: boolean;
+    selectedSkills?: string[] | null;
+    removeSkills?: string[] | null;
+  },
 ): Promise<MigrationResult> {
   const backup = opts.backup;
   if (!backup) throw new Error('Backup session required.');
@@ -264,6 +270,7 @@ export async function applyMigration(
       skipped: linkResult.skipped,
       conflicts: linkResult.conflicts,
       backedUp: linkResult.backedUp,
+      removed: linkResult.removed,
     },
   };
 }

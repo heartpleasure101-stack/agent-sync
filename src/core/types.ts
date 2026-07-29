@@ -12,6 +12,10 @@ export type Mapping = {
 export type LinkTask =
   | { type: 'ensure-source'; path: string; kind: SourceKind }
   | { type: 'link'; source: string; target: string; kind: SourceKind; replaceSymlink?: boolean }
+  // Remove a symlink this tool created. Only ever emitted for a target that was
+  // verified to be a symlink resolving to `source`; anything else becomes a
+  // conflict, because backupPath() would otherwise move a real directory.
+  | { type: 'unlink'; source: string; target: string; kind: SourceKind }
   | { type: 'conflict'; source: string; target: string; reason: string; kind?: SourceKind }
   | { type: 'noop'; source: string; target: string };
 
