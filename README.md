@@ -1,10 +1,9 @@
 <div align="center">
-  <h1>dotagents</h1>
+  <h1>agent-sync</h1>
   <p><strong>一個資料夾，搞定你電腦裡所有 AI 助手的設定與技能招式！</strong></p>
 
   <p>
-    <a href="https://github.com/heartpleasure101-stack/dotagents/actions"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status" /></a>
-    <a href="https://github.com/heartpleasure101-stack/dotagents/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License" /></a>
+    <a href="https://github.com/heartpleasure101-stack/agent-sync/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License" /></a>
     <a href="https://bun.sh"><img src="https://img.shields.io/badge/runtime-Bun%201.3%2B-black.svg" alt="Bun 1.3+" /></a>
   </p>
 
@@ -15,13 +14,13 @@
 
 ## 1. Header & Visual Hook (標頭與視覺錨點)
 
-- **Title & Subtitle**：`dotagents` —— 把所有 AI 助手（Claude, ChatGPT, Cursor 等）的招式與規則通通綁定，再也不用手動複製貼上！
-- **Badges**：顯示自動測試通過標籤、MIT 免費開源授權與 Bun 執行環境。
+- **Title & Subtitle**：`agent-sync` —— 把所有 AI 助手（Claude, ChatGPT, Cursor 等）的招式與規則通通綁定，再也不用手動複製貼上！
+- **Badges**：顯示 MIT 免費開源授權與 Bun 執行環境。
 - **Visual Demo**：畫面向導會自動幫你看電腦裡裝了哪些 AI 工具，按空白鍵就能輕鬆勾選要用的技能招式！
 
 ```text
 ┌──────────────────────────────────────────────────────────┐
-│  dotagents — 請選擇要設定的 AI 助手                        │
+│  agent-sync — 請選擇要設定的 AI 助手                       │
 │  已偵測到電腦已安裝：Claude, Gemini                       │
 │                                                          │
 │  [ 分頁: 寫程式招式 ]  [ 分頁: 寫文件招式 ]                  │
@@ -45,10 +44,10 @@
 - **One-Liner Command（單行執行指令）**：打開終端機 (Terminal)，複製貼上這行指令就能立刻開始：
 
   ```bash
-  npx github:heartpleasure101-stack/dotagents
+  npx github:heartpleasure101-stack/agent-sync
   ```
 
-  （如果您是用 Bun 的朋友，也可以跑 `bunx github:heartpleasure101-stack/dotagents`）
+  （如果您是用 Bun 的朋友，也可以跑 `bunx github:heartpleasure101-stack/agent-sync`）
 
 - **Scope Explanation（作用域說明）**：
   - **全域套用 (Global `~`)**：設定一次，電腦裡所有專案的 AI 助手都能一起共享招式與規則！
@@ -60,7 +59,7 @@
 
 ### 從舊版遷移 (Migration from Older Versions)
 
-若您的既有專案內含有舊版建立的 `專案/.agents/` 實體資料夾（非 symlink），新版 `dotagents` 預設改讀 `~/.agents/`。您可以將專案內本源遷移至全域：
+若您的既有專案內含有舊版建立的 `專案/.agents/` 實體資料夾（非 symlink），新版 `agent-sync` 預設改讀 `~/.agents/`。您可以將專案內本源遷移至全域：
 
 ```bash
 rsync -a .agents/ ~/.agents/ && rm -rf .agents
@@ -127,6 +126,9 @@ rsync -a .agents/ ~/.agents/ && rm -rf .agents
 
 - **Backups & Restore（備份與安全復原）**：
   免驚！每次修改設定前，系統都會自動在 `.agents/backup/` 資料夾存一份備份。如果設定錯了，只要在選單點選 **「Undo last change」** 就能一鍵回到上一次的狀態！
+
+- **Upstream Credit（上游專案聲明）**：
+  本專案衍生自 [iannuttall/dotagents](https://github.com/iannuttall/dotagents)，感謝原作者 Ian Nuttall 之開源貢獻。詳細版權宣告保留於 [LICENSE](LICENSE)。
 
 - **License（開源授權）**：
   本專案完全免費開源，採用 [MIT License](LICENSE) 授權，歡迎自由使用與分享！
