@@ -85,5 +85,5 @@
 
 ## Open Questions
 
-- 主程式產物命名用 `main.js` 還是 `cli-main.js`？後者與 `src/cli-main.tsx` 對應更直覺，前者較短。目前 spec 與本文件暫用 `main.js`，實作時可一次決定並同步 spec。
+- ~~主程式產物命名用 `main.js` 還是 `cli-main.js`？~~ **已定案：`dist/main.js`**。spec 與本文件原本就暫用此名，維持可免去同步成本；`dist/` 下只有一個主程式 bundle，不存在歧義。
 - esbuild lowering 這一步要不要同時套用到主程式 bundle？目前判斷不必要（它只在 Node 22+ 才被載入），但若日後想讓 `type-check` 與建置目標一致，可再評估。
