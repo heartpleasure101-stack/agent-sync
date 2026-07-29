@@ -37,11 +37,13 @@
 - [x] 5.6 新增上游 credit 段落於第 5 節 License 附近：說明本專案衍生自 `iannuttall/dotagents`（MIT），版權宣告保留於 `LICENSE`。
 - [x] 5.7 **不改** README 中所有 `.agents/`、`~/.agents/`、`.agents/backup/` 字樣（資料目錄約定）。
 
-## 6. npm 佔名（**待使用者拍板，未拍板則跳過整節**）
+## 6. npm 佔名（**已拍板：不做，整節跳過**）
 
-- [ ] 6.1 確認 `agent-sync` 仍為 `E404`。
-- [ ] 6.2 `npm publish --access public` 發佈 0.1.11。
-- [ ] 6.3 README 安裝指令補上 `npx agent-sync` 短版。
+使用者於 2026-07-29 決定不發佈到 npm。發佈通路維持 `npx github:heartpleasure101-stack/agent-sync`（已於 9.3 實測可用），不佔用 npm 名稱。
+
+- [x] ~~6.1 確認 `agent-sync` 仍為 `E404`。~~ 已跳過（不發佈則無需查名）。
+- [x] ~~6.2 `npm publish --access public` 發佈 0.1.11。~~ 已跳過。
+- [x] ~~6.3 README 安裝指令補上 `npx agent-sync` 短版。~~ 已跳過 —— 此短版指令只有在套件發到 npm 後才成立，未發佈就寫進 README 會給出一條跑不起來的指令。
 
 ## 7. openspec 規格同步
 
@@ -63,4 +65,4 @@
 - [x] 9.2 `git remote set-url origin https://github.com/heartpleasure101-stack/agent-sync.git`，`git remote -v` 確認 fetch/push 皆已指向 `agent-sync.git`。
 - [x] 9.3 實跑 `npx -y github:heartpleasure101-stack/agent-sync`：下載與啟動成功，標題顯示 `agent-sync`，無 `ERR_MODULE_NOT_FOUND`（0 筆）。**保留但未驗**：因執行環境非 TTY，止於 `TTY initialization failed`（此為 `scripts/smoke.mjs:32-34` 記錄的已知非 TTY 行為，非改名造成），未能實際看到 scope picker 選項。要完整確認需在真終端機手動跑一次。
 - [x] 9.4 實跑舊 URL `npx -y github:heartpleasure101-stack/dotagents`：GitHub redirect **仍可用**，輸出與新 URL 一致（標題 `agent-sync`，無 `ERR_MODULE_NOT_FOUND`）。過渡期舊連結不會斷，可據此撰寫公告。
-- [ ] 9.5 決定 npm 佔名（第 6 節）要不要做。
+- [x] 9.5 決定 npm 佔名（第 6 節）要不要做 → **決定不做**（2026-07-29）。第 6 節整節跳過。
