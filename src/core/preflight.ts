@@ -16,6 +16,11 @@ type PreflightOptions = {
 
 async function needsLinkBackup(task: LinkTask, forceLinks: boolean): Promise<boolean> {
   if (task.type === 'conflict') return forceLinks && task.target !== task.source;
+  // An unlink always routes through backupPath(), so its backup destination
+  // needs the same write-permission precheck as a link. Without this the plan
+  // would get partway through applying before discovering the backup dir is
+  // unwritable, which is exactly what preflight exists to prevent.
+  if (task.type === 'unlink') return await pathExists(task.target);
   if (task.type !== 'link') return false;
   if (!await pathExists(task.target)) return false;
   if (forceLinks) return true;
@@ -42,7 +47,7 @@ export async function preflightBackup(opts: PreflightOptions): Promise<{ targets
 
   for (const task of opts.linkPlan.tasks) {
     if (await needsLinkBackup(task, opts.forceLinks)) {
-      if (task.type === 'link' || task.type === 'conflict') {
+      if (task.type === 'link' || task.type === 'conflict' || task.type === 'unlink') {
         targets.add(path.resolve(task.target));
       }
     }

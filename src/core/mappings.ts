@@ -3,11 +3,53 @@ import type { Client, Mapping, Scope } from './types.js';
 import { resolveRoots, type RootOptions } from './paths.js';
 import { pathExists } from '../utils/fs.js';
 import { listSkills } from './list-skills.js';
+import { getSkillRoots } from './skill-roots.js';
 
 export type MappingOptions = RootOptions & {
   clients?: Client[];
   selectedSkills?: string[] | null;
+  /** Skill dirs the user wants gone from the selected clients. */
+  removeSkills?: string[] | null;
 };
+
+/**
+ * Targets to unlink for each skill the user deselected.
+ *
+ * Deliberately separate from getMappings(): a mapping means "this should exist
+ * and be linked", and buildLinkPlan() runs ensureSourceTask() over every one of
+ * them. Feeding removals through the same list would create the canonical
+ * source directory for a skill we are in the middle of removing.
+ */
+export async function getRemovalMappings(opts: MappingOptions): Promise<Mapping[]> {
+  const removals = opts.removeSkills;
+  if (!removals || removals.length === 0) return [];
+
+  const roots = resolveRoots(opts);
+  const clients = new Set<Client>(opts.clients ?? []);
+  const skillTargetRoots = getSkillRoots(roots, clients, opts.scope).map((r) => r.root);
+  if (skillTargetRoots.length === 0) return [];
+
+  const wanted = new Set(removals);
+  const entries = await listSkills({
+    scope: opts.scope,
+    projectRoot: opts.projectRoot,
+    homeDir: opts.homeDir,
+    canonicalOverride: opts.canonicalOverride,
+  });
+
+  const mappings: Mapping[] = [];
+  for (const entry of entries) {
+    if (!wanted.has(entry.dir)) continue;
+    const basename = path.basename(entry.dir);
+    mappings.push({
+      name: 'skills',
+      source: entry.dir,
+      targets: skillTargetRoots.map((root) => path.join(root, basename)),
+      kind: 'dir',
+    });
+  }
+  return mappings;
+}
 
 export async function getMappings(opts: MappingOptions): Promise<Mapping[]> {
   const roots = resolveRoots(opts);
@@ -18,7 +60,6 @@ export async function getMappings(opts: MappingOptions): Promise<Mapping[]> {
   const claudeSource = await pathExists(claudeOverride) ? claudeOverride : agentsFallback;
   const geminiSource = await pathExists(geminiOverride) ? geminiOverride : agentsFallback;
   const clients = new Set<Client>(opts.clients ?? ['claude', 'factory', 'codex', 'cursor', 'opencode', 'gemini', 'github', 'ampcode', 'antigravity']);
-  const opencodeSkillsRoot = opts.scope === 'global' ? roots.opencodeConfigRoot : roots.opencodeRoot;
 
   const mappings: Mapping[] = [];
   const includeAgentFiles = opts.scope === 'global';
@@ -84,19 +125,9 @@ export async function getMappings(opts: MappingOptions): Promise<Mapping[]> {
     },
   );
 
-  const skillTargetRoots: string[] = [
-    clients.has('claude') ? path.join(roots.claudeRoot, 'skills') : null,
-    clients.has('factory') ? path.join(roots.factoryRoot, 'skills') : null,
-    clients.has('codex') ? path.join(roots.codexRoot, 'skills') : null,
-    clients.has('opencode') ? path.join(opencodeSkillsRoot, 'skills') : null,
-    clients.has('cursor') ? path.join(roots.cursorRoot, 'skills') : null,
-    clients.has('gemini') ? path.join(roots.geminiRoot, 'skills') : null,
-    clients.has('antigravity') ? path.join(roots.antigravityRoot, 'skills') : null,
-    // GitHub uses .github/skills for project scope and ~/.copilot/skills for global scope.
-    clients.has('github')
-      ? (opts.scope === 'global' ? path.join(roots.copilotRoot, 'skills') : path.join(roots.githubRoot, 'skills'))
-      : null,
-  ].filter(Boolean) as string[];
+  // Shared with scanInstalledSkills() so the write side and the read-back side
+  // cannot disagree about where a client's skills live.
+  const skillTargetRoots: string[] = getSkillRoots(roots, clients, opts.scope).map((r) => r.root);
 
   if (opts.selectedSkills === undefined || opts.selectedSkills === null) {
     mappings.push({
