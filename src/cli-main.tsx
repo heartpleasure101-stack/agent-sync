@@ -10,6 +10,7 @@ import { resolveRoots } from './core/paths.js';
 import os from 'os';
 import { detectInstalledClients, getGlobalClientRoots } from './core/detect-installed.js';
 import { listSkills, type SkillEntry } from './core/list-skills.js';
+import { scanInstalledSkills } from './core/scan-installed.js';
 import { pickSkills, SkillPickerBackError } from './ui/skill-picker.js';
 import { createBackupSession, finalizeBackup } from './core/backup.js';
 import { undoLastChange } from './core/undo.js';
@@ -202,7 +203,13 @@ function formatClients(clients: Client[]): string {
   return clients.map((c) => CLIENT_LABELS[c]).join(', ');
 }
 
-async function selectSkills(scope: Scope, canonicalOverride?: string): Promise<string[] | 'back'> {
+type SkillSelection = { toInstall: string[]; toRemove: string[] };
+
+async function selectSkills(
+  scope: Scope,
+  clients: Client[],
+  canonicalOverride?: string,
+): Promise<SkillSelection | 'back'> {
   let entries: SkillEntry[] = [];
   try {
     entries = await listSkills({ scope, canonicalOverride });
@@ -211,24 +218,56 @@ async function selectSkills(scope: Scope, canonicalOverride?: string): Promise<s
   }
   if (entries.length === 0) {
     note('未偵測到任何 canonical skill', 'Skills');
-    return [];
+    return { toInstall: [], toRemove: [] };
+  }
+
+  // Read the disk before opening the picker: the checkboxes represent the
+  // desired end state, so they have to start from what is actually installed.
+  //
+  // Scan every detected client, not just the selected ones. initState() derives
+  // the tri-state from the selected subset regardless, but the row annotation
+  // for "also installed on a client you didn't pick" can only report clients
+  // that were actually looked at — scanning just the selection makes those
+  // installs invisible, which is one of the things this change exists to fix.
+  let installed = new Map<string, Set<Client>>();
+  try {
+    let scanClients: Client[] = [];
+    try {
+      scanClients = await detectInstalledClients();
+    } catch {
+      scanClients = [];
+    }
+    const merged = Array.from(new Set<Client>([...scanClients, ...clients]));
+    installed = await scanInstalledSkills({ scope, clients: merged, canonicalOverride });
+  } catch {
+    installed = new Map();
   }
 
   try {
-    return await pickSkills(entries);
+    return await pickSkills(entries, { installed, clients });
   } catch (err: unknown) {
     if (err instanceof SkillPickerBackError) return 'back';
     exitCancelled();
-    return [];
+    return { toInstall: [], toRemove: [] };
   }
 }
 
-function formatSkillsOverview(selected: string[], allEntries: SkillEntry[]): string {
-  const selectedSet = new Set(selected);
+/**
+ * Two different numbers, deliberately kept apart: what this session is about to
+ * change, and what is installed across every client right now. Collapsing them
+ * into one count is what made cross-session installs invisible.
+ */
+function formatSkillsOverview(
+  toInstall: string[],
+  toRemove: string[],
+  allEntries: SkillEntry[],
+  installedGlobal: number,
+): string {
+  const pendingSet = new Set([...toInstall, ...toRemove]);
   const activeCategories = Array.from(
     new Set(
       allEntries
-        .filter((e) => selectedSet.has(e.dir) && e.category !== null)
+        .filter((e) => pendingSet.has(e.dir) && e.category !== null)
         .map((e) => e.category as string),
     ),
   );
@@ -237,13 +276,28 @@ function formatSkillsOverview(selected: string[], allEntries: SkillEntry[]): str
     : activeCategories.length <= 3
       ? ` · Categories: ${activeCategories.join(', ')}`
       : ` · Categories: ${activeCategories.length}`;
-  return `Skills: ${selected.length} / ${allEntries.length}${catPart}`;
+  const pending = `Skills pending: ${toInstall.length} install · ${toRemove.length} remove`;
+  return `${pending} · Installed: ${installedGlobal} / ${allEntries.length}${catPart}`;
 }
 
-async function showStatus(scope: Scope, clients: Client[], status: LinkStatus[], planConflicts: { target: string; reason: string }[]): Promise<void> {
+async function showStatus(
+  scope: Scope,
+  clients: Client[],
+  status: LinkStatus[],
+  planConflicts: { target: string; reason: string }[],
+  canonicalOverride?: string,
+): Promise<void> {
   const conflicts = new Map(planConflicts.map((c) => [c.target, c.reason]));
-  const lines = renderStatusLines(mergeAgentStatus(status), conflicts);
-  note(lines.join('\n'), `Status · ${scopeLabel(scope)} · ${formatClients(clients)}`);
+  // Global scan rather than the session-filtered status: installs made in
+  // earlier sessions (other clients, other skills) are otherwise invisible here.
+  let globalStatus = status;
+  try {
+    globalStatus = await getLinkStatus({ scope, clients, canonicalOverride, scanAll: true });
+  } catch {
+    globalStatus = status;
+  }
+  const lines = renderStatusLines(mergeAgentStatus(globalStatus), conflicts);
+  note(lines.join('\n'), `Status · ${scopeLabel(scope)} · all detected clients`);
 }
 
 async function resolveMigrationConflicts(plan: Awaited<ReturnType<typeof scanMigration>>): Promise<Map<string, MigrationCandidate | null> | null> {
@@ -261,19 +315,27 @@ async function resolveMigrationConflicts(plan: Awaited<ReturnType<typeof scanMig
   return selections;
 }
 
-async function runChange(scope: Scope, clients: Client[], skills: string[], canonicalOverride?: string): Promise<void> {
+async function runChange(
+  scope: Scope,
+  clients: Client[],
+  skills: string[],
+  removeSkills: string[],
+  canonicalOverride?: string,
+): Promise<void> {
   const spin = spinner();
   spin.start('Scanning current setup...');
   const roots = resolveRoots({ scope, canonicalOverride });
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const migrate = await scanMigration({ scope, clients, canonicalOverride });
-  const link = await buildLinkPlan({ scope, clients, selectedSkills: skills, canonicalOverride });
+  const link = await buildLinkPlan({ scope, clients, selectedSkills: skills, removeSkills, canonicalOverride });
   const backupDir = path.join(roots.canonicalRoot, 'backup', timestamp);
   spin.stop('Scan complete');
 
+  const unlinkCount = link.tasks.filter((t) => t.type === 'unlink').length;
   const planSummary = [
     `Migration: ${migrate.auto.length} auto · ${migrate.conflicts.length} conflicts (choose sources)`,
     `Links: ${link.changes.length} changes · ${link.conflicts.length} conflicts (existing files/dirs)`,
+    `Removals: ${unlinkCount}`,
     `Backup: ${backupDir}`,
     'Undo: Use "Undo last change" after this completes.',
   ].join('\n');
@@ -321,7 +383,7 @@ async function runChange(scope: Scope, clients: Client[], skills: string[], cano
       selections,
       forceLinks: overwriteConflicts,
     });
-    const result = await applyMigration(migrate, selections, { scope, clients, backup, forceLinks: overwriteConflicts, selectedSkills: skills, canonicalOverride });
+    const result = await applyMigration(migrate, selections, { scope, clients, backup, forceLinks: overwriteConflicts, selectedSkills: skills, removeSkills, canonicalOverride });
     await finalizeBackup(backup);
     const migrationSummary = `Migrated ${formatCount(result.copied, 'item')}`;
     const linkSummary = `Linked ${formatCount(result.links.applied, 'path')}`;
@@ -331,6 +393,11 @@ async function runChange(scope: Scope, clients: Client[], skills: string[], cano
         : `left ${formatCount(result.links.conflicts, 'conflict')} untouched`
       : '';
     const pieces = [migrationSummary, linkSummary];
+    if (result.links.removed > 0) pieces.push(`removed ${formatCount(result.links.removed, 'link')}`);
+    // Surfaced separately from `removed`: backupPath() can decline to act when a
+    // parent path was already backed up, and reporting those as removed would
+    // claim something is gone while it is still on disk.
+    if (result.links.skipped > 0) pieces.push(`skipped ${formatCount(result.links.skipped, 'path')}`);
     if (conflictSummary) pieces.push(conflictSummary);
     applySpinner.stop(`${pieces.join(' · ')}. Backup: ${result.backupDir}`);
   } catch (err: any) {
@@ -359,6 +426,7 @@ async function run(): Promise<void> {
   let scope: Scope = 'global';
   let clients: Client[] = [];
   let skills: string[] = [];
+  let removeSkills: string[] = [];
   let allSkillEntries: SkillEntry[] = [];
 
   // Wizard: scope → clients → skills → main. Back from any step rewinds one step.
@@ -377,9 +445,10 @@ async function run(): Promise<void> {
       continue;
     }
     if (step === 'skills') {
-      const res = await selectSkills(scope, canonicalOverride);
+      const res = await selectSkills(scope, clients, canonicalOverride);
       if (res === 'back') { step = 'clients'; continue; }
-      skills = res;
+      skills = res.toInstall;
+      removeSkills = res.toRemove;
       allSkillEntries = await loadAllSkillEntries(scope, canonicalOverride);
       step = 'main';
       continue;
@@ -389,7 +458,21 @@ async function run(): Promise<void> {
 
   while (true) {
     const status = mergeAgentStatus(await getLinkStatus({ scope, clients, selectedSkills: skills, canonicalOverride }));
-    const plan = await buildLinkPlan({ scope, clients, selectedSkills: skills, canonicalOverride });
+    // Counted across all detected clients so the Overview reflects reality, not
+    // just what this session happens to have selected.
+    let installedGlobalCount = 0;
+    try {
+      const detected = await detectInstalledClients();
+      const installedMap = await scanInstalledSkills({
+        scope,
+        clients: detected.length > 0 ? detected : clients,
+        canonicalOverride,
+      });
+      installedGlobalCount = installedMap.size;
+    } catch {
+      installedGlobalCount = 0;
+    }
+    const plan = await buildLinkPlan({ scope, clients, selectedSkills: skills, removeSkills, canonicalOverride });
     const conflicts = plan.conflicts.length || 0;
     const changes = plan.changes.length || 0;
     const summary = buildStatusSummary(status);
@@ -398,7 +481,7 @@ async function run(): Promise<void> {
     note([
       `Scope: ${scopeLabel(scope)}`,
       `Clients: ${formatClients(clients)}`,
-      formatSkillsOverview(skills, allSkillEntries),
+      formatSkillsOverview(skills, removeSkills, allSkillEntries, installedGlobalCount),
       `Pending changes: ${changes} · Conflicts: ${conflicts}`,
       ...summaryLines,
     ].join('\n'), 'Overview');
@@ -421,20 +504,31 @@ async function run(): Promise<void> {
     if (action === 'exit') break;
 
     if (action === 'status') {
-      await showStatus(scope, clients, status, plan.conflicts);
+      await showStatus(scope, clients, status, plan.conflicts, canonicalOverride);
       continue;
     }
 
     if (action === 'clients') {
       const res = await selectClients();
-      if (res !== 'back') clients = res;
+      if (res !== 'back' && res.join(',') !== clients.join(',')) {
+        clients = res;
+        // The tri-state boxes are derived relative to the selected clients, so
+        // a pending selection made against the old set is meaningless now.
+        // Drop it and make the user re-pick against the new frame of reference.
+        if (skills.length > 0 || removeSkills.length > 0) {
+          note('Client 選擇已變更，先前的 skill 待套用變更已清除，請重新選擇。', 'Skills');
+        }
+        skills = [];
+        removeSkills = [];
+      }
       continue;
     }
 
     if (action === 'skills') {
-      const res = await selectSkills(scope, canonicalOverride);
+      const res = await selectSkills(scope, clients, canonicalOverride);
       if (res !== 'back') {
-        skills = res;
+        skills = res.toInstall;
+        removeSkills = res.toRemove;
         allSkillEntries = await loadAllSkillEntries(scope, canonicalOverride);
       }
       continue;
@@ -468,7 +562,7 @@ async function run(): Promise<void> {
     }
 
     if (action === 'change') {
-      await runChange(scope, clients, skills, canonicalOverride);
+      await runChange(scope, clients, skills, removeSkills, canonicalOverride);
     }
   }
 

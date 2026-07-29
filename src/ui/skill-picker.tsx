@@ -1,29 +1,53 @@
 import React, { useState } from 'react';
 import { Box, Text, render, useApp, useInput } from 'ink';
 import type { SkillEntry } from '../core/list-skills.js';
+import type { Client } from '../core/types.js';
 import {
-  deselectAllInTab,
-  flatten,
+  diff,
   groupByCategory,
   initState,
+  outOfScopeClients,
+  pendingCounts,
+  resetTab,
+  rowMarker,
   selectAllInTab,
+  tabSelectedCount,
   toggle,
-  totalSelected,
   type PickerState,
+  type SkillDiff,
   type TabGroup,
+  type Tri,
 } from './skill-picker-state.js';
+
+/** How many out-of-scope client names to spell out before collapsing to a count. */
+const MAX_SHOWN_CLIENTS = 2;
 
 type Props = {
   groups: TabGroup[];
-  onSubmit: (selected: string[]) => void;
+  installed: Map<string, Set<Client>>;
+  clients: Client[];
+  onSubmit: (result: SkillDiff) => void;
   onCancel: (reason: 'cancel' | 'back') => void;
 };
 
-function SkillPicker({ groups, onSubmit, onCancel }: Props): React.JSX.Element {
+function boxFor(desired: Tri): string {
+  if (desired === 'all') return '[x]';
+  if (desired === 'partial') return '[~]';
+  return '[ ]';
+}
+
+function formatOutOfScope(clients: Client[]): string {
+  if (clients.length === 0) return '';
+  if (clients.length <= MAX_SHOWN_CLIENTS) return `(${clients.join(', ')})`;
+  const shown = clients.slice(0, MAX_SHOWN_CLIENTS).join(', ');
+  return `(${shown} +${clients.length - MAX_SHOWN_CLIENTS})`;
+}
+
+function SkillPicker({ groups, installed, clients, onSubmit, onCancel }: Props): React.JSX.Element {
   const { exit } = useApp();
   const [tabIdx, setTabIdx] = useState(0);
   const [rowIdx, setRowIdx] = useState(0);
-  const [state, setState] = useState<PickerState>(() => initState(groups));
+  const [state, setState] = useState<PickerState>(() => initState(groups, installed, clients));
   const [error, setError] = useState<string | null>(null);
 
   const currentGroup = groups[tabIdx];
@@ -44,11 +68,14 @@ function SkillPicker({ groups, onSubmit, onCancel }: Props): React.JSX.Element {
     }
 
     if (key.return) {
-      if (totalSelected(state) === 0) {
-        setError('至少要選 1 個 skill');
+      const counts = pendingCounts(state, groups);
+      // "Nothing selected" is now a legitimate intent (remove everything), so
+      // the gate is on pending changes, not on selection count.
+      if (counts.install === 0 && counts.remove === 0) {
+        setError('沒有任何待套用的變更');
         return;
       }
-      onSubmit(flatten(state, groups));
+      onSubmit(diff(state, groups));
       exit();
       return;
     }
@@ -90,20 +117,23 @@ function SkillPicker({ groups, onSubmit, onCancel }: Props): React.JSX.Element {
       return;
     }
     if (input === 'd') {
-      setState((s) => deselectAllInTab(s, currentGroup.key));
+      // Reset, not uninstall-all — see design.md Decision 4.
+      setState((s) => resetTab(s, currentGroup.key));
+      setError(null);
       return;
     }
   });
 
-  const total = totalSelected(state);
+  const counts = pendingCounts(state, groups);
 
   return (
     <Box flexDirection="column" paddingX={1}>
       <Text bold>Select skills to link (tabbed)</Text>
+      <Text dimColor>Clients: {clients.length > 0 ? clients.join(', ') : '(none)'}</Text>
 
       <Box marginTop={1} flexWrap="wrap">
         {groups.map((g, i) => {
-          const selectedInTab = state.get(g.key)?.size ?? 0;
+          const selectedInTab = tabSelectedCount(state, g.key);
           const label = `${g.label} (${selectedInTab}/${g.entries.length})`;
           const active = i === tabIdx;
           return (
@@ -126,12 +156,16 @@ function SkillPicker({ groups, onSubmit, onCancel }: Props): React.JSX.Element {
         ) : (
           currentGroup?.entries.map((e, i) => {
             const focused = i === rowIdx;
-            const checked = state.get(currentGroup.key)?.has(e.dir) ?? false;
+            const row = state.get(currentGroup.key)?.get(e.dir);
             const pointer = focused ? '›' : ' ';
-            const box = checked ? '[x]' : '[ ]';
+            const box = boxFor(row?.desired ?? 'none');
+            const marker = rowMarker(row);
+            const elsewhere = formatOutOfScope(outOfScopeClients(installed, e.dir, clients));
             return (
               <Text key={e.dir} color={focused ? 'cyan' : undefined}>
                 {pointer} {box} {e.displayName}
+                {marker ? <Text color={marker === '+' ? 'green' : 'red'}> {marker}</Text> : null}
+                {elsewhere ? <Text dimColor> {elsewhere}</Text> : null}
               </Text>
             );
           })
@@ -140,7 +174,7 @@ function SkillPicker({ groups, onSubmit, onCancel }: Props): React.JSX.Element {
 
       <Box marginTop={1} flexDirection="column">
         <Text dimColor>
-          Total: {total} selected · ←/→ tab · ↑/↓ row · space toggle · a select-all · d cancel-all · enter submit · b back · esc cancel
+          Pending: {counts.install} install · {counts.remove} remove · ←/→ tab · ↑/↓ row · space toggle · a select-all · d reset · enter submit · b back · esc cancel
         </Text>
         {error ? <Text color="red">{error}</Text> : null}
       </Box>
@@ -163,21 +197,28 @@ export class SkillPickerCancelError extends Error {
 }
 
 type PickerOutcome =
-  | { type: 'submit'; skills: string[] }
+  | { type: 'submit'; result: SkillDiff }
   | { type: 'back' }
   | { type: 'cancel' };
 
-export async function pickSkills(entries: SkillEntry[]): Promise<string[]> {
+export type PickSkillsOptions = {
+  installed: Map<string, Set<Client>>;
+  clients: Client[];
+};
+
+export async function pickSkills(entries: SkillEntry[], opts: PickSkillsOptions): Promise<SkillDiff> {
   const groups = groupByCategory(entries);
-  if (groups.length === 0) return [];
+  if (groups.length === 0) return { toInstall: [], toRemove: [] };
 
   let outcome: PickerOutcome | null = null;
 
   const app = render(
     <SkillPicker
       groups={groups}
-      onSubmit={(selected) => {
-        outcome = { type: 'submit', skills: selected };
+      installed={opts.installed}
+      clients={opts.clients}
+      onSubmit={(result) => {
+        outcome = { type: 'submit', result };
       }}
       onCancel={(reason) => {
         outcome = reason === 'back' ? { type: 'back' } : { type: 'cancel' };
@@ -208,6 +249,6 @@ export async function pickSkills(entries: SkillEntry[]): Promise<string[]> {
     case 'cancel':
       throw new SkillPickerCancelError();
     case 'submit':
-      return settled.skills;
+      return settled.result;
   }
 }
