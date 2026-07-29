@@ -11,7 +11,7 @@ async function readLinkTarget(target: string): Promise<string> {
 }
 
 test('migration wizard copies selected items, backs up, and links', async () => {
-  const home = await makeTempDir('dotagents-home-');
+  const home = await makeTempDir('agent-sync-home-');
 
   // Seed tool folders
   await writeFile(path.join(home, '.claude', 'commands', 'log-session.md'), 'claude');
@@ -64,8 +64,8 @@ test('migration wizard copies selected items, backs up, and links', async () => 
 });
 
 test('migration wizard copies skills from github/copilot folders', async () => {
-  const home = await makeTempDir('dotagents-home-');
-  const project = await makeTempDir('dotagents-project-');
+  const home = await makeTempDir('agent-sync-home-');
+  const project = await makeTempDir('agent-sync-project-');
 
   // Seed GitHub Copilot skill folders
   await createSkill(path.join(home, '.copilot', 'skills'), 'global-github-skill');
@@ -105,8 +105,8 @@ test('migration wizard copies skills from github/copilot folders', async () => {
 });
 
 test('migration wizard copies antigravity workflows and skills into .agents', async () => {
-  const home = await makeTempDir('dotagents-home-');
-  const project = await makeTempDir('dotagents-project-');
+  const home = await makeTempDir('agent-sync-home-');
+  const project = await makeTempDir('agent-sync-project-');
 
   await writeFile(path.join(project, '.agent', 'workflows', 'ship-it.md'), '# Ship it');
   await createSkill(path.join(project, '.agent', 'skills'), 'antigravity-skill');
