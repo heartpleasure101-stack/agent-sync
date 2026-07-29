@@ -1,13 +1,13 @@
 # Client Selection UX
 
 ## Purpose
-UX and detection logic for selecting clients in dotagents CLI.
+UX and detection logic for selecting clients in agent-sync CLI.
 
 ## Requirements
 
 ### Requirement: Client picker defaults to no clients selected
 
-The interactive multiselect prompt shown by `selectClients()` SHALL start with an empty selection. The user MUST explicitly pick each client they want `dotagents` to manage in this run.
+The interactive multiselect prompt shown by `selectClients()` SHALL start with an empty selection. The user MUST explicitly pick each client they want `agent-sync` to manage in this run.
 
 #### Scenario: User opens the client picker
 - **WHEN** the CLI reaches the "Select clients to manage" prompt

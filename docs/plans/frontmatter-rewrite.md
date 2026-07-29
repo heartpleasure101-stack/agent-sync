@@ -4,7 +4,7 @@ This is a future feature idea for cases where **plain symlinks are not enough**.
 
 ## Why this might be necessary
 
-Right now, dotagents uses symlinks so `.agents` is the canonical source of truth. That works as long as every tool accepts the same frontmatter keys and values. In practice, tools can diverge:
+Right now, agent-sync uses symlinks so `.agents` is the canonical source of truth. That works as long as every tool accepts the same frontmatter keys and values. In practice, tools can diverge:
 
 - Some tools support fields that others do not (`model`, `allowed-tools`, etc.).
 - Field names may differ (e.g., `argument-hint` vs `argument_hint`).
@@ -15,22 +15,22 @@ When that happens, **symlinking cannot transform the file contents**. The only w
 ## Proposed approach (simple UX, canonical source)
 
 - Keep canonical files in `.agents/commands` (and other `.agents` folders).
-- Generate tool-specific views in `.agents/.dotagents/<tool>/...`.
+- Generate tool-specific views in `.agents/.agent-sync/<tool>/...`.
 - Symlink each tool home to its generated view.
 
 Example layout:
 
 ```
 .agents/commands/              # canonical source
-.agents/.dotagents/claude/commands/
-.agents/.dotagents/factory/commands/
-.agents/.dotagents/codex/prompts/
+.agents/.agent-sync/claude/commands/
+.agents/.agent-sync/factory/commands/
+.agents/.agent-sync/codex/prompts/
 ```
 
 ## Task list
 
 - [ ] Define canonical frontmatter schema (tool-agnostic keys)
-- [ ] Decide override format (sidecar file vs embedded `dotagents` block)
+- [ ] Decide override format (sidecar file vs embedded `agent-sync` block)
 - [ ] Add tool-specific mapping tables (key rename + value mapping)
 - [ ] Implement renderer that produces tool-specific output folders
 - [ ] Add a lightweight config UI in TUI to edit overrides
