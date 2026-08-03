@@ -6,6 +6,8 @@ import type { LinkPlan, LinkTask, SourceKind, ConflictTask } from './types.js';
 import { pathExists } from '../utils/fs.js';
 import { getLinkTarget } from './link-target.js';
 import { resolveSymlinkTo, isSymlinkPointingTo, describePathKind } from './symlink.js';
+import { resolveRoots } from './paths.js';
+import { createPathClassifier } from './path-state.js';
 
 async function ensureSourceTask(source: string, kind: SourceKind): Promise<LinkTask[]> {
   const exists = await pathExists(source);
@@ -81,6 +83,32 @@ export async function buildLinkPlan(opts: MappingOptions): Promise<LinkPlan> {
   const mappings = await getMappings(opts);
   const tasks: LinkTask[] = [];
 
+  const roots = resolveRoots({
+    scope: opts.scope,
+    projectRoot: opts.projectRoot,
+    homeDir: opts.homeDir,
+    canonicalOverride: opts.canonicalOverride,
+  });
+  const classifier = createPathClassifier(roots.canonicalRoot);
+
+  async function checkBlockedRoot(target: string): Promise<{ blockedPath: string; link: string; reason: string } | null> {
+    let curr = path.resolve(target);
+    while (curr !== path.dirname(curr)) {
+      const state = await classifier.classify(curr);
+      if (state.state === 'broken-symlink') {
+        const linkStr = state.link ?? '';
+        const targetDesc = state.resolved ?? linkStr;
+        return {
+          blockedPath: curr,
+          link: linkStr,
+          reason: `Path or parent directory ${curr} is a broken symlink pointing to ${targetDesc}`,
+        };
+      }
+      curr = path.dirname(curr);
+    }
+    return null;
+  }
+
   for (const mapping of mappings) {
     tasks.push(...await ensureSourceTask(mapping.source, mapping.kind));
     let relinkableSources: string[] | undefined;
@@ -97,7 +125,19 @@ export async function buildLinkPlan(opts: MappingOptions): Promise<LinkPlan> {
     }
 
     for (const target of mapping.targets) {
-      tasks.push(await analyzeTarget(mapping.source, target, mapping.kind, { relinkableSources }));
+      const blocked = await checkBlockedRoot(target);
+      if (blocked) {
+        tasks.push({
+          type: 'blocked-root',
+          source: mapping.source,
+          target,
+          blockedPath: blocked.blockedPath,
+          link: blocked.link,
+          reason: blocked.reason,
+        });
+      } else {
+        tasks.push(await analyzeTarget(mapping.source, target, mapping.kind, { relinkableSources }));
+      }
     }
   }
 
@@ -114,3 +154,4 @@ export async function buildLinkPlan(opts: MappingOptions): Promise<LinkPlan> {
 
   return { tasks, conflicts, changes };
 }
+

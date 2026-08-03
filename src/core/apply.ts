@@ -9,6 +9,24 @@ import { isSymlinkPointingTo } from './symlink.js';
 
 const DEFAULT_AGENTS = `# AGENTS\n\nAdd shared agent instructions here.\n`;
 
+export type ApplyFailure = {
+  target: string;
+  code?: string;
+  message: string;
+  suggestion?: string;
+};
+
+export type ApplyResult = {
+  applied: number;
+  skipped: number;
+  conflicts: number;
+  failed: number;
+  failures: ApplyFailure[];
+  backupDir: string;
+  backedUp: number;
+  removed: number;
+};
+
 async function createSource(task: Extract<LinkTask, { type: 'ensure-source' }>): Promise<void> {
   if (task.kind === 'dir') {
     await ensureDir(task.path);
@@ -16,7 +34,6 @@ async function createSource(task: Extract<LinkTask, { type: 'ensure-source' }>):
   }
   await ensureFile(task.path, DEFAULT_AGENTS);
 }
-
 
 async function createLink(
   source: string,
@@ -45,23 +62,42 @@ async function createLink(
 export async function applyLinkPlan(
   plan: LinkPlan,
   opts: { force?: boolean; backup: BackupSession },
-): Promise<{ applied: number; skipped: number; conflicts: number; backupDir: string; backedUp: number; removed: number }> {
+): Promise<ApplyResult> {
   const force = !!opts?.force;
   const backup = opts.backup;
   if (!backup) throw new Error('Backup session required.');
   let applied = 0;
   let skipped = 0;
   let conflicts = 0;
+  let failed = 0;
   let backedUp = 0;
   let removed = 0;
+  const failures: ApplyFailure[] = [];
 
   for (const task of plan.tasks) {
+    if (task.type === 'blocked-root') {
+      skipped += 1;
+      continue;
+    }
     if (task.type === 'conflict') {
       conflicts += 1;
       if (force && task.target !== task.source && task.kind) {
-        const result = await createLink(task.source, task.target, task.kind, true, backup);
-        if (result.backedUp) backedUp += 1;
-        applied += 1;
+        try {
+          const result = await createLink(task.source, task.target, task.kind, true, backup);
+          if (result.backedUp) backedUp += 1;
+          applied += 1;
+        } catch (err: any) {
+          failed += 1;
+          const code = err?.code;
+          failures.push({
+            target: task.target,
+            code,
+            message: err?.message || String(err),
+            suggestion: code === 'ENOENT'
+              ? `Check parent path or run: rm "${path.dirname(task.target)}"`
+              : `Inspect ${task.target}`,
+          });
+        }
       }
       continue;
     }
@@ -70,50 +106,76 @@ export async function applyLinkPlan(
       continue;
     }
     if (task.type === 'ensure-source') {
-      await createSource(task);
-      recordCreatedPath(task.path, task.kind, backup);
-      applied += 1;
+      try {
+        await createSource(task);
+        recordCreatedPath(task.path, task.kind, backup);
+        applied += 1;
+      } catch (err: any) {
+        failed += 1;
+        failures.push({
+          target: task.path,
+          code: err?.code,
+          message: err?.message || String(err),
+          suggestion: `Ensure directory or permissions for ${task.path}`,
+        });
+      }
       continue;
     }
     if (task.type === 'unlink') {
-      // Re-verify. buildLinkPlan() already checked, but several interactive
-      // prompts run between plan and apply, and backupPath() would move a real
-      // directory into the backup dir rather than refuse. The TOCTOU window is
-      // real, so the check that guards a destructive call belongs next to it.
-      if (!(await isSymlinkPointingTo(task.target, task.source))) {
-        if (await pathExists(task.target)) conflicts += 1;
-        else skipped += 1;
-        continue;
-      }
-      // backupPath() returns false when a parent path was already backed up in
-      // this session; it skips without deleting. Reporting that as removed
-      // would tell the user something vanished while it is still on disk.
-      const ok = await backupPath(task.target, backup);
-      if (ok) {
-        removed += 1;
-        backedUp += 1;
-      } else {
-        skipped += 1;
+      try {
+        if (!(await isSymlinkPointingTo(task.target, task.source))) {
+          if (await pathExists(task.target)) conflicts += 1;
+          else skipped += 1;
+          continue;
+        }
+        const ok = await backupPath(task.target, backup);
+        if (ok) {
+          removed += 1;
+          backedUp += 1;
+        } else {
+          skipped += 1;
+        }
+      } catch (err: any) {
+        failed += 1;
+        failures.push({
+          target: task.target,
+          code: err?.code,
+          message: err?.message || String(err),
+          suggestion: `Inspect permissions for ${task.target}`,
+        });
       }
       continue;
     }
     if (task.type === 'link') {
-      const before = await pathExists(task.target);
-      let useForce = force;
-      if (!useForce && task.replaceSymlink && before) {
-        try {
-          const stat = await fs.promises.lstat(task.target);
-          if (stat.isSymbolicLink()) useForce = true;
-        } catch {}
+      try {
+        const before = await pathExists(task.target);
+        let useForce = force;
+        if (!useForce && task.replaceSymlink && before) {
+          try {
+            const stat = await fs.promises.lstat(task.target);
+            if (stat.isSymbolicLink()) useForce = true;
+          } catch {}
+        }
+        const result = await createLink(task.source, task.target, task.kind, useForce, backup);
+        if (result.backedUp) backedUp += 1;
+        if (!before && result.created) {
+          recordCreatedPath(task.target, 'symlink', backup);
+        }
+        if (before && !useForce) skipped += 1; else applied += 1;
+      } catch (err: any) {
+        failed += 1;
+        const code = err?.code;
+        failures.push({
+          target: task.target,
+          code,
+          message: `Failed to link target ${task.target}: ${err?.message || String(err)}`,
+          suggestion: code === 'ENOENT'
+            ? `Parent directory may be a broken symlink. Run: rm "${path.dirname(task.target)}"`
+            : `Inspect permissions for ${task.target}`,
+        });
       }
-      const result = await createLink(task.source, task.target, task.kind, useForce, backup);
-      if (result.backedUp) backedUp += 1;
-      if (!before && result.created) {
-        recordCreatedPath(task.target, 'symlink', backup);
-      }
-      if (before && !useForce) skipped += 1; else applied += 1;
     }
   }
 
-  return { applied, skipped, conflicts, backupDir: backup.dir, backedUp, removed };
+  return { applied, skipped, conflicts, failed, failures, backupDir: backup.dir, backedUp, removed };
 }

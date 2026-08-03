@@ -4933,11 +4933,11 @@ var require_react_reconciler_development = __commonJS((exports, module) => {
         fiber = fiber.next, id--;
       return fiber;
     }
-    function copyWithSetImpl(obj, path15, index, value) {
-      if (index >= path15.length)
+    function copyWithSetImpl(obj, path16, index, value) {
+      if (index >= path16.length)
         return value;
-      var key = path15[index], updated = isArrayImpl(obj) ? obj.slice() : assign2({}, obj);
-      updated[key] = copyWithSetImpl(obj[key], path15, index + 1, value);
+      var key = path16[index], updated = isArrayImpl(obj) ? obj.slice() : assign2({}, obj);
+      updated[key] = copyWithSetImpl(obj[key], path16, index + 1, value);
       return updated;
     }
     function copyWithRename(obj, oldPath, newPath) {
@@ -4957,11 +4957,11 @@ var require_react_reconciler_development = __commonJS((exports, module) => {
       index + 1 === oldPath.length ? (updated[newPath[index]] = updated[oldKey], isArrayImpl(updated) ? updated.splice(oldKey, 1) : delete updated[oldKey]) : updated[oldKey] = copyWithRenameImpl(obj[oldKey], oldPath, newPath, index + 1);
       return updated;
     }
-    function copyWithDeleteImpl(obj, path15, index) {
-      var key = path15[index], updated = isArrayImpl(obj) ? obj.slice() : assign2({}, obj);
-      if (index + 1 === path15.length)
+    function copyWithDeleteImpl(obj, path16, index) {
+      var key = path16[index], updated = isArrayImpl(obj) ? obj.slice() : assign2({}, obj);
+      if (index + 1 === path16.length)
         return isArrayImpl(updated) ? updated.splice(key, 1) : delete updated[key], updated;
-      updated[key] = copyWithDeleteImpl(obj[key], path15, index + 1);
+      updated[key] = copyWithDeleteImpl(obj[key], path16, index + 1);
       return updated;
     }
     function shouldSuspendImpl() {
@@ -14984,29 +14984,29 @@ Check the top-level render call using <` + componentName2 + ">.");
     var didWarnAboutNestedUpdates = false;
     var didWarnAboutFindNodeInStrictMode = {};
     var overrideHookState = null, overrideHookStateDeletePath = null, overrideHookStateRenamePath = null, overrideProps = null, overridePropsDeletePath = null, overridePropsRenamePath = null, scheduleUpdate = null, scheduleRetry = null, setErrorHandler = null, setSuspenseHandler = null;
-    overrideHookState = function(fiber, id, path15, value) {
+    overrideHookState = function(fiber, id, path16, value) {
       id = findHook(fiber, id);
-      id !== null && (path15 = copyWithSetImpl(id.memoizedState, path15, 0, value), id.memoizedState = path15, id.baseState = path15, fiber.memoizedProps = assign2({}, fiber.memoizedProps), path15 = enqueueConcurrentRenderForLane(fiber, 2), path15 !== null && scheduleUpdateOnFiber(path15, fiber, 2));
+      id !== null && (path16 = copyWithSetImpl(id.memoizedState, path16, 0, value), id.memoizedState = path16, id.baseState = path16, fiber.memoizedProps = assign2({}, fiber.memoizedProps), path16 = enqueueConcurrentRenderForLane(fiber, 2), path16 !== null && scheduleUpdateOnFiber(path16, fiber, 2));
     };
-    overrideHookStateDeletePath = function(fiber, id, path15) {
+    overrideHookStateDeletePath = function(fiber, id, path16) {
       id = findHook(fiber, id);
-      id !== null && (path15 = copyWithDeleteImpl(id.memoizedState, path15, 0), id.memoizedState = path15, id.baseState = path15, fiber.memoizedProps = assign2({}, fiber.memoizedProps), path15 = enqueueConcurrentRenderForLane(fiber, 2), path15 !== null && scheduleUpdateOnFiber(path15, fiber, 2));
+      id !== null && (path16 = copyWithDeleteImpl(id.memoizedState, path16, 0), id.memoizedState = path16, id.baseState = path16, fiber.memoizedProps = assign2({}, fiber.memoizedProps), path16 = enqueueConcurrentRenderForLane(fiber, 2), path16 !== null && scheduleUpdateOnFiber(path16, fiber, 2));
     };
     overrideHookStateRenamePath = function(fiber, id, oldPath, newPath) {
       id = findHook(fiber, id);
       id !== null && (oldPath = copyWithRename(id.memoizedState, oldPath, newPath), id.memoizedState = oldPath, id.baseState = oldPath, fiber.memoizedProps = assign2({}, fiber.memoizedProps), oldPath = enqueueConcurrentRenderForLane(fiber, 2), oldPath !== null && scheduleUpdateOnFiber(oldPath, fiber, 2));
     };
-    overrideProps = function(fiber, path15, value) {
-      fiber.pendingProps = copyWithSetImpl(fiber.memoizedProps, path15, 0, value);
+    overrideProps = function(fiber, path16, value) {
+      fiber.pendingProps = copyWithSetImpl(fiber.memoizedProps, path16, 0, value);
       fiber.alternate && (fiber.alternate.pendingProps = fiber.pendingProps);
-      path15 = enqueueConcurrentRenderForLane(fiber, 2);
-      path15 !== null && scheduleUpdateOnFiber(path15, fiber, 2);
+      path16 = enqueueConcurrentRenderForLane(fiber, 2);
+      path16 !== null && scheduleUpdateOnFiber(path16, fiber, 2);
     };
-    overridePropsDeletePath = function(fiber, path15) {
-      fiber.pendingProps = copyWithDeleteImpl(fiber.memoizedProps, path15, 0);
+    overridePropsDeletePath = function(fiber, path16) {
+      fiber.pendingProps = copyWithDeleteImpl(fiber.memoizedProps, path16, 0);
       fiber.alternate && (fiber.alternate.pendingProps = fiber.pendingProps);
-      path15 = enqueueConcurrentRenderForLane(fiber, 2);
-      path15 !== null && scheduleUpdateOnFiber(path15, fiber, 2);
+      path16 = enqueueConcurrentRenderForLane(fiber, 2);
+      path16 !== null && scheduleUpdateOnFiber(path16, fiber, 2);
     };
     overridePropsRenamePath = function(fiber, oldPath, newPath) {
       fiber.pendingProps = copyWithRename(fiber.memoizedProps, oldPath, newPath);
@@ -18888,7 +18888,8 @@ var require_jsx_dev_runtime = __commonJS((exports, module) => {
 });
 
 // src/cli-main.tsx
-import path18 from "path";
+import fs15 from "fs";
+import path19 from "path";
 
 // node_modules/chalk/source/vendor/ansi-styles/index.js
 var ANSI_BACKGROUND_OFFSET = 10;
@@ -20028,8 +20029,8 @@ function me() {
 }
 
 // src/core/plan.ts
-import fs3 from "fs";
-import path9 from "path";
+import fs4 from "fs";
+import path10 from "path";
 
 // src/core/mappings.ts
 import path6 from "path";
@@ -20430,12 +20431,76 @@ async function describePathKind(target) {
   return "path";
 }
 
+// src/core/path-state.ts
+import fs3 from "fs";
+import path9 from "path";
+function isSubpathOrEqual(parent, child) {
+  const rel = path9.relative(path9.resolve(parent), path9.resolve(child));
+  return rel === "" || !rel.startsWith("..") && !path9.isAbsolute(rel);
+}
+async function classifyPath(targetPath, canonicalRoot, cache) {
+  const abs = path9.resolve(targetPath);
+  if (cache?.has(abs)) {
+    return cache.get(abs);
+  }
+  const promise = (async () => {
+    let stat;
+    try {
+      stat = await fs3.promises.lstat(abs);
+    } catch {
+      return { state: "missing" };
+    }
+    if (!stat.isSymbolicLink()) {
+      return { state: "ok" };
+    }
+    const link = await fs3.promises.readlink(abs).catch(() => {
+      return;
+    });
+    const resolved = await resolveSymlinkTo(abs);
+    if (!resolved) {
+      return { state: "broken-symlink", link, resolved: undefined };
+    }
+    let destExists = false;
+    try {
+      await fs3.promises.lstat(resolved);
+      destExists = true;
+    } catch {
+      destExists = false;
+    }
+    if (!destExists) {
+      return { state: "broken-symlink", link, resolved };
+    }
+    if (canonicalRoot) {
+      const isCanonical = isSubpathOrEqual(canonicalRoot, resolved);
+      if (!isCanonical) {
+        return { state: "foreign-symlink", link, resolved };
+      }
+    }
+    return { state: "ok", link, resolved };
+  })();
+  if (cache) {
+    cache.set(abs, promise);
+  }
+  return promise;
+}
+function createPathClassifier(canonicalRoot) {
+  const cache = new Map;
+  return {
+    classify(p) {
+      return classifyPath(p, canonicalRoot, cache);
+    },
+    clear() {
+      cache.clear();
+    }
+  };
+}
+
 // src/core/plan.ts
 async function ensureSourceTask(source, kind) {
   const exists = await pathExists(source);
   if (!exists)
     return [{ type: "ensure-source", path: source, kind }];
-  const stat = await fs3.promises.lstat(source);
+  const stat = await fs4.promises.lstat(source);
   if (kind === "file" && stat.isDirectory()) {
     return [{ type: "conflict", source, target: source, reason: "Expected file but found directory", kind }];
   }
@@ -20448,20 +20513,20 @@ async function analyzeTarget(source, target, kind, opts) {
   const exists = await pathExists(target);
   if (!exists)
     return { type: "link", source, target, kind };
-  const stat = await fs3.promises.lstat(target);
+  const stat = await fs4.promises.lstat(target);
   if (stat.isSymbolicLink()) {
-    const rawLink = await fs3.promises.readlink(target);
+    const rawLink = await fs4.promises.readlink(target);
     const resolved = await resolveSymlinkTo(target);
-    if (resolved && path9.resolve(resolved) === path9.resolve(source)) {
+    if (resolved && path10.resolve(resolved) === path10.resolve(source)) {
       const desired = getLinkTarget(source, target, kind);
-      if (desired.isRelative && path9.isAbsolute(rawLink)) {
+      if (desired.isRelative && path10.isAbsolute(rawLink)) {
         return { type: "link", source, target, kind, replaceSymlink: true };
       }
       return { type: "noop", source, target };
     }
     if (resolved && opts?.relinkableSources) {
-      const relinkable = new Set(opts.relinkableSources.map((p) => path9.resolve(p)));
-      if (relinkable.has(path9.resolve(resolved))) {
+      const relinkable = new Set(opts.relinkableSources.map((p) => path10.resolve(p)));
+      if (relinkable.has(path10.resolve(resolved))) {
         return { type: "link", source, target, kind, replaceSymlink: true };
       }
     }
@@ -20489,22 +20554,58 @@ async function analyzeRemoval(source, target, kind) {
 async function buildLinkPlan(opts) {
   const mappings = await getMappings(opts);
   const tasks = [];
+  const roots = resolveRoots({
+    scope: opts.scope,
+    projectRoot: opts.projectRoot,
+    homeDir: opts.homeDir,
+    canonicalOverride: opts.canonicalOverride
+  });
+  const classifier = createPathClassifier(roots.canonicalRoot);
+  async function checkBlockedRoot(target) {
+    let curr = path10.resolve(target);
+    while (curr !== path10.dirname(curr)) {
+      const state = await classifier.classify(curr);
+      if (state.state === "broken-symlink") {
+        const linkStr = state.link ?? "";
+        const targetDesc = state.resolved ?? linkStr;
+        return {
+          blockedPath: curr,
+          link: linkStr,
+          reason: `Path or parent directory ${curr} is a broken symlink pointing to ${targetDesc}`
+        };
+      }
+      curr = path10.dirname(curr);
+    }
+    return null;
+  }
   for (const mapping of mappings) {
     tasks.push(...await ensureSourceTask(mapping.source, mapping.kind));
     let relinkableSources;
     if (mapping.name === "claude-md") {
       relinkableSources = [
-        path9.join(path9.dirname(mapping.source), "AGENTS.md"),
-        path9.join(path9.dirname(mapping.source), "CLAUDE.md")
+        path10.join(path10.dirname(mapping.source), "AGENTS.md"),
+        path10.join(path10.dirname(mapping.source), "CLAUDE.md")
       ];
     } else if (mapping.name === "gemini-md") {
       relinkableSources = [
-        path9.join(path9.dirname(mapping.source), "AGENTS.md"),
-        path9.join(path9.dirname(mapping.source), "GEMINI.md")
+        path10.join(path10.dirname(mapping.source), "AGENTS.md"),
+        path10.join(path10.dirname(mapping.source), "GEMINI.md")
       ];
     }
     for (const target of mapping.targets) {
-      tasks.push(await analyzeTarget(mapping.source, target, mapping.kind, { relinkableSources }));
+      const blocked = await checkBlockedRoot(target);
+      if (blocked) {
+        tasks.push({
+          type: "blocked-root",
+          source: mapping.source,
+          target,
+          blockedPath: blocked.blockedPath,
+          link: blocked.link,
+          reason: blocked.reason
+        });
+      } else {
+        tasks.push(await analyzeTarget(mapping.source, target, mapping.kind, { relinkableSources }));
+      }
     }
   }
   for (const mapping of await getRemovalMappings(opts)) {
@@ -20518,8 +20619,8 @@ async function buildLinkPlan(opts) {
 }
 
 // src/core/status.ts
-import fs5 from "fs";
-import path11 from "path";
+import fs6 from "fs";
+import path12 from "path";
 
 // src/core/detect-installed.ts
 var CLIENT_ORDER = [
@@ -20557,12 +20658,13 @@ async function detectInstalledClients(opts = {}) {
 }
 
 // src/core/scan-installed.ts
-import fs4 from "fs";
-import path10 from "path";
+import fs5 from "fs";
+import path11 from "path";
 async function scanInstalledSkills(opts) {
   const installed = new Map;
+  const brokenRoots = [];
   if (opts.clients.length === 0)
-    return installed;
+    return { installed, brokenRoots };
   const entries = await listSkills({
     scope: opts.scope,
     projectRoot: opts.projectRoot,
@@ -20570,10 +20672,10 @@ async function scanInstalledSkills(opts) {
     canonicalOverride: opts.canonicalOverride
   });
   if (entries.length === 0)
-    return installed;
+    return { installed, brokenRoots };
   const canonicalByResolved = new Map;
   for (const entry of entries)
-    canonicalByResolved.set(path10.resolve(entry.dir), entry.dir);
+    canonicalByResolved.set(path11.resolve(entry.dir), entry.dir);
   const roots = resolveRoots({
     scope: opts.scope,
     projectRoot: opts.projectRoot,
@@ -20583,15 +20685,23 @@ async function scanInstalledSkills(opts) {
   for (const { client, root } of getSkillRoots(roots, opts.clients, opts.scope)) {
     let names;
     try {
-      names = await fs4.promises.readdir(root);
+      names = await fs5.promises.readdir(root);
     } catch {
+      const pathState = await classifyPath(root, roots.canonicalRoot);
+      if (pathState.state === "broken-symlink") {
+        brokenRoots.push({
+          client,
+          path: root,
+          link: pathState.link
+        });
+      }
       continue;
     }
     for (const name of names) {
-      const resolved = await resolveSymlinkTo(path10.join(root, name));
+      const resolved = await resolveSymlinkTo(path11.join(root, name));
       if (!resolved)
         continue;
-      const canonicalDir = canonicalByResolved.get(path10.resolve(resolved));
+      const canonicalDir = canonicalByResolved.get(path11.resolve(resolved));
       if (!canonicalDir)
         continue;
       let set = installed.get(canonicalDir);
@@ -20602,7 +20712,7 @@ async function scanInstalledSkills(opts) {
       set.add(client);
     }
   }
-  return installed;
+  return { installed, brokenRoots };
 }
 
 // src/core/status.ts
@@ -20626,7 +20736,7 @@ async function withAllSkills(opts) {
   }
   if (clients.length === 0)
     clients = ALL_CLIENTS;
-  const installed = await scanInstalledSkills({
+  const { installed } = await scanInstalledSkills({
     scope: opts.scope,
     clients,
     projectRoot: opts.projectRoot,
@@ -20637,9 +20747,9 @@ async function withAllSkills(opts) {
 }
 async function resolveLinkTarget(targetPath) {
   try {
-    const link = await fs5.promises.readlink(targetPath);
-    if (!path11.isAbsolute(link))
-      return path11.resolve(path11.dirname(targetPath), link);
+    const link = await fs6.promises.readlink(targetPath);
+    if (!path12.isAbsolute(link))
+      return path12.resolve(path12.dirname(targetPath), link);
     return link;
   } catch {
     return null;
@@ -20656,10 +20766,10 @@ async function getLinkStatus(opts) {
         targets.push({ path: target, status: "missing" });
         continue;
       }
-      const stat = await fs5.promises.lstat(target);
+      const stat = await fs6.promises.lstat(target);
       if (stat.isSymbolicLink()) {
         const resolved = await resolveLinkTarget(target);
-        if (resolved && path11.resolve(resolved) === path11.resolve(mapping.source)) {
+        if (resolved && path12.resolve(resolved) === path12.resolve(mapping.source)) {
           targets.push({ path: target, status: "linked" });
         } else {
           targets.push({ path: target, status: "conflict" });
@@ -20674,42 +20784,42 @@ async function getLinkStatus(opts) {
 }
 
 // src/core/migrate.ts
+import fs9 from "fs";
+import path15 from "path";
+
+// src/core/apply.ts
 import fs8 from "fs";
 import path14 from "path";
 
-// src/core/apply.ts
+// src/core/backup.ts
 import fs7 from "fs";
 import path13 from "path";
-
-// src/core/backup.ts
-import fs6 from "fs";
-import path12 from "path";
 var MANIFEST_NAME = "manifest.json";
 function backupPathFor(target, backupRoot) {
-  const root = path12.parse(target).root || path12.sep;
-  const rel = path12.relative(root, target);
-  return path12.join(backupRoot, rel);
+  const root = path13.parse(target).root || path13.sep;
+  const rel = path13.relative(root, target);
+  return path13.join(backupRoot, rel);
 }
 function hasParentPath(target, seen) {
-  const resolved = path12.resolve(target);
+  const resolved = path13.resolve(target);
   for (const parent of seen) {
     if (resolved === parent)
       return true;
-    if (resolved.startsWith(parent + path12.sep))
+    if (resolved.startsWith(parent + path13.sep))
       return true;
   }
   return false;
 }
 async function backupSymlink(target, dest) {
-  const link = await fs6.promises.readlink(target);
-  await ensureDir(path12.dirname(dest));
-  await fs6.promises.symlink(link, dest);
-  await fs6.promises.unlink(target);
+  const link = await fs7.promises.readlink(target);
+  await ensureDir(path13.dirname(dest));
+  await fs7.promises.symlink(link, dest);
+  await fs7.promises.unlink(target);
 }
 async function backupPathImpl(target, dest, kind) {
-  await ensureDir(path12.dirname(dest));
+  await ensureDir(path13.dirname(dest));
   try {
-    await fs6.promises.rename(target, dest);
+    await fs7.promises.rename(target, dest);
     return;
   } catch (err) {
     if (err?.code !== "EXDEV")
@@ -20724,11 +20834,11 @@ async function backupPathImpl(target, dest, kind) {
 }
 async function createBackupSession(opts) {
   const timestamp = opts.timestamp || new Date().toISOString().replace(/[:.]/g, "-");
-  const dir = path12.join(opts.canonicalRoot, "backup", timestamp);
+  const dir = path13.join(opts.canonicalRoot, "backup", timestamp);
   await ensureDir(dir);
   return {
     dir,
-    manifestPath: path12.join(dir, MANIFEST_NAME),
+    manifestPath: path13.join(dir, MANIFEST_NAME),
     createdAt: new Date().toISOString(),
     scope: opts.scope,
     operation: opts.operation,
@@ -20739,10 +20849,10 @@ async function createBackupSession(opts) {
 async function backupPath(target, session) {
   if (!await pathExists(target))
     return false;
-  const resolved = path12.resolve(target);
+  const resolved = path13.resolve(target);
   if (hasParentPath(resolved, session._seen))
     return false;
-  const stat = await fs6.promises.lstat(target);
+  const stat = await fs7.promises.lstat(target);
   const kind = stat.isSymbolicLink() ? "symlink" : stat.isDirectory() ? "dir" : "file";
   const dest = backupPathFor(target, session.dir);
   if (stat.isSymbolicLink()) {
@@ -20755,7 +20865,7 @@ async function backupPath(target, session) {
   return true;
 }
 function recordCreatedPath(target, kind, session) {
-  const resolved = path12.resolve(target);
+  const resolved = path13.resolve(target);
   if (hasParentPath(resolved, session._seen))
     return;
   session.entries.push({ originalPath: resolved, kind, action: "create" });
@@ -20769,13 +20879,13 @@ async function finalizeBackup(session) {
     operation: session.operation,
     entries: session.entries
   };
-  await fs6.promises.writeFile(session.manifestPath, JSON.stringify(manifest, null, 2), "utf8");
+  await fs7.promises.writeFile(session.manifestPath, JSON.stringify(manifest, null, 2), "utf8");
 }
 async function loadBackupManifest(dir) {
-  const manifestPath = path12.join(dir, MANIFEST_NAME);
+  const manifestPath = path13.join(dir, MANIFEST_NAME);
   if (!await pathExists(manifestPath))
     return null;
-  const raw = await fs6.promises.readFile(manifestPath, "utf8");
+  const raw = await fs7.promises.readFile(manifestPath, "utf8");
   return JSON.parse(raw);
 }
 
@@ -20799,14 +20909,14 @@ async function createLink(source, target, kind, overwrite, backup) {
     const backedUp = backup ? await backupPath(target, backup) : false;
     if (await pathExists(target))
       await removePath(target);
-    await ensureDir(path13.dirname(target));
+    await ensureDir(path14.dirname(target));
     const type2 = kind === "dir" ? "junction" : "file";
-    await fs7.promises.symlink(linkTarget.link, target, type2);
+    await fs8.promises.symlink(linkTarget.link, target, type2);
     return { created: true, backedUp };
   }
-  await ensureDir(path13.dirname(target));
+  await ensureDir(path14.dirname(target));
   const type = kind === "dir" ? "junction" : "file";
-  await fs7.promises.symlink(linkTarget.link, target, type);
+  await fs8.promises.symlink(linkTarget.link, target, type);
   return { created: true, backedUp: false };
 }
 async function applyLinkPlan(plan, opts) {
@@ -20817,16 +20927,33 @@ async function applyLinkPlan(plan, opts) {
   let applied = 0;
   let skipped = 0;
   let conflicts = 0;
+  let failed = 0;
   let backedUp = 0;
   let removed = 0;
+  const failures = [];
   for (const task of plan.tasks) {
+    if (task.type === "blocked-root") {
+      skipped += 1;
+      continue;
+    }
     if (task.type === "conflict") {
       conflicts += 1;
       if (force && task.target !== task.source && task.kind) {
-        const result = await createLink(task.source, task.target, task.kind, true, backup);
-        if (result.backedUp)
-          backedUp += 1;
-        applied += 1;
+        try {
+          const result = await createLink(task.source, task.target, task.kind, true, backup);
+          if (result.backedUp)
+            backedUp += 1;
+          applied += 1;
+        } catch (err) {
+          failed += 1;
+          const code = err?.code;
+          failures.push({
+            target: task.target,
+            code,
+            message: err?.message || String(err),
+            suggestion: code === "ENOENT" ? `Check parent path or run: rm "${path14.dirname(task.target)}"` : `Inspect ${task.target}`
+          });
+        }
       }
       continue;
     }
@@ -20835,57 +20962,88 @@ async function applyLinkPlan(plan, opts) {
       continue;
     }
     if (task.type === "ensure-source") {
-      await createSource(task);
-      recordCreatedPath(task.path, task.kind, backup);
-      applied += 1;
+      try {
+        await createSource(task);
+        recordCreatedPath(task.path, task.kind, backup);
+        applied += 1;
+      } catch (err) {
+        failed += 1;
+        failures.push({
+          target: task.path,
+          code: err?.code,
+          message: err?.message || String(err),
+          suggestion: `Ensure directory or permissions for ${task.path}`
+        });
+      }
       continue;
     }
     if (task.type === "unlink") {
-      if (!await isSymlinkPointingTo(task.target, task.source)) {
-        if (await pathExists(task.target))
-          conflicts += 1;
-        else
+      try {
+        if (!await isSymlinkPointingTo(task.target, task.source)) {
+          if (await pathExists(task.target))
+            conflicts += 1;
+          else
+            skipped += 1;
+          continue;
+        }
+        const ok = await backupPath(task.target, backup);
+        if (ok) {
+          removed += 1;
+          backedUp += 1;
+        } else {
           skipped += 1;
-        continue;
-      }
-      const ok = await backupPath(task.target, backup);
-      if (ok) {
-        removed += 1;
-        backedUp += 1;
-      } else {
-        skipped += 1;
+        }
+      } catch (err) {
+        failed += 1;
+        failures.push({
+          target: task.target,
+          code: err?.code,
+          message: err?.message || String(err),
+          suggestion: `Inspect permissions for ${task.target}`
+        });
       }
       continue;
     }
     if (task.type === "link") {
-      const before = await pathExists(task.target);
-      let useForce = force;
-      if (!useForce && task.replaceSymlink && before) {
-        try {
-          const stat = await fs7.promises.lstat(task.target);
-          if (stat.isSymbolicLink())
-            useForce = true;
-        } catch {}
+      try {
+        const before = await pathExists(task.target);
+        let useForce = force;
+        if (!useForce && task.replaceSymlink && before) {
+          try {
+            const stat = await fs8.promises.lstat(task.target);
+            if (stat.isSymbolicLink())
+              useForce = true;
+          } catch {}
+        }
+        const result = await createLink(task.source, task.target, task.kind, useForce, backup);
+        if (result.backedUp)
+          backedUp += 1;
+        if (!before && result.created) {
+          recordCreatedPath(task.target, "symlink", backup);
+        }
+        if (before && !useForce)
+          skipped += 1;
+        else
+          applied += 1;
+      } catch (err) {
+        failed += 1;
+        const code = err?.code;
+        failures.push({
+          target: task.target,
+          code,
+          message: `Failed to link target ${task.target}: ${err?.message || String(err)}`,
+          suggestion: code === "ENOENT" ? `Parent directory may be a broken symlink. Run: rm "${path14.dirname(task.target)}"` : `Inspect permissions for ${task.target}`
+        });
       }
-      const result = await createLink(task.source, task.target, task.kind, useForce, backup);
-      if (result.backedUp)
-        backedUp += 1;
-      if (!before && result.created) {
-        recordCreatedPath(task.target, "symlink", backup);
-      }
-      if (before && !useForce)
-        skipped += 1;
-      else
-        applied += 1;
     }
   }
-  return { applied, skipped, conflicts, backupDir: backup.dir, backedUp, removed };
+  return { applied, skipped, conflicts, failed, failures, backupDir: backup.dir, backedUp, removed };
 }
 
 // src/core/migrate.ts
 async function isSymlink(p) {
   try {
-    const stat = await fs8.promises.lstat(p);
+    const stat = await fs9.promises.lstat(p);
     return stat.isSymbolicLink();
   } catch {
     return false;
@@ -20893,18 +21051,18 @@ async function isSymlink(p) {
 }
 async function listFiles(dir) {
   try {
-    const entries = await fs8.promises.readdir(dir, { withFileTypes: true });
-    return entries.filter((e2) => e2.isFile()).map((e2) => path14.join(dir, e2.name));
+    const entries = await fs9.promises.readdir(dir, { withFileTypes: true });
+    return entries.filter((e2) => e2.isFile()).map((e2) => path15.join(dir, e2.name));
   } catch {
     return [];
   }
 }
 function conflictLabel(targetPath, canonicalRoot) {
   if (targetPath.startsWith(canonicalRoot)) {
-    const rel = path14.relative(canonicalRoot, targetPath);
-    return rel || path14.basename(targetPath);
+    const rel = path15.relative(canonicalRoot, targetPath);
+    return rel || path15.basename(targetPath);
   }
-  return path14.basename(targetPath);
+  return path15.basename(targetPath);
 }
 async function scanMigration(opts) {
   const roots = resolveRoots(opts);
@@ -20912,48 +21070,48 @@ async function scanMigration(opts) {
   const candidatesByTarget = new Map;
   const clients = new Set(opts.clients ?? ["claude", "factory", "codex", "cursor", "opencode", "gemini", "github", "ampcode", "antigravity"]);
   const includeAgentFiles = opts.scope === "global";
-  const canonicalCommands = path14.join(canonicalRoot, "commands");
-  const canonicalHooks = path14.join(canonicalRoot, "hooks");
-  const canonicalSkills = path14.join(canonicalRoot, "skills");
-  const canonicalAgents = path14.join(canonicalRoot, "AGENTS.md");
-  const canonicalClaude = path14.join(canonicalRoot, "CLAUDE.md");
+  const canonicalCommands = path15.join(canonicalRoot, "commands");
+  const canonicalHooks = path15.join(canonicalRoot, "hooks");
+  const canonicalSkills = path15.join(canonicalRoot, "skills");
+  const canonicalAgents = path15.join(canonicalRoot, "AGENTS.md");
+  const canonicalClaude = path15.join(canonicalRoot, "CLAUDE.md");
   const opencodeSkillsRoot = opts.scope === "global" ? roots.opencodeConfigRoot : roots.opencodeRoot;
   const sources = {
     commands: [
-      clients.has("claude") ? { label: "Claude commands", dir: path14.join(roots.claudeRoot, "commands") } : null,
-      clients.has("factory") ? { label: "Factory commands", dir: path14.join(roots.factoryRoot, "commands") } : null,
-      clients.has("codex") ? { label: "Codex prompts", dir: path14.join(roots.codexRoot, "prompts") } : null,
-      clients.has("cursor") ? { label: "Cursor commands", dir: path14.join(roots.cursorRoot, "commands") } : null,
-      clients.has("opencode") ? { label: "OpenCode commands", dir: path14.join(roots.opencodeRoot, "commands") } : null,
-      clients.has("gemini") ? { label: "Gemini commands", dir: path14.join(roots.geminiRoot, "commands") } : null,
-      clients.has("antigravity") ? { label: "Antigravity workflows", dir: path14.join(roots.antigravityRoot, "workflows") } : null
+      clients.has("claude") ? { label: "Claude commands", dir: path15.join(roots.claudeRoot, "commands") } : null,
+      clients.has("factory") ? { label: "Factory commands", dir: path15.join(roots.factoryRoot, "commands") } : null,
+      clients.has("codex") ? { label: "Codex prompts", dir: path15.join(roots.codexRoot, "prompts") } : null,
+      clients.has("cursor") ? { label: "Cursor commands", dir: path15.join(roots.cursorRoot, "commands") } : null,
+      clients.has("opencode") ? { label: "OpenCode commands", dir: path15.join(roots.opencodeRoot, "commands") } : null,
+      clients.has("gemini") ? { label: "Gemini commands", dir: path15.join(roots.geminiRoot, "commands") } : null,
+      clients.has("antigravity") ? { label: "Antigravity workflows", dir: path15.join(roots.antigravityRoot, "workflows") } : null
     ].filter(Boolean),
     hooks: [
-      clients.has("claude") ? { label: "Claude hooks", dir: path14.join(roots.claudeRoot, "hooks") } : null,
-      clients.has("factory") ? { label: "Factory hooks", dir: path14.join(roots.factoryRoot, "hooks") } : null
+      clients.has("claude") ? { label: "Claude hooks", dir: path15.join(roots.claudeRoot, "hooks") } : null,
+      clients.has("factory") ? { label: "Factory hooks", dir: path15.join(roots.factoryRoot, "hooks") } : null
     ].filter(Boolean),
     skills: [
-      clients.has("claude") ? { label: "Claude skills", dir: path14.join(roots.claudeRoot, "skills") } : null,
-      clients.has("factory") ? { label: "Factory skills", dir: path14.join(roots.factoryRoot, "skills") } : null,
-      clients.has("codex") ? { label: "Codex skills", dir: path14.join(roots.codexRoot, "skills") } : null,
-      clients.has("cursor") ? { label: "Cursor skills", dir: path14.join(roots.cursorRoot, "skills") } : null,
-      clients.has("opencode") ? { label: "OpenCode skills", dir: path14.join(opencodeSkillsRoot, "skills") } : null,
-      clients.has("gemini") ? { label: "Gemini skills", dir: path14.join(roots.geminiRoot, "skills") } : null,
-      clients.has("antigravity") ? { label: "Antigravity skills", dir: path14.join(roots.antigravityRoot, "skills") } : null,
-      clients.has("github") ? opts.scope === "global" ? { label: "GitHub Copilot skills", dir: path14.join(roots.copilotRoot, "skills") } : { label: "GitHub skills", dir: path14.join(roots.githubRoot, "skills") } : null
+      clients.has("claude") ? { label: "Claude skills", dir: path15.join(roots.claudeRoot, "skills") } : null,
+      clients.has("factory") ? { label: "Factory skills", dir: path15.join(roots.factoryRoot, "skills") } : null,
+      clients.has("codex") ? { label: "Codex skills", dir: path15.join(roots.codexRoot, "skills") } : null,
+      clients.has("cursor") ? { label: "Cursor skills", dir: path15.join(roots.cursorRoot, "skills") } : null,
+      clients.has("opencode") ? { label: "OpenCode skills", dir: path15.join(opencodeSkillsRoot, "skills") } : null,
+      clients.has("gemini") ? { label: "Gemini skills", dir: path15.join(roots.geminiRoot, "skills") } : null,
+      clients.has("antigravity") ? { label: "Antigravity skills", dir: path15.join(roots.antigravityRoot, "skills") } : null,
+      clients.has("github") ? opts.scope === "global" ? { label: "GitHub Copilot skills", dir: path15.join(roots.copilotRoot, "skills") } : { label: "GitHub skills", dir: path15.join(roots.githubRoot, "skills") } : null
     ].filter(Boolean),
     agents: includeAgentFiles ? [
-      clients.has("claude") ? { label: "Claude AGENTS.md", file: path14.join(roots.claudeRoot, "AGENTS.md") } : null,
-      clients.has("factory") ? { label: "Factory AGENTS.md", file: path14.join(roots.factoryRoot, "AGENTS.md") } : null,
-      clients.has("codex") ? { label: "Codex AGENTS.md", file: path14.join(roots.codexRoot, "AGENTS.md") } : null,
-      clients.has("opencode") ? { label: "OpenCode AGENTS.md", file: path14.join(roots.opencodeConfigRoot, "AGENTS.md") } : null,
-      clients.has("ampcode") ? { label: "Ampcode AGENTS.md", file: path14.join(roots.ampcodeConfigRoot, "AGENTS.md") } : null
+      clients.has("claude") ? { label: "Claude AGENTS.md", file: path15.join(roots.claudeRoot, "AGENTS.md") } : null,
+      clients.has("factory") ? { label: "Factory AGENTS.md", file: path15.join(roots.factoryRoot, "AGENTS.md") } : null,
+      clients.has("codex") ? { label: "Codex AGENTS.md", file: path15.join(roots.codexRoot, "AGENTS.md") } : null,
+      clients.has("opencode") ? { label: "OpenCode AGENTS.md", file: path15.join(roots.opencodeConfigRoot, "AGENTS.md") } : null,
+      clients.has("ampcode") ? { label: "Ampcode AGENTS.md", file: path15.join(roots.ampcodeConfigRoot, "AGENTS.md") } : null
     ].filter(Boolean) : [],
     claude: includeAgentFiles ? [
-      clients.has("claude") ? { label: "Claude CLAUDE.md", file: path14.join(roots.claudeRoot, "CLAUDE.md") } : null
+      clients.has("claude") ? { label: "Claude CLAUDE.md", file: path15.join(roots.claudeRoot, "CLAUDE.md") } : null
     ].filter(Boolean) : [],
     gemini: includeAgentFiles ? [
-      clients.has("gemini") ? { label: "Gemini GEMINI.md", file: path14.join(roots.geminiRoot, "GEMINI.md") } : null
+      clients.has("gemini") ? { label: "Gemini GEMINI.md", file: path15.join(roots.geminiRoot, "GEMINI.md") } : null
     ].filter(Boolean) : []
   };
   const addCandidate = (candidate) => {
@@ -20966,7 +21124,7 @@ async function scanMigration(opts) {
       continue;
     const files = await listFiles(src.dir);
     for (const file of files) {
-      const targetPath = path14.join(canonicalCommands, path14.basename(file));
+      const targetPath = path15.join(canonicalCommands, path15.basename(file));
       addCandidate({ label: src.label, targetPath, kind: "file", action: "copy", sourcePath: file });
     }
   }
@@ -20975,7 +21133,7 @@ async function scanMigration(opts) {
       continue;
     const files = await listFiles(src.dir);
     for (const file of files) {
-      const targetPath = path14.join(canonicalHooks, path14.basename(file));
+      const targetPath = path15.join(canonicalHooks, path15.basename(file));
       addCandidate({ label: src.label, targetPath, kind: "file", action: "copy", sourcePath: file });
     }
   }
@@ -20985,8 +21143,8 @@ async function scanMigration(opts) {
     const skillDirs = await findSkillDirs(src.dir);
     for (const dir of skillDirs) {
       try {
-        const meta = await parseSkillFile(path14.join(dir, "SKILL.md"));
-        const targetPath = path14.join(canonicalSkills, meta.name);
+        const meta = await parseSkillFile(path15.join(dir, "SKILL.md"));
+        const targetPath = path15.join(canonicalSkills, meta.name);
         addCandidate({ label: src.label, targetPath, kind: "dir", action: "copy", sourcePath: dir });
       } catch {}
     }
@@ -21001,7 +21159,7 @@ async function scanMigration(opts) {
       continue;
     addCandidate({ label: src.label, targetPath: canonicalClaude, kind: "file", action: "copy", sourcePath: src.file });
   }
-  const canonicalGemini = path14.join(canonicalRoot, "GEMINI.md");
+  const canonicalGemini = path15.join(canonicalRoot, "GEMINI.md");
   for (const src of sources.gemini) {
     if (!await pathExists(src.file) || await isSymlink(src.file))
       continue;
@@ -21014,7 +21172,7 @@ async function scanMigration(opts) {
     if (canonicalExists) {
       let kind = "file";
       try {
-        const stat = await fs8.promises.lstat(targetPath);
+        const stat = await fs9.promises.lstat(targetPath);
         kind = stat.isDirectory() ? "dir" : "file";
       } catch {}
       list.unshift({
@@ -21088,7 +21246,9 @@ async function applyMigration(plan, selections, opts) {
       skipped: linkResult.skipped,
       conflicts: linkResult.conflicts,
       backedUp: linkResult.backedUp,
-      removed: linkResult.removed
+      removed: linkResult.removed,
+      failed: linkResult.failed,
+      failures: linkResult.failures
     }
   };
 }
@@ -23882,7 +24042,7 @@ function wrapAnsi(string, columns, options2) {
 // node_modules/terminal-size/index.js
 import process4 from "node:process";
 import { execFileSync } from "node:child_process";
-import fs9 from "node:fs";
+import fs10 from "node:fs";
 import tty2 from "node:tty";
 var defaultColumns = 80;
 var defaultRows = 24;
@@ -23912,7 +24072,7 @@ var isForegroundProcess = () => {
     return true;
   }
   try {
-    const statContents = fs9.readFileSync("/proc/self/stat", "utf8");
+    const statContents = fs10.readFileSync("/proc/self/stat", "utf8");
     const closingParenthesisIndex = statContents.lastIndexOf(") ");
     if (closingParenthesisIndex === -1) {
       return false;
@@ -23956,8 +24116,8 @@ function terminalSize() {
 }
 var devTty = () => {
   try {
-    const flags = process4.platform === "darwin" ? fs9.constants.O_EVTONLY | fs9.constants.O_NONBLOCK : fs9.constants.O_NONBLOCK;
-    const { columns, rows } = tty2.WriteStream(fs9.openSync("/dev/tty", flags));
+    const flags = process4.platform === "darwin" ? fs10.constants.O_EVTONLY | fs10.constants.O_NONBLOCK : fs10.constants.O_NONBLOCK;
+    const { columns, rows } = tty2.WriteStream(fs10.openSync("/dev/tty", flags));
     return { columns, rows };
   } catch {}
 };
@@ -25862,8 +26022,8 @@ var cleanupYogaNode = (node) => {
 var currentUpdatePriority = import_constants.NoEventPriority;
 var currentRootNode;
 async function loadPackageJson() {
-  const fs10 = await import("node:fs");
-  const content = fs10.readFileSync(new URL("../package.json", import.meta.url), "utf8");
+  const fs11 = await import("node:fs");
+  const content = fs11.readFileSync(new URL("../package.json", import.meta.url), "utf8");
   const parsedContent = JSON.parse(content);
   return {
     name: parsedContent?.name,
@@ -27605,7 +27765,7 @@ var import_react14 = __toESM(require_react(), 1);
 // node_modules/ink/build/components/ErrorOverview.js
 var import_react13 = __toESM(require_react(), 1);
 var import_stack_utils = __toESM(require_stack_utils(), 1);
-import * as fs10 from "node:fs";
+import * as fs11 from "node:fs";
 import { cwd } from "node:process";
 
 // node_modules/convert-to-spaces/dist/index.js
@@ -27725,8 +27885,8 @@ function Text({ color, backgroundColor, dimColor = false, bold = false, italic =
 }
 
 // node_modules/ink/build/components/ErrorOverview.js
-var cleanupPath = (path15) => {
-  return path15?.replace(`file://${cwd()}/`, "");
+var cleanupPath = (path16) => {
+  return path16?.replace(`file://${cwd()}/`, "");
 };
 var stackUtils = new import_stack_utils.default({
   cwd: cwd(),
@@ -27740,8 +27900,8 @@ function ErrorOverview({ error }) {
   let excerpt;
   let lineWidth = 0;
   const stackLineCounts = new Map;
-  if (filePath && origin?.line && fs10.existsSync(filePath)) {
-    const sourceCode = fs10.readFileSync(filePath, "utf8");
+  if (filePath && origin?.line && fs11.existsSync(filePath)) {
+    const sourceCode = fs11.readFileSync(filePath, "utf8");
     excerpt = dist_default3(sourceCode, origin.line);
     if (excerpt) {
       for (const { line } of excerpt) {
@@ -30032,14 +30192,14 @@ async function pickSkills(entries, opts) {
 }
 
 // src/core/undo.ts
-import fs11 from "fs";
-import path15 from "path";
+import fs12 from "fs";
+import path16 from "path";
 async function listBackupDirs(canonicalRoot) {
-  const root = path15.join(canonicalRoot, "backup");
+  const root = path16.join(canonicalRoot, "backup");
   if (!await pathExists(root))
     return [];
-  const entries = await fs11.promises.readdir(root, { withFileTypes: true });
-  return entries.filter((e2) => e2.isDirectory()).map((e2) => path15.join(root, e2.name));
+  const entries = await fs12.promises.readdir(root, { withFileTypes: true });
+  return entries.filter((e2) => e2.isDirectory()).map((e2) => path16.join(root, e2.name));
 }
 async function findLatestBackup(canonicalRoot) {
   const dirs = await listBackupDirs(canonicalRoot);
@@ -30057,10 +30217,10 @@ async function findLatestBackup(canonicalRoot) {
 async function restoreSymlink(entry) {
   if (!entry.backupPath)
     return;
-  const link2 = await fs11.promises.readlink(entry.backupPath);
-  await ensureDir(path15.dirname(entry.originalPath));
-  await fs11.promises.symlink(link2, entry.originalPath);
-  await fs11.promises.unlink(entry.backupPath);
+  const link2 = await fs12.promises.readlink(entry.backupPath);
+  await ensureDir(path16.dirname(entry.originalPath));
+  await fs12.promises.symlink(link2, entry.originalPath);
+  await fs12.promises.unlink(entry.backupPath);
 }
 async function restorePath(entry) {
   if (entry.action === "create") {
@@ -30073,18 +30233,18 @@ async function restorePath(entry) {
     await restoreSymlink(entry);
     return;
   }
-  await ensureDir(path15.dirname(entry.originalPath));
+  await ensureDir(path16.dirname(entry.originalPath));
   try {
-    await fs11.promises.rename(entry.backupPath, entry.originalPath);
+    await fs12.promises.rename(entry.backupPath, entry.originalPath);
     return;
   } catch (err) {
     if (err?.code !== "EXDEV")
       throw err;
   }
   if (entry.kind === "dir") {
-    await fs11.promises.cp(entry.backupPath, entry.originalPath, { recursive: true, force: true });
+    await fs12.promises.cp(entry.backupPath, entry.originalPath, { recursive: true, force: true });
   } else {
-    await fs11.promises.copyFile(entry.backupPath, entry.originalPath);
+    await fs12.promises.copyFile(entry.backupPath, entry.originalPath);
   }
   await removePath(entry.backupPath);
 }
@@ -30135,8 +30295,8 @@ async function undoLastChange(opts) {
 }
 
 // src/core/preflight.ts
-import fs12 from "fs";
-import path16 from "path";
+import fs13 from "fs";
+import path17 from "path";
 async function needsLinkBackup(task, forceLinks) {
   if (task.type === "conflict")
     return forceLinks && task.target !== task.source;
@@ -30151,7 +30311,7 @@ async function needsLinkBackup(task, forceLinks) {
   if (!task.replaceSymlink)
     return false;
   try {
-    const stat = await fs12.promises.lstat(task.target);
+    const stat = await fs13.promises.lstat(task.target);
     return stat.isSymbolicLink();
   } catch {
     return false;
@@ -30171,7 +30331,7 @@ async function preflightBackup(opts) {
   for (const task of opts.linkPlan.tasks) {
     if (await needsLinkBackup(task, opts.forceLinks)) {
       if (task.type === "link" || task.type === "conflict" || task.type === "unlink") {
-        targets.add(path16.resolve(task.target));
+        targets.add(path17.resolve(task.target));
       }
     }
   }
@@ -30180,36 +30340,46 @@ async function preflightBackup(opts) {
     if (!candidate.sourcePath)
       continue;
     if (await pathExists(candidate.targetPath)) {
-      targets.add(path16.resolve(candidate.targetPath));
+      targets.add(path17.resolve(candidate.targetPath));
     }
   }
   for (const target of targets) {
     const exists = await pathExists(target);
     if (!exists)
       continue;
-    const stat = await fs12.promises.lstat(target);
+    const stat = await fs13.promises.lstat(target);
     if (stat.isSymbolicLink()) {
-      await fs12.promises.readlink(target);
+      await fs13.promises.readlink(target);
     }
     const dest = backupPathFor(target, opts.backup.dir);
-    await ensureDir(path16.dirname(dest));
-    await fs12.promises.access(path16.dirname(dest), fs12.constants.W_OK);
+    await ensureDir(path17.dirname(dest));
+    await fs13.promises.access(path17.dirname(dest), fs13.constants.W_OK);
   }
   return { targets: targets.size };
 }
 
 // src/core/ensure-canonical.ts
-import fs13 from "fs";
-import path17 from "path";
+import fs14 from "fs";
+import path18 from "path";
 import os4 from "os";
 async function checkMigrationHint(projectRoot) {
-  const p = path17.join(projectRoot, ".agents");
+  const p = path18.join(projectRoot, ".agents");
   try {
-    const lstat = await fs13.promises.lstat(p);
-    if (lstat.isSymbolicLink())
-      return;
+    const lstat = await fs14.promises.lstat(p);
+    if (lstat.isSymbolicLink()) {
+      const link2 = await fs14.promises.readlink(p);
+      const resolved = path18.isAbsolute(link2) ? link2 : path18.resolve(path18.dirname(p), link2);
+      try {
+        await fs14.promises.lstat(resolved);
+        return;
+      } catch {
+        return `偵測到 ${p} 為無效連結（指向不存在的 ${resolved}）。
+若需使用預設全域本源，建議移除此無效連結：
+  rm "${p}"`;
+      }
+    }
     if (lstat.isDirectory()) {
-      const files = await fs13.promises.readdir(p);
+      const files = await fs14.promises.readdir(p);
       if (files.length > 0) {
         return `偵測到 ${p} 為實體目錄且非空。新版預設讀取 ~/.agents/。
 若需將專案私有本源遷移至全域，請執行：
@@ -30222,9 +30392,9 @@ async function checkMigrationHint(projectRoot) {
 async function ensureCanonical(opts = {}) {
   const homeDir = opts.homeDir || os4.homedir();
   const projectRoot = opts.projectRoot || process.cwd();
-  const defaultCanonical = path17.join(homeDir, ".agents");
+  const defaultCanonical = path18.join(homeDir, ".agents");
   const migrationHint = await checkMigrationHint(projectRoot);
-  if (fs13.existsSync(defaultCanonical)) {
+  if (fs14.existsSync(defaultCanonical)) {
     return migrationHint ? { migrationHint } : {};
   }
   const selectPrompt = opts.selectFn || ie;
@@ -30243,22 +30413,22 @@ async function ensureCanonical(opts = {}) {
   }
   let canonicalOverride;
   if (choice === "create") {
-    await fs13.promises.mkdir(defaultCanonical, { recursive: true });
+    await fs14.promises.mkdir(defaultCanonical, { recursive: true });
   } else if (choice === "custom") {
     const input = await textPrompt({
       message: "請輸入既有 canonical 目錄的絕對路徑：",
-      placeholder: path17.join(homeDir, ".agents"),
+      placeholder: path18.join(homeDir, ".agents"),
       validate(val) {
         if (!val || val.trim() === "")
           return "路徑不能為空";
         const raw2 = val.trim();
-        const resolved = raw2.startsWith("~") ? path17.join(homeDir, raw2.slice(1)) : path17.resolve(raw2);
-        if (!path17.isAbsolute(resolved))
+        const resolved = raw2.startsWith("~") ? path18.join(homeDir, raw2.slice(1)) : path18.resolve(raw2);
+        if (!path18.isAbsolute(resolved))
           return "必須為絕對路徑";
-        if (!fs13.existsSync(resolved))
+        if (!fs14.existsSync(resolved))
           return `路徑不存在：${resolved}`;
         try {
-          fs13.accessSync(resolved, fs13.constants.R_OK);
+          fs14.accessSync(resolved, fs14.constants.R_OK);
         } catch {
           return `無法讀取路徑：${resolved}`;
         }
@@ -30268,7 +30438,7 @@ async function ensureCanonical(opts = {}) {
       exitProc(0);
     }
     const raw = input.trim();
-    canonicalOverride = raw.startsWith("~") ? path17.join(homeDir, raw.slice(1)) : path17.resolve(raw);
+    canonicalOverride = raw.startsWith("~") ? path18.join(homeDir, raw.slice(1)) : path18.resolve(raw);
   }
   const result2 = {};
   if (canonicalOverride)
@@ -30315,7 +30485,7 @@ function mergeAgentStatus(items) {
 }
 function displayName(entry) {
   if (entry.name === "agents-md") {
-    const sourceFile = path18.basename(entry.source);
+    const sourceFile = path19.basename(entry.source);
     if (sourceFile === "CLAUDE.md")
       return "AGENTS.md (Claude override)";
     if (sourceFile === "GEMINI.md")
@@ -30407,7 +30577,7 @@ async function selectClients() {
   const detectedSet = new Set(detected);
   const clientRoots = getGlobalClientRoots();
   const homeDir = os5.homedir();
-  const displayPath = (p) => p.startsWith(homeDir + path18.sep) ? "~" + p.slice(homeDir.length) : p;
+  const displayPath = (p) => p.startsWith(homeDir + path19.sep) ? "~" + p.slice(homeDir.length) : p;
   const hint = detected.length > 0 ? `偵測到下列資料夾：${detected.map((c2) => displayPath(clientRoots[c2])).join(", ")}` : "未偵測到任何 client 資料夾";
   le("space toggle · a toggle-all · enter submit · pick ◀ Back to return · ctrl+c cancel", "Keys");
   const selected = await ae({
@@ -30454,7 +30624,8 @@ async function selectSkills(scope, clients, canonicalOverride) {
       scanClients = [];
     }
     const merged = Array.from(new Set([...scanClients, ...clients]));
-    installed = await scanInstalledSkills({ scope, clients: merged, canonicalOverride });
+    const scanRes = await scanInstalledSkills({ scope, clients: merged, canonicalOverride });
+    installed = scanRes.installed;
   } catch {
     installed = new Map;
   }
@@ -30509,8 +30680,46 @@ async function runChange(scope, clients, skills, removeSkills, canonicalOverride
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const migrate = await scanMigration({ scope, clients, canonicalOverride });
   const link2 = await buildLinkPlan({ scope, clients, selectedSkills: skills, removeSkills, canonicalOverride });
-  const backupDir = path18.join(roots.canonicalRoot, "backup", timestamp);
+  const backupDir = path19.join(roots.canonicalRoot, "backup", timestamp);
   spin.stop("Scan complete");
+  const blockedTasks = link2.tasks.filter((t) => t.type === "blocked-root");
+  const rootsToClean = new Set;
+  if (blockedTasks.length > 0) {
+    const byBlockedPath = new Map;
+    for (const task of blockedTasks) {
+      const list = byBlockedPath.get(task.blockedPath) || [];
+      list.push(task);
+      byBlockedPath.set(task.blockedPath, list);
+    }
+    const isInteractive = Boolean(process.stdout.isTTY);
+    for (const [blockedPath, tasks] of byBlockedPath.entries()) {
+      const linkTarget = tasks[0]?.link ?? "";
+      const count = tasks.length;
+      le([
+        `壞掉的技能根目錄: ${blockedPath}`,
+        `指向目標: ${linkTarget}`,
+        `受影響技能數: ${count}`,
+        `手動修復指令: rm "${blockedPath}"`
+      ].join(`
+`), "無效技能根目錄診斷");
+      if (isInteractive) {
+        const choice = await ie({
+          message: `技能根目錄 ${blockedPath} 為無效連結，請選擇處置方式：`,
+          options: [
+            { label: "備份後移除並重建 (推薦)", value: "clean" },
+            { label: "跳過此 client", value: "skip" }
+          ]
+        });
+        if (!lD(choice) && choice === "clean") {
+          rootsToClean.add(blockedPath);
+          for (const task of tasks) {
+            task.type = "link";
+            task.kind = "dir";
+          }
+        }
+      }
+    }
+  }
   const unlinkCount = link2.tasks.filter((t) => t.type === "unlink").length;
   const planSummary = [
     `Migration: ${migrate.auto.length} auto · ${migrate.conflicts.length} conflicts (choose sources)`,
@@ -30557,6 +30766,11 @@ async function runChange(scope, clients, skills, removeSkills, canonicalOverride
       operation: "change-to-agents",
       timestamp
     });
+    for (const blockedPath of rootsToClean) {
+      await backupPath(blockedPath, backup);
+      await removePath(blockedPath);
+      await fs15.promises.mkdir(blockedPath, { recursive: true });
+    }
     await preflightBackup({
       backup,
       linkPlan: link2,
@@ -30574,9 +30788,18 @@ async function runChange(scope, clients, skills, removeSkills, canonicalOverride
       pieces.push(`removed ${formatCount(result2.links.removed, "link")}`);
     if (result2.links.skipped > 0)
       pieces.push(`skipped ${formatCount(result2.links.skipped, "path")}`);
+    if (result2.links.failed > 0)
+      pieces.push(`failed ${formatCount(result2.links.failed, "target")}`);
     if (conflictSummary)
       pieces.push(conflictSummary);
     applySpinner.stop(`${pieces.join(" · ")}. Backup: ${result2.backupDir}`);
+    if (result2.links.failures && result2.links.failures.length > 0) {
+      const details = result2.links.failures.map((f2) => `- Target: ${f2.target}
+  Reason: ${f2.message}
+  Suggestion: ${f2.suggestion ?? "None"}`).join(`
+`);
+      le(details, "Apply Failures Detail");
+    }
   } catch (err) {
     applySpinner.stop("Change failed");
     le(String(err?.message || err), "Error");
@@ -30638,7 +30861,7 @@ async function run() {
     let installedGlobalCount = 0;
     try {
       const detected = await detectInstalledClients();
-      const installedMap = await scanInstalledSkills({
+      const { installed: installedMap } = await scanInstalledSkills({
         scope,
         clients: detected.length > 0 ? detected : clients,
         canonicalOverride
@@ -30717,7 +30940,8 @@ async function run() {
           totalSummary = [restoredSummary, removedSummary, symlinkSummary].filter(Boolean).join(" · ");
         }
         spin.stop(`${totalSummary} Reverted: ${result2.undoneDir}`);
-        le(`Undo backup: ${result2.backupDir}`, "Undo log");
+        le(`Undo backup: ${result2.backupDir}
+提示：還原的 symlink 可能本來就是壞的（連至不存在的目標）。`, "Undo log");
       } catch (err) {
         spin.stop("Undo failed");
         le(String(err?.message || err), "Error");

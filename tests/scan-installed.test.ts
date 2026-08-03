@@ -30,7 +30,7 @@ test('collects a symlink that points at a canonical skill', async () => {
   const claudeSkills = await clientSkillsDir(home, 'claude');
   await fs.promises.symlink(skillDir, path.join(claudeSkills, 'git-smart-commit'));
 
-  const installed = await scanInstalledSkills({ scope: 'global', clients: ['claude'], homeDir: home });
+  const { installed } = await scanInstalledSkills({ scope: 'global', clients: ['claude'], homeDir: home });
 
   expect(installed.get(skillDir)).toEqual(new Set(['claude']));
 });
@@ -42,7 +42,7 @@ test('ignores a real directory on the client side', async () => {
   const claudeSkills = await clientSkillsDir(home, 'claude');
   await fs.promises.mkdir(path.join(claudeSkills, 'foo'), { recursive: true });
 
-  const installed = await scanInstalledSkills({ scope: 'global', clients: ['claude'], homeDir: home });
+  const { installed } = await scanInstalledSkills({ scope: 'global', clients: ['claude'], homeDir: home });
 
   expect(installed.has(skillDir)).toBe(false);
   expect(installed.size).toBe(0);
@@ -57,7 +57,7 @@ test('ignores a symlink pointing outside canonical', async () => {
   const claudeSkills = await clientSkillsDir(home, 'claude');
   await fs.promises.symlink(outside, path.join(claudeSkills, 'foo'));
 
-  const installed = await scanInstalledSkills({ scope: 'global', clients: ['claude'], homeDir: home });
+  const { installed } = await scanInstalledSkills({ scope: 'global', clients: ['claude'], homeDir: home });
 
   expect(installed.has(skillDir)).toBe(false);
   expect(installed.size).toBe(0);
@@ -75,19 +75,41 @@ test('same basename in different categories resolves to the linked one only', as
   const claudeSkills = await clientSkillsDir(home, 'claude');
   await fs.promises.symlink(codingFoo, path.join(claudeSkills, 'foo'));
 
-  const installed = await scanInstalledSkills({ scope: 'global', clients: ['claude'], homeDir: home });
+  const { installed } = await scanInstalledSkills({ scope: 'global', clients: ['claude'], homeDir: home });
 
   expect(installed.get(codingFoo)).toEqual(new Set(['claude']));
   expect(installed.has(mediaFoo)).toBe(false);
 });
 
-test('missing client skills directory does not throw', async () => {
+test('missing client skills directory does not throw and does not populate brokenRoots', async () => {
   const { home, canonicalSkills } = await setup('scan-installed-missing-');
   await createSkill(canonicalSkills, 'foo');
 
-  const installed = await scanInstalledSkills({ scope: 'global', clients: ['claude', 'gemini'], homeDir: home });
+  const { installed, brokenRoots } = await scanInstalledSkills({ scope: 'global', clients: ['claude', 'gemini'], homeDir: home });
 
   expect(installed.size).toBe(0);
+  expect(brokenRoots).toEqual([]);
+});
+
+test('broken symlink client skills root collects into brokenRoots without throwing or producing installed entries', async () => {
+  const { home, canonicalSkills } = await setup('scan-installed-broken-');
+  await createSkill(canonicalSkills, 'foo');
+
+  const claudeDir = path.join(home, '.claude');
+  await fs.promises.mkdir(claudeDir, { recursive: true });
+  const claudeSkills = path.join(claudeDir, 'skills');
+  const nonExistentTarget = path.join(home, 'non-existent-skills');
+  await fs.promises.symlink(nonExistentTarget, claudeSkills);
+
+  const { installed, brokenRoots } = await scanInstalledSkills({ scope: 'global', clients: ['claude'], homeDir: home });
+
+  expect(installed.size).toBe(0);
+  expect(brokenRoots).toHaveLength(1);
+  expect(brokenRoots[0]).toEqual({
+    client: 'claude',
+    path: claudeSkills,
+    link: nonExistentTarget,
+  });
 });
 
 test('aggregates the same skill across multiple clients', async () => {
@@ -99,7 +121,7 @@ test('aggregates the same skill across multiple clients', async () => {
   await fs.promises.symlink(skillDir, path.join(claudeSkills, 'shared'));
   await fs.promises.symlink(skillDir, path.join(geminiSkills, 'shared'));
 
-  const installed = await scanInstalledSkills({ scope: 'global', clients: ['claude', 'gemini'], homeDir: home });
+  const { installed } = await scanInstalledSkills({ scope: 'global', clients: ['claude', 'gemini'], homeDir: home });
 
   expect(installed.get(skillDir)).toEqual(new Set(['claude', 'gemini']));
 });
@@ -113,7 +135,7 @@ test('only reports clients that were asked for', async () => {
   await fs.promises.symlink(skillDir, path.join(claudeSkills, 'shared'));
   await fs.promises.symlink(skillDir, path.join(geminiSkills, 'shared'));
 
-  const installed = await scanInstalledSkills({ scope: 'global', clients: ['gemini'], homeDir: home });
+  const { installed } = await scanInstalledSkills({ scope: 'global', clients: ['gemini'], homeDir: home });
 
   expect(installed.get(skillDir)).toEqual(new Set(['gemini']));
 });
@@ -126,17 +148,12 @@ test('relative symlinks resolve correctly', async () => {
   const linkPath = path.join(claudeSkills, 'rel');
   await fs.promises.symlink(path.relative(path.dirname(linkPath), skillDir), linkPath);
 
-  const installed = await scanInstalledSkills({ scope: 'global', clients: ['claude'], homeDir: home });
+  const { installed } = await scanInstalledSkills({ scope: 'global', clients: ['claude'], homeDir: home });
 
   expect(installed.get(skillDir)).toEqual(new Set(['claude']));
 });
 
 test('scanning a superset of clients is what makes out-of-scope installs visible', async () => {
-  // Regression guard: the picker derives its tri-state from the *selected*
-  // clients but annotates rows with installs on clients outside that selection.
-  // That annotation is only possible if the scan covered those clients, so
-  // callers must scan broadly and narrow afterwards — scanning only the
-  // selection silently hides the very state this change exists to surface.
   const { home, canonicalSkills } = await setup('scan-installed-superset-');
   const skillDir = await createSkill(canonicalSkills, 'beta');
 
@@ -144,17 +161,17 @@ test('scanning a superset of clients is what makes out-of-scope installs visible
   await fs.promises.symlink(skillDir, path.join(claudeSkills, 'beta'));
 
   const narrow = await scanInstalledSkills({ scope: 'global', clients: ['gemini'], homeDir: home });
-  expect(narrow.has(skillDir)).toBe(false); // claude never looked at
+  expect(narrow.installed.has(skillDir)).toBe(false);
 
   const wide = await scanInstalledSkills({ scope: 'global', clients: ['claude', 'gemini'], homeDir: home });
-  expect(wide.get(skillDir)).toEqual(new Set(['claude']));
+  expect(wide.installed.get(skillDir)).toEqual(new Set(['claude']));
 });
 
 test('returns empty map when no clients are selected', async () => {
   const { home, canonicalSkills } = await setup('scan-installed-noclients-');
   await createSkill(canonicalSkills, 'foo');
 
-  const installed = await scanInstalledSkills({ scope: 'global', clients: [], homeDir: home });
+  const { installed } = await scanInstalledSkills({ scope: 'global', clients: [], homeDir: home });
 
   expect(installed.size).toBe(0);
 });

@@ -28,7 +28,7 @@ async function withAllSkills(opts: LinkStatusOptions): Promise<MappingOptions> {
   }
   if (clients.length === 0) clients = ALL_CLIENTS;
 
-  const installed = await scanInstalledSkills({
+  const { installed } = await scanInstalledSkills({
     scope: opts.scope,
     clients,
     projectRoot: opts.projectRoot,

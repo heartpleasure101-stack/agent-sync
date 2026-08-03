@@ -17,6 +17,7 @@ export type LinkTask =
   // conflict, because backupPath() would otherwise move a real directory.
   | { type: 'unlink'; source: string; target: string; kind: SourceKind }
   | { type: 'conflict'; source: string; target: string; reason: string; kind?: SourceKind }
+  | { type: 'blocked-root'; source: string; target: string; blockedPath: string; link: string; reason: string }
   | { type: 'noop'; source: string; target: string };
 
 export type ConflictTask = Extract<LinkTask, { type: 'conflict' }>;

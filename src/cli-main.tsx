@@ -1,5 +1,4 @@
-// Heavy CLI entry — loaded via dynamic import from src/cli.tsx after preflight.
-// The shebang lives on cli.tsx (the real entry point). Do not re-add here.
+import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import { intro, outro, select, confirm, note, spinner, isCancel, cancel, multiselect } from '@clack/prompts';
@@ -12,12 +11,14 @@ import { detectInstalledClients, getGlobalClientRoots } from './core/detect-inst
 import { listSkills, type SkillEntry } from './core/list-skills.js';
 import { scanInstalledSkills } from './core/scan-installed.js';
 import { pickSkills, SkillPickerBackError } from './ui/skill-picker.js';
-import { createBackupSession, finalizeBackup } from './core/backup.js';
+import { createBackupSession, finalizeBackup, backupPath } from './core/backup.js';
+import { removePath } from './utils/fs.js';
 import { undoLastChange } from './core/undo.js';
 import { preflightBackup } from './core/preflight.js';
-import type { Client, LinkStatus, Scope } from './core/types.js';
+import type { Client, LinkStatus, Scope, LinkTask } from './core/types.js';
 import type { MigrationCandidate } from './core/migrate.js';
 import { ensureCanonical } from './core/ensure-canonical.js';
+import type { ApplyFailure } from './core/apply.js';
 
 const appTitle = 'agent-sync';
 
@@ -238,7 +239,8 @@ async function selectSkills(
       scanClients = [];
     }
     const merged = Array.from(new Set<Client>([...scanClients, ...clients]));
-    installed = await scanInstalledSkills({ scope, clients: merged, canonicalOverride });
+    const scanRes = await scanInstalledSkills({ scope, clients: merged, canonicalOverride });
+    installed = scanRes.installed;
   } catch {
     installed = new Map();
   }
@@ -331,6 +333,53 @@ async function runChange(
   const backupDir = path.join(roots.canonicalRoot, 'backup', timestamp);
   spin.stop('Scan complete');
 
+  const blockedTasks = link.tasks.filter(
+    (t): t is Extract<LinkTask, { type: 'blocked-root' }> => t.type === 'blocked-root',
+  );
+  const rootsToClean = new Set<string>();
+
+  if (blockedTasks.length > 0) {
+    const byBlockedPath = new Map<string, Extract<LinkTask, { type: 'blocked-root' }>[]>();
+    for (const task of blockedTasks) {
+      const list = byBlockedPath.get(task.blockedPath) || [];
+      list.push(task);
+      byBlockedPath.set(task.blockedPath, list);
+    }
+
+    const isInteractive = Boolean(process.stdout.isTTY);
+
+    for (const [blockedPath, tasks] of byBlockedPath.entries()) {
+      const linkTarget = tasks[0]?.link ?? '';
+      const count = tasks.length;
+      note(
+        [
+          `壞掉的技能根目錄: ${blockedPath}`,
+          `指向目標: ${linkTarget}`,
+          `受影響技能數: ${count}`,
+          `手動修復指令: rm "${blockedPath}"`,
+        ].join('\n'),
+        '無效技能根目錄診斷',
+      );
+
+      if (isInteractive) {
+        const choice = await select({
+          message: `技能根目錄 ${blockedPath} 為無效連結，請選擇處置方式：`,
+          options: [
+            { label: '備份後移除並重建 (推薦)', value: 'clean' },
+            { label: '跳過此 client', value: 'skip' },
+          ],
+        });
+        if (!isCancel(choice) && choice === 'clean') {
+          rootsToClean.add(blockedPath);
+          for (const task of tasks) {
+            (task as any).type = 'link';
+            (task as any).kind = 'dir';
+          }
+        }
+      }
+    }
+  }
+
   const unlinkCount = link.tasks.filter((t) => t.type === 'unlink').length;
   const planSummary = [
     `Migration: ${migrate.auto.length} auto · ${migrate.conflicts.length} conflicts (choose sources)`,
@@ -376,6 +425,13 @@ async function runChange(
       operation: 'change-to-agents',
       timestamp,
     });
+
+    for (const blockedPath of rootsToClean) {
+      await backupPath(blockedPath, backup);
+      await removePath(blockedPath);
+      await fs.promises.mkdir(blockedPath, { recursive: true });
+    }
+
     await preflightBackup({
       backup,
       linkPlan: link,
@@ -398,8 +454,16 @@ async function runChange(
     // parent path was already backed up, and reporting those as removed would
     // claim something is gone while it is still on disk.
     if (result.links.skipped > 0) pieces.push(`skipped ${formatCount(result.links.skipped, 'path')}`);
+    if (result.links.failed > 0) pieces.push(`failed ${formatCount(result.links.failed, 'target')}`);
     if (conflictSummary) pieces.push(conflictSummary);
     applySpinner.stop(`${pieces.join(' · ')}. Backup: ${result.backupDir}`);
+
+    if (result.links.failures && result.links.failures.length > 0) {
+      const details = result.links.failures
+        .map((f: ApplyFailure) => `- Target: ${f.target}\n  Reason: ${f.message}\n  Suggestion: ${f.suggestion ?? 'None'}`)
+        .join('\n');
+      note(details, 'Apply Failures Detail');
+    }
   } catch (err: any) {
     applySpinner.stop('Change failed');
     note(String(err?.message || err), 'Error');
@@ -463,7 +527,7 @@ async function run(): Promise<void> {
     let installedGlobalCount = 0;
     try {
       const detected = await detectInstalledClients();
-      const installedMap = await scanInstalledSkills({
+      const { installed: installedMap } = await scanInstalledSkills({
         scope,
         clients: detected.length > 0 ? detected : clients,
         canonicalOverride,
@@ -553,7 +617,7 @@ async function run(): Promise<void> {
           totalSummary = [restoredSummary, removedSummary, symlinkSummary].filter(Boolean).join(' · ');
         }
         spin.stop(`${totalSummary} Reverted: ${result.undoneDir}`);
-        note(`Undo backup: ${result.backupDir}`, 'Undo log');
+        note(`Undo backup: ${result.backupDir}\n提示：還原的 symlink 可能本來就是壞的（連至不存在的目標）。`, 'Undo log');
       } catch (err: any) {
         spin.stop('Undo failed');
         note(String(err?.message || err), 'Error');
