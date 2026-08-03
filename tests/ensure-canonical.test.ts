@@ -128,7 +128,7 @@ test('detects real directory in projectRoot/.agents and returns migrationHint', 
   expect(res.migrationHint).toContain('偵測到');
 });
 
-test('symlink in projectRoot/.agents does not trigger migrationHint', async () => {
+test('valid symlink in projectRoot/.agents does not trigger migrationHint', async () => {
   const home = makeTmpDir('home');
   const project = makeTmpDir('project');
   const canonical = path.join(home, '.agents');
@@ -137,4 +137,16 @@ test('symlink in projectRoot/.agents does not trigger migrationHint', async () =
 
   const res = await ensureCanonical({ homeDir: home, projectRoot: project });
   expect(res.migrationHint).toBeUndefined();
+});
+
+test('broken symlink in projectRoot/.agents triggers migrationHint', async () => {
+  const home = makeTmpDir('home');
+  const project = makeTmpDir('project');
+  fs.mkdirSync(path.join(home, '.agents'));
+  const nonExistent = path.join(project, 'non-existent');
+  fs.symlinkSync(nonExistent, path.join(project, '.agents'));
+
+  const res = await ensureCanonical({ homeDir: home, projectRoot: project });
+  expect(res.migrationHint).toBeDefined();
+  expect(res.migrationHint).toContain('無效連結');
 });

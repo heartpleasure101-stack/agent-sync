@@ -337,3 +337,44 @@ test('project symlinks are portable after directory move when supported', async 
   const content = await fs.promises.readFile(testFile, 'utf8');
   expect(content).toBe('# Test');
 });
+
+test('claude root broken, gemini root normal emits blocked-root for claude targets without throwing', async () => {
+  const project = await makeTempDir('agent-sync-broken-root-plan-');
+  const canonicalOverride = path.join(project, '.agents');
+  const skillDir = path.join(canonicalOverride, 'skills', '01_Coding', 'my-skill');
+  await fs.promises.mkdir(skillDir, { recursive: true });
+
+  const claudeDir = path.join(project, '.claude');
+  await fs.promises.mkdir(claudeDir, { recursive: true });
+  const claudeSkills = path.join(claudeDir, 'skills');
+  const nonExistentTarget = path.join(project, 'non-existent-skills');
+  await fs.promises.symlink(nonExistentTarget, claudeSkills);
+
+  const plan = await buildLinkPlan({
+    scope: 'project',
+    projectRoot: project,
+    clients: ['claude', 'gemini'],
+    canonicalOverride,
+  });
+
+  const claudeSkillTasks = plan.tasks.filter((t) => 'target' in t && t.target.includes('.claude/skills'));
+  const geminiSkillTasks = plan.tasks.filter((t) => 'target' in t && t.target.includes('.gemini/skills'));
+
+  expect(claudeSkillTasks.length).toBeGreaterThan(0);
+  for (const task of claudeSkillTasks) {
+    expect(task.type).toBe('blocked-root');
+    if (task.type === 'blocked-root') {
+      expect(task.blockedPath).toBe(claudeSkills);
+      expect(task.link).toBe(nonExistentTarget);
+    }
+  }
+
+  expect(geminiSkillTasks.length).toBeGreaterThan(0);
+  for (const task of geminiSkillTasks) {
+    expect(task.type).toBe('link');
+  }
+
+  expect(plan.conflicts).toEqual([]);
+  expect(plan.changes.some((t) => 'target' in t && t.target.includes('.claude/skills'))).toBe(false);
+  expect(plan.changes.some((t) => 'target' in t && t.target.includes('.gemini/skills'))).toBe(true);
+});
