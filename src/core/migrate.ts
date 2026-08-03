@@ -5,7 +5,7 @@ import type { RootOptions } from './paths.js';
 import type { Client } from './types.js';
 import { findSkillDirs, parseSkillFile } from './skills.js';
 import { buildLinkPlan } from './plan.js';
-import { applyLinkPlan } from './apply.js';
+import { applyLinkPlan, type ApplyFailure } from './apply.js';
 import { copyDir, copyFile, pathExists } from '../utils/fs.js';
 import type { BackupSession } from './backup.js';
 import { backupPath, recordCreatedPath } from './backup.js';
@@ -213,15 +213,23 @@ export type MigrationResult = {
   copied: number;
   skipped: number;
   backupDir: string;
-  links: { applied: number; skipped: number; conflicts: number; backedUp: number; removed: number };
+  links: {
+    applied: number;
+    skipped: number;
+    conflicts: number;
+    backedUp: number;
+    removed: number;
+    failed: number;
+    failures: ApplyFailure[];
+  };
 };
 
 export async function applyMigration(
   plan: MigrationPlan,
   selections: Map<string, MigrationCandidate | null>,
   opts: RootOptions & {
+    backup: BackupSession;
     clients?: Client[];
-    backup?: BackupSession;
     forceLinks?: boolean;
     selectedSkills?: string[] | null;
     removeSkills?: string[] | null;
@@ -271,6 +279,8 @@ export async function applyMigration(
       conflicts: linkResult.conflicts,
       backedUp: linkResult.backedUp,
       removed: linkResult.removed,
+      failed: linkResult.failed,
+      failures: linkResult.failures,
     },
   };
 }

@@ -5,6 +5,7 @@ import { resolveRoots } from './paths.js';
 import { listSkills } from './list-skills.js';
 import { getSkillRoots } from './skill-roots.js';
 import { resolveSymlinkTo } from './symlink.js';
+import { classifyPath } from './path-state.js';
 
 export type ScanInstalledOptions = {
   scope: Scope;
@@ -12,6 +13,17 @@ export type ScanInstalledOptions = {
   projectRoot?: string;
   homeDir?: string;
   canonicalOverride?: string;
+};
+
+export type BrokenRoot = {
+  client: Client;
+  path: string;
+  link?: string;
+};
+
+export type ScanInstalledResult = {
+  installed: Map<string, Set<Client>>;
+  brokenRoots: BrokenRoot[];
 };
 
 /**
@@ -27,9 +39,10 @@ export type ScanInstalledOptions = {
  * 03_Medie/foo both land on <clientRoot>/skills/foo), so a basename match would
  * mark both as installed when only one of them actually is.
  */
-export async function scanInstalledSkills(opts: ScanInstalledOptions): Promise<Map<string, Set<Client>>> {
+export async function scanInstalledSkills(opts: ScanInstalledOptions): Promise<ScanInstalledResult> {
   const installed = new Map<string, Set<Client>>();
-  if (opts.clients.length === 0) return installed;
+  const brokenRoots: BrokenRoot[] = [];
+  if (opts.clients.length === 0) return { installed, brokenRoots };
 
   const entries = await listSkills({
     scope: opts.scope,
@@ -37,7 +50,7 @@ export async function scanInstalledSkills(opts: ScanInstalledOptions): Promise<M
     homeDir: opts.homeDir,
     canonicalOverride: opts.canonicalOverride,
   });
-  if (entries.length === 0) return installed;
+  if (entries.length === 0) return { installed, brokenRoots };
 
   // Resolved canonical dir -> the entry.dir we report back to callers.
   const canonicalByResolved = new Map<string, string>();
@@ -55,8 +68,14 @@ export async function scanInstalledSkills(opts: ScanInstalledOptions): Promise<M
     try {
       names = await fs.promises.readdir(root);
     } catch {
-      // Client has never had skills installed (or the whole client dir is
-      // absent). Not an error — it simply has nothing installed.
+      const pathState = await classifyPath(root, roots.canonicalRoot);
+      if (pathState.state === 'broken-symlink') {
+        brokenRoots.push({
+          client,
+          path: root,
+          link: pathState.link,
+        });
+      }
       continue;
     }
 
@@ -74,5 +93,6 @@ export async function scanInstalledSkills(opts: ScanInstalledOptions): Promise<M
     }
   }
 
-  return installed;
+  return { installed, brokenRoots };
 }
+

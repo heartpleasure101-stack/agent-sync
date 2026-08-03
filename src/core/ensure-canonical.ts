@@ -21,7 +21,16 @@ async function checkMigrationHint(projectRoot: string): Promise<string | undefin
   const p = path.join(projectRoot, '.agents');
   try {
     const lstat = await fs.promises.lstat(p);
-    if (lstat.isSymbolicLink()) return undefined;
+    if (lstat.isSymbolicLink()) {
+      const link = await fs.promises.readlink(p);
+      const resolved = path.isAbsolute(link) ? link : path.resolve(path.dirname(p), link);
+      try {
+        await fs.promises.lstat(resolved);
+        return undefined;
+      } catch {
+        return `偵測到 ${p} 為無效連結（指向不存在的 ${resolved}）。\n若需使用預設全域本源，建議移除此無效連結：\n  rm "${p}"`;
+      }
+    }
     if (lstat.isDirectory()) {
       const files = await fs.promises.readdir(p);
       if (files.length > 0) {
