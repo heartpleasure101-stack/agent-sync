@@ -7,7 +7,7 @@
     <a href="https://bun.sh"><img src="https://img.shields.io/badge/runtime-Bun%201.3%2B-black.svg" alt="Bun 1.3+" /></a>
   </p>
 
-  <p><em>自動偵測已安裝 AI • 免安裝貼上即跑 • 內建一鍵自動備份與還原</em></p>
+  <p><em>自動偵測已安裝 AI所需技能與設定 • 免安裝貼上即跑 • 內建一鍵自動備份與還原</em></p>
 </div>
 
 ---
