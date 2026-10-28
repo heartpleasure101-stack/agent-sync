@@ -28,8 +28,8 @@ const CLIENT_LABELS: Record<Client, string> = {
   codex: 'Codex',
   cursor: 'Cursor',
   opencode: 'OpenCode',
-  gemini: 'Gemini',
-  antigravity: 'Antigravity',
+  gemini: 'Gemini (gemini 指令)',
+  antigravity: 'Antigravity (agy 指令)',
   github: 'GitHub',
   ampcode: 'Ampcode',
   pi: 'Pi',
@@ -154,15 +154,10 @@ const BACK_TOKEN = '__BACK__';
 async function selectClients(): Promise<Client[] | 'back'> {
   const options: { label: string; value: Client }[] = [
     { label: CLIENT_LABELS.claude, value: 'claude' },
-    { label: CLIENT_LABELS.factory, value: 'factory' },
     { label: CLIENT_LABELS.codex, value: 'codex' },
-    { label: CLIENT_LABELS.cursor, value: 'cursor' },
-    { label: CLIENT_LABELS.opencode, value: 'opencode' },
-    { label: CLIENT_LABELS.gemini, value: 'gemini' },
     { label: CLIENT_LABELS.antigravity, value: 'antigravity' },
-    { label: CLIENT_LABELS.github, value: 'github' },
-    { label: CLIENT_LABELS.ampcode, value: 'ampcode' },
     { label: CLIENT_LABELS.pi, value: 'pi' },
+    { label: CLIENT_LABELS.opencode, value: 'opencode' },
   ];
 
   let detected: Client[] = [];
