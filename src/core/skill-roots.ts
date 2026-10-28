@@ -16,9 +16,12 @@ export type SkillRoot = {
  * drift means the scanner reports "not installed" for something the installer
  * put somewhere else — the checkbox would silently disagree with the disk.
  *
- * Two clients do not follow the plain `<root>/skills` shape:
+ * Three clients do not follow the plain `<root>/skills` shape:
  *   - opencode keeps global config separate from project config
  *   - github uses ~/.copilot/skills globally but .github/skills per project
+ *   - antigravity (agy) reads global skills from ~/.gemini/skills, the same
+ *     directory as gemini; the agy log only ever scans that path. Callers that
+ *     fan out over roots must dedupe.
  */
 export function getSkillRoots(roots: ResolvedRoots, clients: Iterable<Client>, scope: Scope): SkillRoot[] {
   const set = new Set<Client>(clients);
@@ -31,7 +34,7 @@ export function getSkillRoots(roots: ResolvedRoots, clients: Iterable<Client>, s
     ['opencode', path.join(opencodeSkillsRoot, 'skills')],
     ['cursor', path.join(roots.cursorRoot, 'skills')],
     ['gemini', path.join(roots.geminiRoot, 'skills')],
-    ['antigravity', path.join(roots.antigravityRoot, 'skills')],
+    ['antigravity', scope === 'global' ? path.join(roots.geminiRoot, 'skills') : path.join(roots.antigravityRoot, 'skills')],
     ['pi', path.join(roots.piRoot, 'skills')],
     ['github', scope === 'global' ? path.join(roots.copilotRoot, 'skills') : path.join(roots.githubRoot, 'skills')],
   ];

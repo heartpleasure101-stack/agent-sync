@@ -41,7 +41,8 @@ test('creates symlinks from canonical .agents to tool homes', async () => {
   const opencodeSkills = path.join(home, '.config', 'opencode', 'skills');
   const geminiCommands = path.join(home, '.gemini', 'commands');
   const geminiSkills = path.join(home, '.gemini', 'skills');
-  const antigravitySkills = path.join(home, '.gemini', 'antigravity', 'skills');
+  // agy reads global skills from ~/.gemini/skills (shared with gemini), not antigravity/skills.
+  const antigravitySkills = geminiSkills;
   const copilotSkills = path.join(home, '.copilot', 'skills');
 
   expect(await readLinkTarget(claudeCommands)).toBe(commands);
@@ -207,6 +208,19 @@ test('antigravity links to .agent folders in project scope', async () => {
 
   expect(await readLinkTarget(antigravityWorkflows)).toBe(commands);
   expect(await readLinkTarget(antigravitySkills)).toBe(skills);
+});
+
+test('antigravity alone links global skills to ~/.gemini/skills, not antigravity/skills', async () => {
+  const home = await makeTempDir('agent-sync-home-');
+
+  const plan = await buildLinkPlan({ scope: 'global', homeDir: home, clients: ['antigravity'] });
+  const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'global', operation: 'test' });
+  const result = await applyLinkPlan(plan, { backup });
+  await finalizeBackup(backup);
+  expect(result.applied).toBeGreaterThan(0);
+
+  expect(await readLinkTarget(path.join(home, '.gemini', 'skills'))).toBe(path.join(home, '.agents', 'skills'));
+  expect(fs.existsSync(path.join(home, '.gemini', 'antigravity', 'skills'))).toBe(false);
 });
 
 test('github skills link to ~/.copilot/skills in global scope', async () => {

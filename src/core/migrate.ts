@@ -91,7 +91,10 @@ export async function scanMigration(opts: RootOptions & { clients?: Client[] }):
       clients.has('cursor') ? { label: 'Cursor skills', dir: path.join(roots.cursorRoot, 'skills') } : null,
       clients.has('opencode') ? { label: 'OpenCode skills', dir: path.join(opencodeSkillsRoot, 'skills') } : null,
       clients.has('gemini') ? { label: 'Gemini skills', dir: path.join(roots.geminiRoot, 'skills') } : null,
-      clients.has('antigravity') ? { label: 'Antigravity skills', dir: path.join(roots.antigravityRoot, 'skills') } : null,
+      // Global agy shares ~/.gemini/skills with gemini; don't scan it twice.
+      clients.has('antigravity') && !(opts.scope === 'global' && clients.has('gemini'))
+        ? { label: 'Antigravity skills', dir: path.join(opts.scope === 'global' ? roots.geminiRoot : roots.antigravityRoot, 'skills') }
+        : null,
       clients.has('pi') ? { label: 'Pi skills', dir: path.join(roots.piRoot, 'skills') } : null,
       // GitHub uses .github/skills for project scope and ~/.copilot/skills for global scope.
       clients.has('github')
