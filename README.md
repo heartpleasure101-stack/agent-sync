@@ -80,7 +80,7 @@ rsync -a .agents/ ~/.agents/ && rm -rf .agents
 
 - **Target Mapping Matrix（對照表）**：
 
-  #### 支援的 9 大 AI 助手對照表 (Global Scope `~`)
+  #### 支援的 10 大 AI 助手對照表 (Global Scope `~`)
   | AI 助手 (Client) | 設定位置 | 規則檔案 | 指令與提示詞位置 | 技能招式位置 |
   | --- | --- | --- | --- | --- |
   | **Claude** | `~/.claude/` | `CLAUDE.md` (或 `AGENTS.md`) | `commands/` | `skills/<技能名稱>` |
@@ -92,6 +92,9 @@ rsync -a .agents/ ~/.agents/ && rm -rf .agents
   | **Antigravity** | `~/.gemini/antigravity/` | *(工具自動讀取)* | `workflows/` | `skills/<技能名稱>` |
   | **GitHub Copilot** | `~/.copilot/` | *(工具自動讀取)* | *(預設無)* | `skills/<技能名稱>` |
   | **AmpCode** | `~/.ampcode/` | `AGENTS.md` | *(預設無)* | *(預設無)* |
+  | **Pi** | `~/.pi/agent/` | `AGENTS.md` | *(預設無)* | `skills/<技能名稱>` |
+
+  > Pi 預設也會自己讀 `~/.agents/skills/`。若不想讓 Pi 載入全部技能，請在 Pi 自己的 `settings.json` 設定排除；agent-sync 不會改動 Pi 的設定檔。專案模式下技能連到 `<專案>/.pi/skills/`，Pi 首次進入該專案時會詢問是否信任。
 
   #### 規則優先順序（簡單好懂）
   - **Claude**：優先讀取 `.agents/CLAUDE.md`，找不到時會自動改成使用 `.agents/AGENTS.md`。

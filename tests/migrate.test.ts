@@ -136,3 +136,44 @@ test('migration wizard copies antigravity workflows and skills into .agents', as
   expect(await readLinkTarget(path.join(project, '.agent', 'workflows'))).toBe(path.join(home, '.agents', 'commands'));
   expect(await readLinkTarget(path.join(project, '.agent', 'skills'))).toBe(path.join(home, '.agents', 'skills'));
 });
+
+test('migration wizard copies pi skills and AGENTS.md into .agents', async () => {
+  const home = await makeTempDir('agent-sync-home-');
+
+  await createSkill(path.join(home, '.pi', 'agent', 'skills'), 'pi-skill');
+  await writeFile(path.join(home, '.pi', 'agent', 'AGENTS.md'), '# pi agents');
+
+  const plan = await scanMigration({ scope: 'global', homeDir: home, clients: ['pi'] });
+  expect(plan.auto.length + plan.conflicts.length).toBeGreaterThan(0);
+
+  const selections = new Map();
+  for (const conflict of plan.conflicts) {
+    selections.set(conflict.targetPath, conflict.candidates[0] || null);
+  }
+
+  const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'global', operation: 'test' });
+  const result = await applyMigration(plan, selections, {
+    scope: 'global',
+    homeDir: home,
+    backup,
+    forceLinks: true,
+    clients: ['pi'],
+  });
+  await finalizeBackup(backup);
+
+  expect(result.copied).toBeGreaterThan(0);
+  expect(fs.existsSync(path.join(home, '.agents', 'skills', 'pi-skill', 'SKILL.md'))).toBe(true);
+  expect(fs.readFileSync(path.join(home, '.agents', 'AGENTS.md'), 'utf8')).toBe('# pi agents');
+  expect(await readLinkTarget(path.join(home, '.pi', 'agent', 'skills'))).toBe(path.join(home, '.agents', 'skills'));
+});
+
+test('migration scan ignores pi skills directory that is already a symlink', async () => {
+  const home = await makeTempDir('agent-sync-home-');
+  const real = path.join(home, 'elsewhere');
+  await createSkill(real, 'linked-skill');
+  await fs.promises.mkdir(path.join(home, '.pi', 'agent'), { recursive: true });
+  await fs.promises.symlink(real, path.join(home, '.pi', 'agent', 'skills'));
+
+  const plan = await scanMigration({ scope: 'global', homeDir: home, clients: ['pi'] });
+  expect(plan.auto.length + plan.conflicts.length).toBe(0);
+});

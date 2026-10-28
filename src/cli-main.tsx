@@ -32,6 +32,7 @@ const CLIENT_LABELS: Record<Client, string> = {
   antigravity: 'Antigravity',
   github: 'GitHub',
   ampcode: 'Ampcode',
+  pi: 'Pi',
 };
 
 type StatusSummary = { name: string; linked: number; missing: number; conflict: number };
@@ -161,6 +162,7 @@ async function selectClients(): Promise<Client[] | 'back'> {
     { label: CLIENT_LABELS.antigravity, value: 'antigravity' },
     { label: CLIENT_LABELS.github, value: 'github' },
     { label: CLIENT_LABELS.ampcode, value: 'ampcode' },
+    { label: CLIENT_LABELS.pi, value: 'pi' },
   ];
 
   let detected: Client[] = [];

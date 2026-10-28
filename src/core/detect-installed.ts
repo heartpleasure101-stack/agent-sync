@@ -12,6 +12,7 @@ export const CLIENT_ORDER: readonly Client[] = [
   'antigravity',
   'github',
   'ampcode',
+  'pi',
 ] as const;
 
 export type DetectInstalledOptions = {
@@ -30,6 +31,7 @@ export function getGlobalClientRoots(homeDir?: string): Record<Client, string> {
     antigravity: roots.antigravityRoot,
     github: roots.copilotRoot,
     ampcode: roots.ampcodeConfigRoot,
+    pi: roots.piRoot,
   };
 }
 

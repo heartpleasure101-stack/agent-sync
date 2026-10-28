@@ -20056,6 +20056,7 @@ function resolveRoots(opts) {
       githubRoot: path.join(projectRoot, ".github"),
       copilotRoot: path.join(homeDir, ".copilot"),
       ampcodeConfigRoot: path.join(homeDir, ".config", "amp"),
+      piRoot: path.join(homeDir, ".pi", "agent"),
       projectRoot,
       homeDir
     };
@@ -20073,6 +20074,7 @@ function resolveRoots(opts) {
     githubRoot: path.join(projectRoot, ".github"),
     copilotRoot: path.join(homeDir, ".copilot"),
     ampcodeConfigRoot: path.join(homeDir, ".config", "amp"),
+    piRoot: path.join(projectRoot, ".pi"),
     projectRoot,
     homeDir
   };
@@ -20235,6 +20237,7 @@ function getSkillRoots(roots, clients, scope) {
     ["cursor", path5.join(roots.cursorRoot, "skills")],
     ["gemini", path5.join(roots.geminiRoot, "skills")],
     ["antigravity", path5.join(roots.antigravityRoot, "skills")],
+    ["pi", path5.join(roots.piRoot, "skills")],
     ["github", scope === "global" ? path5.join(roots.copilotRoot, "skills") : path5.join(roots.githubRoot, "skills")]
   ];
   return candidates.filter(([client]) => set.has(client)).map(([client, root]) => ({ client, root }));
@@ -20279,7 +20282,7 @@ async function getMappings(opts) {
   const agentsFallback = path6.join(canonical, "AGENTS.md");
   const claudeSource = await pathExists(claudeOverride) ? claudeOverride : agentsFallback;
   const geminiSource = await pathExists(geminiOverride) ? geminiOverride : agentsFallback;
-  const clients = new Set(opts.clients ?? ["claude", "factory", "codex", "cursor", "opencode", "gemini", "github", "ampcode", "antigravity"]);
+  const clients = new Set(opts.clients ?? ["claude", "factory", "codex", "cursor", "opencode", "gemini", "github", "ampcode", "antigravity", "pi"]);
   const mappings = [];
   const includeAgentFiles = opts.scope === "global";
   if (includeAgentFiles && clients.has("claude")) {
@@ -20303,7 +20306,8 @@ async function getMappings(opts) {
       clients.has("factory") ? path6.join(roots.factoryRoot, "AGENTS.md") : null,
       clients.has("codex") ? path6.join(roots.codexRoot, "AGENTS.md") : null,
       clients.has("opencode") ? path6.join(roots.opencodeConfigRoot, "AGENTS.md") : null,
-      clients.has("ampcode") ? path6.join(roots.ampcodeConfigRoot, "AGENTS.md") : null
+      clients.has("ampcode") ? path6.join(roots.ampcodeConfigRoot, "AGENTS.md") : null,
+      clients.has("pi") ? path6.join(roots.piRoot, "AGENTS.md") : null
     ].filter(Boolean);
     if (agentTargets.length > 0) {
       mappings.push({
@@ -20632,7 +20636,8 @@ var CLIENT_ORDER = [
   "gemini",
   "antigravity",
   "github",
-  "ampcode"
+  "ampcode",
+  "pi"
 ];
 function getGlobalClientRoots(homeDir) {
   const roots = resolveRoots({ scope: "global", homeDir });
@@ -20645,7 +20650,8 @@ function getGlobalClientRoots(homeDir) {
     gemini: roots.geminiRoot,
     antigravity: roots.antigravityRoot,
     github: roots.copilotRoot,
-    ampcode: roots.ampcodeConfigRoot
+    ampcode: roots.ampcodeConfigRoot,
+    pi: roots.piRoot
   };
 }
 async function detectInstalledClients(opts = {}) {
@@ -20725,7 +20731,8 @@ var ALL_CLIENTS = [
   "gemini",
   "github",
   "ampcode",
-  "antigravity"
+  "antigravity",
+  "pi"
 ];
 async function withAllSkills(opts) {
   let clients;
@@ -21068,7 +21075,7 @@ async function scanMigration(opts) {
   const roots = resolveRoots(opts);
   const canonicalRoot = roots.canonicalRoot;
   const candidatesByTarget = new Map;
-  const clients = new Set(opts.clients ?? ["claude", "factory", "codex", "cursor", "opencode", "gemini", "github", "ampcode", "antigravity"]);
+  const clients = new Set(opts.clients ?? ["claude", "factory", "codex", "cursor", "opencode", "gemini", "github", "ampcode", "antigravity", "pi"]);
   const includeAgentFiles = opts.scope === "global";
   const canonicalCommands = path15.join(canonicalRoot, "commands");
   const canonicalHooks = path15.join(canonicalRoot, "hooks");
@@ -21098,6 +21105,7 @@ async function scanMigration(opts) {
       clients.has("opencode") ? { label: "OpenCode skills", dir: path15.join(opencodeSkillsRoot, "skills") } : null,
       clients.has("gemini") ? { label: "Gemini skills", dir: path15.join(roots.geminiRoot, "skills") } : null,
       clients.has("antigravity") ? { label: "Antigravity skills", dir: path15.join(roots.antigravityRoot, "skills") } : null,
+      clients.has("pi") ? { label: "Pi skills", dir: path15.join(roots.piRoot, "skills") } : null,
       clients.has("github") ? opts.scope === "global" ? { label: "GitHub Copilot skills", dir: path15.join(roots.copilotRoot, "skills") } : { label: "GitHub skills", dir: path15.join(roots.githubRoot, "skills") } : null
     ].filter(Boolean),
     agents: includeAgentFiles ? [
@@ -21105,7 +21113,8 @@ async function scanMigration(opts) {
       clients.has("factory") ? { label: "Factory AGENTS.md", file: path15.join(roots.factoryRoot, "AGENTS.md") } : null,
       clients.has("codex") ? { label: "Codex AGENTS.md", file: path15.join(roots.codexRoot, "AGENTS.md") } : null,
       clients.has("opencode") ? { label: "OpenCode AGENTS.md", file: path15.join(roots.opencodeConfigRoot, "AGENTS.md") } : null,
-      clients.has("ampcode") ? { label: "Ampcode AGENTS.md", file: path15.join(roots.ampcodeConfigRoot, "AGENTS.md") } : null
+      clients.has("ampcode") ? { label: "Ampcode AGENTS.md", file: path15.join(roots.ampcodeConfigRoot, "AGENTS.md") } : null,
+      clients.has("pi") ? { label: "Pi AGENTS.md", file: path15.join(roots.piRoot, "AGENTS.md") } : null
     ].filter(Boolean) : [],
     claude: includeAgentFiles ? [
       clients.has("claude") ? { label: "Claude CLAUDE.md", file: path15.join(roots.claudeRoot, "CLAUDE.md") } : null
@@ -30459,7 +30468,8 @@ var CLIENT_LABELS = {
   gemini: "Gemini",
   antigravity: "Antigravity",
   github: "GitHub",
-  ampcode: "Ampcode"
+  ampcode: "Ampcode",
+  pi: "Pi"
 };
 function exitCancelled() {
   ue("Cancelled");
@@ -30566,7 +30576,8 @@ async function selectClients() {
     { label: CLIENT_LABELS.gemini, value: "gemini" },
     { label: CLIENT_LABELS.antigravity, value: "antigravity" },
     { label: CLIENT_LABELS.github, value: "github" },
-    { label: CLIENT_LABELS.ampcode, value: "ampcode" }
+    { label: CLIENT_LABELS.ampcode, value: "ampcode" },
+    { label: CLIENT_LABELS.pi, value: "pi" }
   ];
   let detected = [];
   try {
