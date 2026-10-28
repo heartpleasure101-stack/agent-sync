@@ -60,7 +60,7 @@ export async function scanMigration(opts: RootOptions & { clients?: Client[] }):
   const roots = resolveRoots(opts);
   const canonicalRoot = roots.canonicalRoot;
   const candidatesByTarget = new Map<string, MigrationCandidate[]>();
-  const clients = new Set<Client>(opts.clients ?? ['claude', 'factory', 'codex', 'cursor', 'opencode', 'gemini', 'github', 'ampcode', 'antigravity']);
+  const clients = new Set<Client>(opts.clients ?? ['claude', 'factory', 'codex', 'cursor', 'opencode', 'gemini', 'github', 'ampcode', 'antigravity', 'pi']);
   const includeAgentFiles = opts.scope === 'global';
 
   const canonicalCommands = path.join(canonicalRoot, 'commands');
@@ -92,6 +92,7 @@ export async function scanMigration(opts: RootOptions & { clients?: Client[] }):
       clients.has('opencode') ? { label: 'OpenCode skills', dir: path.join(opencodeSkillsRoot, 'skills') } : null,
       clients.has('gemini') ? { label: 'Gemini skills', dir: path.join(roots.geminiRoot, 'skills') } : null,
       clients.has('antigravity') ? { label: 'Antigravity skills', dir: path.join(roots.antigravityRoot, 'skills') } : null,
+      clients.has('pi') ? { label: 'Pi skills', dir: path.join(roots.piRoot, 'skills') } : null,
       // GitHub uses .github/skills for project scope and ~/.copilot/skills for global scope.
       clients.has('github')
         ? (opts.scope === 'global'
@@ -106,6 +107,7 @@ export async function scanMigration(opts: RootOptions & { clients?: Client[] }):
           clients.has('codex') ? { label: 'Codex AGENTS.md', file: path.join(roots.codexRoot, 'AGENTS.md') } : null,
           clients.has('opencode') ? { label: 'OpenCode AGENTS.md', file: path.join(roots.opencodeConfigRoot, 'AGENTS.md') } : null,
           clients.has('ampcode') ? { label: 'Ampcode AGENTS.md', file: path.join(roots.ampcodeConfigRoot, 'AGENTS.md') } : null,
+          clients.has('pi') ? { label: 'Pi AGENTS.md', file: path.join(roots.piRoot, 'AGENTS.md') } : null,
         ].filter(Boolean) as { label: string; file: string }[]
       : [],
     claude: includeAgentFiles

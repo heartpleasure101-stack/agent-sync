@@ -8,7 +8,7 @@ import { detectInstalledClients } from './detect-installed.js';
 import { scanInstalledSkills } from './scan-installed.js';
 
 const ALL_CLIENTS: Client[] = [
-  'claude', 'factory', 'codex', 'cursor', 'opencode', 'gemini', 'github', 'ampcode', 'antigravity',
+  'claude', 'factory', 'codex', 'cursor', 'opencode', 'gemini', 'github', 'ampcode', 'antigravity', 'pi',
 ];
 
 /**

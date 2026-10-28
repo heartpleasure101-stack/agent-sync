@@ -32,6 +32,7 @@ export function getSkillRoots(roots: ResolvedRoots, clients: Iterable<Client>, s
     ['cursor', path.join(roots.cursorRoot, 'skills')],
     ['gemini', path.join(roots.geminiRoot, 'skills')],
     ['antigravity', path.join(roots.antigravityRoot, 'skills')],
+    ['pi', path.join(roots.piRoot, 'skills')],
     ['github', scope === 'global' ? path.join(roots.copilotRoot, 'skills') : path.join(roots.githubRoot, 'skills')],
   ];
 

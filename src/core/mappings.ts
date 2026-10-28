@@ -59,7 +59,7 @@ export async function getMappings(opts: MappingOptions): Promise<Mapping[]> {
   const agentsFallback = path.join(canonical, 'AGENTS.md');
   const claudeSource = await pathExists(claudeOverride) ? claudeOverride : agentsFallback;
   const geminiSource = await pathExists(geminiOverride) ? geminiOverride : agentsFallback;
-  const clients = new Set<Client>(opts.clients ?? ['claude', 'factory', 'codex', 'cursor', 'opencode', 'gemini', 'github', 'ampcode', 'antigravity']);
+  const clients = new Set<Client>(opts.clients ?? ['claude', 'factory', 'codex', 'cursor', 'opencode', 'gemini', 'github', 'ampcode', 'antigravity', 'pi']);
 
   const mappings: Mapping[] = [];
   const includeAgentFiles = opts.scope === 'global';
@@ -87,6 +87,7 @@ export async function getMappings(opts: MappingOptions): Promise<Mapping[]> {
       clients.has('codex') ? path.join(roots.codexRoot, 'AGENTS.md') : null,
       clients.has('opencode') ? path.join(roots.opencodeConfigRoot, 'AGENTS.md') : null,
       clients.has('ampcode') ? path.join(roots.ampcodeConfigRoot, 'AGENTS.md') : null,
+      clients.has('pi') ? path.join(roots.piRoot, 'AGENTS.md') : null,
     ].filter(Boolean) as string[];
 
     if (agentTargets.length > 0) {
