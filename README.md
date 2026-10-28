@@ -84,12 +84,12 @@ rsync -a .agents/ ~/.agents/ && rm -rf .agents
   | AI 助手 (Client) | 設定位置 | 規則檔案 | 指令與提示詞位置 | 技能招式位置 |
   | --- | --- | --- | --- | --- |
   | **Claude** | `~/.claude/` | `CLAUDE.md` (或 `AGENTS.md`) | `commands/` | `skills/<技能名稱>` |
-  | **Gemini** | `~/.gemini/` | `GEMINI.md` (或 `AGENTS.md`) | `commands/` | `skills/<技能名稱>` |
+  | **Gemini** (`gemini` 指令) | `~/.gemini/` | `GEMINI.md` (或 `AGENTS.md`) | `commands/` | `skills/<技能名稱>` |
   | **Factory** | `~/.factory/` | `AGENTS.md` | `commands/` | `skills/<技能名稱>` |
   | **Codex** | `~/.codex/` | `AGENTS.md` | `prompts/` | `skills/<技能名稱>` |
   | **OpenCode** | `~/.config/opencode/` | `AGENTS.md` | `commands/` | `skills/<技能名稱>` |
   | **Cursor** | `~/.cursor/` | *(工具自動讀取)* | `commands/` | `skills/<技能名稱>` |
-  | **Antigravity** | `~/.gemini/antigravity/` | *(工具自動讀取)* | `workflows/` | `skills/<技能名稱>` |
+  | **Antigravity** (`agy` 指令) | `~/.gemini/antigravity/` | *(工具自動讀取)* | `workflows/` | `~/.gemini/skills/<技能名稱>`（與 Gemini 共用，專案層級為 `.agent/skills/`） |
   | **GitHub Copilot** | `~/.copilot/` | *(工具自動讀取)* | *(預設無)* | `skills/<技能名稱>` |
   | **AmpCode** | `~/.ampcode/` | `AGENTS.md` | *(預設無)* | *(預設無)* |
   | **Pi** | `~/.pi/agent/` | `AGENTS.md` | *(預設無)* | `skills/<技能名稱>` |
