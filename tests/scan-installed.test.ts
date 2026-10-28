@@ -175,3 +175,16 @@ test('returns empty map when no clients are selected', async () => {
 
   expect(installed.size).toBe(0);
 });
+
+test('reads back a skill linked under ~/.pi/agent/skills', async () => {
+  const { home, canonicalSkills } = await setup('scan-installed-pi-');
+  const skillDir = await createSkill(canonicalSkills, 'foo');
+
+  const piSkills = path.join(home, '.pi', 'agent', 'skills');
+  await fs.promises.mkdir(piSkills, { recursive: true });
+  await fs.promises.symlink(skillDir, path.join(piSkills, 'foo'));
+
+  const { installed } = await scanInstalledSkills({ scope: 'global', clients: ['pi'], homeDir: home });
+
+  expect(installed.get(skillDir)).toEqual(new Set(['pi']));
+});

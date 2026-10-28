@@ -32,3 +32,14 @@ test('global scope ignores canonicalOverride', () => {
   });
   expect(roots.canonicalRoot).toBe('/Users/x/.agents');
 });
+
+test('global scope piRoot is ~/.pi/agent', () => {
+  const roots = resolveRoots({ scope: 'global', homeDir: '/Users/x' });
+  expect(roots.piRoot).toBe('/Users/x/.pi/agent');
+});
+
+test('project scope piRoot is <project>/.pi', () => {
+  const roots = resolveRoots({ scope: 'project', projectRoot: '/tmp/foo', homeDir: '/Users/x' });
+  expect(roots.piRoot).toBe('/tmp/foo/.pi');
+  expect(roots.claudeRoot).toBe('/tmp/foo/.claude');
+});

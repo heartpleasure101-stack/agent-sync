@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { test, expect } from 'bun:test';
-import { detectInstalledClients } from '../src/core/detect-installed.js';
+import { detectInstalledClients, CLIENT_ORDER, getGlobalClientRoots } from '../src/core/detect-installed.js';
+import type { Client } from '../src/core/types.js';
 import { makeTempDir } from './helpers.js';
 
 async function mkdirs(home: string, subs: string[]): Promise<void> {
@@ -37,6 +38,7 @@ test('preserves canonical order when all roots exist', async () => {
     '.gemini/antigravity',
     '.copilot',
     '.config/amp',
+    '.pi/agent',
   ]);
 
   const result = await detectInstalledClients({ homeDir: home });
@@ -50,6 +52,7 @@ test('preserves canonical order when all roots exist', async () => {
     'antigravity',
     'github',
     'ampcode',
+    'pi',
   ]);
 });
 
@@ -59,4 +62,25 @@ test('github is detected via ~/.copilot, not project .github', async () => {
 
   const result = await detectInstalledClients({ homeDir: home });
   expect(result).toEqual(['github']);
+});
+
+test('pi is detected via ~/.pi/agent', async () => {
+  const home = await makeTempDir('detect-installed-pi-');
+  await mkdirs(home, ['.pi/agent']);
+
+  const result = await detectInstalledClients({ homeDir: home });
+  expect(result).toEqual(['pi']);
+});
+
+test('pi is not detected when only ~/.pi exists', async () => {
+  const home = await makeTempDir('detect-installed-pi-parent-');
+  await mkdirs(home, ['.pi']);
+
+  const result = await detectInstalledClients({ homeDir: home });
+  expect(result).toEqual([]);
+});
+
+test('CLIENT_ORDER covers every client that has a global root', () => {
+  const rootKeys = (Object.keys(getGlobalClientRoots('/Users/x')) as Client[]).sort();
+  expect([...CLIENT_ORDER].sort()).toEqual(rootKeys);
 });

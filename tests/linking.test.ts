@@ -378,3 +378,68 @@ test('claude root broken, gemini root normal emits blocked-root for claude targe
   expect(plan.changes.some((t) => 'target' in t && t.target.includes('.claude/skills'))).toBe(false);
   expect(plan.changes.some((t) => 'target' in t && t.target.includes('.gemini/skills'))).toBe(true);
 });
+
+test('pi links skills and AGENTS.md under ~/.pi/agent in global scope', async () => {
+  const home = await makeTempDir('agent-sync-home-');
+  const canonical = path.join(home, '.agents');
+
+  const plan = await buildLinkPlan({ scope: 'global', homeDir: home, clients: ['pi'] });
+  const backup = await createBackupSession({ canonicalRoot: canonical, scope: 'global', operation: 'test' });
+  const result = await applyLinkPlan(plan, { backup });
+  await finalizeBackup(backup);
+  expect(result.applied).toBeGreaterThan(0);
+
+  const piRoot = path.join(home, '.pi', 'agent');
+  expect(await readLinkTarget(path.join(piRoot, 'skills'))).toBe(path.join(canonical, 'skills'));
+  expect(await readLinkTarget(path.join(piRoot, 'AGENTS.md'))).toBe(path.join(canonical, 'AGENTS.md'));
+  expect(fs.existsSync(path.join(piRoot, 'prompts'))).toBe(false);
+  expect(fs.existsSync(path.join(piRoot, 'hooks'))).toBe(false);
+});
+
+test('pi links skills to .pi/skills in project scope and skips AGENTS.md', async () => {
+  const home = await makeTempDir('agent-sync-home-');
+  const project = await makeTempDir('agent-sync-project-');
+
+  const plan = await buildLinkPlan({ scope: 'project', homeDir: home, projectRoot: project, clients: ['pi'] });
+  const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'project', operation: 'test' });
+  await applyLinkPlan(plan, { backup });
+  await finalizeBackup(backup);
+
+  expect(await readLinkTarget(path.join(project, '.pi', 'skills'))).toBe(path.join(home, '.agents', 'skills'));
+  expect(fs.existsSync(path.join(project, '.pi', 'AGENTS.md'))).toBe(false);
+  expect(fs.existsSync(path.join(project, '.pi', 'prompts'))).toBe(false);
+});
+
+test('pi does nothing when not selected', async () => {
+  const home = await makeTempDir('agent-sync-home-');
+
+  const plan = await buildLinkPlan({ scope: 'global', homeDir: home, clients: ['claude'] });
+  const backup = await createBackupSession({ canonicalRoot: path.join(home, '.agents'), scope: 'global', operation: 'test' });
+  await applyLinkPlan(plan, { backup });
+  await finalizeBackup(backup);
+
+  expect(fs.existsSync(path.join(home, '.pi'))).toBe(false);
+});
+
+test('existing real ~/.pi/agent/AGENTS.md is reported as a conflict', async () => {
+  const home = await makeTempDir('agent-sync-home-');
+  await writeFile(path.join(home, '.pi', 'agent', 'AGENTS.md'), '# mine');
+
+  const plan = await buildLinkPlan({ scope: 'global', homeDir: home, clients: ['pi'] });
+  const conflict = plan.conflicts.find((c) => c.target === path.join(home, '.pi', 'agent', 'AGENTS.md'));
+  expect(conflict).toBeDefined();
+});
+
+test('pi root broken emits blocked-root for pi targets without throwing', async () => {
+  const project = await makeTempDir('agent-sync-broken-pi-root-');
+  const canonicalOverride = path.join(project, '.agents');
+  await fs.promises.mkdir(path.join(canonicalOverride, 'skills', '01_Coding', 'my-skill'), { recursive: true });
+
+  await fs.promises.mkdir(path.join(project, '.pi'), { recursive: true });
+  await fs.promises.symlink(path.join(project, 'non-existent-skills'), path.join(project, '.pi', 'skills'));
+
+  const plan = await buildLinkPlan({ scope: 'project', projectRoot: project, clients: ['pi'], canonicalOverride });
+  const piTasks = plan.tasks.filter((t) => 'target' in t && t.target.includes('.pi/skills'));
+  expect(piTasks.length).toBeGreaterThan(0);
+  for (const task of piTasks) expect(task.type).toBe('blocked-root');
+});
