@@ -20236,7 +20236,7 @@ function getSkillRoots(roots, clients, scope) {
     ["opencode", path5.join(opencodeSkillsRoot, "skills")],
     ["cursor", path5.join(roots.cursorRoot, "skills")],
     ["gemini", path5.join(roots.geminiRoot, "skills")],
-    ["antigravity", path5.join(roots.antigravityRoot, "skills")],
+    ["antigravity", scope === "global" ? path5.join(roots.geminiRoot, "skills") : path5.join(roots.antigravityRoot, "skills")],
     ["pi", path5.join(roots.piRoot, "skills")],
     ["github", scope === "global" ? path5.join(roots.copilotRoot, "skills") : path5.join(roots.githubRoot, "skills")]
   ];
@@ -20250,7 +20250,7 @@ async function getRemovalMappings(opts) {
     return [];
   const roots = resolveRoots(opts);
   const clients = new Set(opts.clients ?? []);
-  const skillTargetRoots = getSkillRoots(roots, clients, opts.scope).map((r2) => r2.root);
+  const skillTargetRoots = [...new Set(getSkillRoots(roots, clients, opts.scope).map((r2) => r2.root))];
   if (skillTargetRoots.length === 0)
     return [];
   const wanted = new Set(removals);
@@ -20340,7 +20340,7 @@ async function getMappings(opts) {
     ].filter(Boolean),
     kind: "dir"
   });
-  const skillTargetRoots = getSkillRoots(roots, clients, opts.scope).map((r2) => r2.root);
+  const skillTargetRoots = [...new Set(getSkillRoots(roots, clients, opts.scope).map((r2) => r2.root))];
   if (opts.selectedSkills === undefined || opts.selectedSkills === null) {
     mappings.push({
       name: "skills",
@@ -21104,7 +21104,7 @@ async function scanMigration(opts) {
       clients.has("cursor") ? { label: "Cursor skills", dir: path15.join(roots.cursorRoot, "skills") } : null,
       clients.has("opencode") ? { label: "OpenCode skills", dir: path15.join(opencodeSkillsRoot, "skills") } : null,
       clients.has("gemini") ? { label: "Gemini skills", dir: path15.join(roots.geminiRoot, "skills") } : null,
-      clients.has("antigravity") ? { label: "Antigravity skills", dir: path15.join(roots.antigravityRoot, "skills") } : null,
+      clients.has("antigravity") && !(opts.scope === "global" && clients.has("gemini")) ? { label: "Antigravity skills", dir: path15.join(opts.scope === "global" ? roots.geminiRoot : roots.antigravityRoot, "skills") } : null,
       clients.has("pi") ? { label: "Pi skills", dir: path15.join(roots.piRoot, "skills") } : null,
       clients.has("github") ? opts.scope === "global" ? { label: "GitHub Copilot skills", dir: path15.join(roots.copilotRoot, "skills") } : { label: "GitHub skills", dir: path15.join(roots.githubRoot, "skills") } : null
     ].filter(Boolean),
@@ -30465,8 +30465,8 @@ var CLIENT_LABELS = {
   codex: "Codex",
   cursor: "Cursor",
   opencode: "OpenCode",
-  gemini: "Gemini",
-  antigravity: "Antigravity",
+  gemini: "Gemini (gemini 指令)",
+  antigravity: "Antigravity (agy 指令)",
   github: "GitHub",
   ampcode: "Ampcode",
   pi: "Pi"
@@ -30569,15 +30569,10 @@ var BACK_TOKEN = "__BACK__";
 async function selectClients() {
   const options2 = [
     { label: CLIENT_LABELS.claude, value: "claude" },
-    { label: CLIENT_LABELS.factory, value: "factory" },
     { label: CLIENT_LABELS.codex, value: "codex" },
-    { label: CLIENT_LABELS.cursor, value: "cursor" },
-    { label: CLIENT_LABELS.opencode, value: "opencode" },
-    { label: CLIENT_LABELS.gemini, value: "gemini" },
     { label: CLIENT_LABELS.antigravity, value: "antigravity" },
-    { label: CLIENT_LABELS.github, value: "github" },
-    { label: CLIENT_LABELS.ampcode, value: "ampcode" },
-    { label: CLIENT_LABELS.pi, value: "pi" }
+    { label: CLIENT_LABELS.pi, value: "pi" },
+    { label: CLIENT_LABELS.opencode, value: "opencode" }
   ];
   let detected = [];
   try {

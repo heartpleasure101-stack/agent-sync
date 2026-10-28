@@ -26,7 +26,7 @@ export async function getRemovalMappings(opts: MappingOptions): Promise<Mapping[
 
   const roots = resolveRoots(opts);
   const clients = new Set<Client>(opts.clients ?? []);
-  const skillTargetRoots = getSkillRoots(roots, clients, opts.scope).map((r) => r.root);
+  const skillTargetRoots = [...new Set(getSkillRoots(roots, clients, opts.scope).map((r) => r.root))];
   if (skillTargetRoots.length === 0) return [];
 
   const wanted = new Set(removals);
@@ -128,7 +128,7 @@ export async function getMappings(opts: MappingOptions): Promise<Mapping[]> {
 
   // Shared with scanInstalledSkills() so the write side and the read-back side
   // cannot disagree about where a client's skills live.
-  const skillTargetRoots: string[] = getSkillRoots(roots, clients, opts.scope).map((r) => r.root);
+  const skillTargetRoots: string[] = [...new Set(getSkillRoots(roots, clients, opts.scope).map((r) => r.root))];
 
   if (opts.selectedSkills === undefined || opts.selectedSkills === null) {
     mappings.push({
